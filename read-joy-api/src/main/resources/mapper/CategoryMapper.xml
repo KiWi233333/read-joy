@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.readjoy.readjoyapi.common.mapper.CategoryMapper">
+
+    <resultMap id="BaseResultMap" type="com.readjoy.readjoyapi.common.pojo.Category">
+            <id property="categoryid" column="categoryId" jdbcType="INTEGER"/>
+            <result property="categoryname" column="categoryName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        categoryId,categoryName
+    </sql>
+</mapper>

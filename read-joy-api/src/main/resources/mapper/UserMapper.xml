@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.readjoy.readjoyapi.common.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.readjoy.readjoyapi.common.pojo.User">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="loginname" column="loginName" jdbcType="VARCHAR"/>
+            <result property="loginpassword" column="loginPassword" jdbcType="VARCHAR"/>
+            <result property="truename" column="trueName" jdbcType="VARCHAR"/>
+            <result property="telephone" column="telephone" jdbcType="VARCHAR"/>
+            <result property="imgurl" column="imgUrl" jdbcType="VARCHAR"/>
+            <result property="ischecked" column="isChecked" jdbcType="TINYINT"/>
+            <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="usertype" column="userType" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,loginName,loginPassword,
+        trueName,telephone,imgUrl,
+        isChecked,createTime,userType
+    </sql>
+</mapper>

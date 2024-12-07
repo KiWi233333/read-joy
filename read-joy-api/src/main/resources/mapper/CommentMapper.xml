@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.readjoy.readjoyapi.common.mapper.CommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.readjoy.readjoyapi.common.pojo.Comment">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="bookid" column="bookId" jdbcType="INTEGER"/>
+            <result property="commentator" column="commentator" jdbcType="INTEGER"/>
+            <result property="commentbody" column="commentBody" jdbcType="VARCHAR"/>
+            <result property="commentstatus" column="commentStatus" jdbcType="TINYINT"/>
+            <result property="isdeleted" column="isDeleted" jdbcType="TINYINT"/>
+            <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,bookId,commentator,
+        commentBody,commentStatus,isDeleted,
+        createTime
+    </sql>
+</mapper>
