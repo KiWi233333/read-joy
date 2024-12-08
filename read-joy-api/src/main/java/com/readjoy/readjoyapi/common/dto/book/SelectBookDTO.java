@@ -1,13 +1,20 @@
 package com.readjoy.readjoyapi.common.dto.book;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.readjoy.readjoyapi.common.dto.defaults.PageDTO;
 import com.readjoy.readjoyapi.common.vo.book.BookVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 public class SelectBookDTO extends PageDTO<BookVO> {
@@ -19,4 +26,36 @@ public class SelectBookDTO extends PageDTO<BookVO> {
     @Schema(description = "分类id", example = "1")
     private Integer categoryId;
 
+    @Schema(description = "排序方式 1-按发布时间 2-按价格")
+    @Range(min = 1, max = 2, message = "排序方式只能为1或2！")
+    private Integer sortType;
+
+    @Schema(description = "排序方式 1-降序 desc 2-升序 asc")
+    @Range(min = 1, max = 2, message = "升序降序只能为1或2！")
+    private Integer sortOrder;
+
+    @Schema(description = "开始时间(精度：天)", example = "2021-01-01")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date startDate;
+
+    @Schema(description = "结束时间(精度：天)", example = "2021-12-31")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String endDate;
+
+
+    public boolean checkIsSortByPubDate() {
+        return sortType == 1;
+    }
+    public boolean checkIsSortByPrice() {
+        return sortType == 2;
+    }
+    public boolean checkDesc() {
+        return sortOrder == 1;
+    }
+
+    public boolean checkAsc() {
+        return sortOrder == 2;
+    }
 }

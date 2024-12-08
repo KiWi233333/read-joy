@@ -51,7 +51,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
         // 1. 校验分类是否存在
         AssertUtil.isNotEmpty(categoryRepository.getById(dto.getCategoryId()), "分类不存在，请选择分类！");
         // 2. 保存图书封面
-        String imgUrl = "";
+        String imgUrl = null;
         if (dto.getCoverImage() != null) {
             imgUrl = localFileUtil.saveFile(dto.getCoverImage());
         }
@@ -69,7 +69,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
             AssertUtil.isNotEmpty(categoryRepository.getById(dto.getCategoryId()), "分类不存在，请选择分类！");
         }
         // 2. 保存图书封面
-        String imgUrl = "";
+        String imgUrl = null;
         if (dto.getCoverImage() != null) {
             imgUrl = localFileUtil.saveFile(dto.getCoverImage());
         }

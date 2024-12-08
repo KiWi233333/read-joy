@@ -19,7 +19,4 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class CategoryController {
 
-//    @GetMapping("/{page}/{size}")
-//    public Result<IPage<BookVO>>
-
 }

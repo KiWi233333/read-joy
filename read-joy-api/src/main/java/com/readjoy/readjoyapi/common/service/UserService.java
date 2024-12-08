@@ -1,6 +1,13 @@
 package com.readjoy.readjoyapi.common.service;
 
 
+import com.readjoy.readjoyapi.common.dto.user.UserLoginDTO;
+import com.readjoy.readjoyapi.common.dto.user.UserRegisterDTO;
+import com.readjoy.readjoyapi.common.dto.user.UserUpdateInfoDTO;
+import com.readjoy.readjoyapi.common.dto.user.UserUpdatePwdDTO;
+import com.readjoy.readjoyapi.common.vo.user.UserInfoVO;
+import com.readjoy.readjoyapi.common.vo.user.UserLoginVO;
+
 /**
  * 用户服务层
  *
@@ -10,4 +17,11 @@ package com.readjoy.readjoyapi.common.service;
  */
 public interface UserService {
 
+    UserLoginVO login(UserLoginDTO loginDTO);
+
+    UserLoginVO register(UserRegisterDTO loginDTO);
+
+    Integer updatePwd(UserUpdatePwdDTO dto);
+
+    UserInfoVO updateUserBaseInfo(UserUpdateInfoDTO dto);
 }

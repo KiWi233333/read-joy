@@ -28,13 +28,21 @@ public class BookRepository extends JoinCrudRepository<BookMapper, Book> {
                 .selectAll(Book.class)
                 .selectAs(Category::getCategoryName, BookVO::getCategoryName) // 分类名称
                 .and(StringUtils.isNotBlank(dto.getKeyword()), q -> q // 关键字
-                        .eq(Book::getTitle, dto.getKeyword())
-                        .or().eq(Book::getIntroduction, dto.getKeyword())
-                        .or().eq(Book::getIsbn, dto.getKeyword())
-                        .or().eq(Book::getAuthor, dto.getKeyword())
+                        .or().like(Book::getTitle, dto.getKeyword())
+                        .or().like(Book::getIntroduction, dto.getKeyword())
+                        .or().like(Book::getIsbn, dto.getKeyword())
+                        .or().like(Category::getCategoryName, dto.getKeyword())
+                        .or().like(Book::getAuthor, dto.getKeyword())
                 )
                 .eq(dto.getCategoryId() != null, Book::getCategoryId, dto.getCategoryId())
                 .leftJoin(Category.class, Category::getCategoryId, Book::getCategoryId);
+        if (dto.getSortType() != null) {
+            qw.orderBy(dto.checkIsSortByPubDate(), dto.checkAsc(), Book::getPublishionDate);
+            qw.orderBy(dto.checkIsSortByPrice(), dto.checkAsc(), Book::getPrice);
+        }
+        if (dto.getStartDate() != null && dto.getEndDate() != null) {
+            qw.between(Book::getPublishionDate, dto.getStartDate(), dto.getEndDate());
+        }
         return this.selectJoinListPage(dto.toPage(), BookVO.class, qw);
     }
 

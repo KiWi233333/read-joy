@@ -1,5 +1,6 @@
 package com.readjoy.readjoyapi.common.dto.book;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.readjoy.readjoyapi.common.pojo.Book;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
@@ -46,10 +48,11 @@ public class UpdateBookDTO {
     private String publisher;
 
     @Schema(description = "封面图片URL", example = "cover1.jpg")
-    @Length(max = 30, message = "封面图片")
-    private MultipartFile coverImage;
+    private MultipartFile coverImage = null;
 
     @Schema(description = "出版日期", example = "2024-01-01 00:00:00")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date publishionDate;
 
 

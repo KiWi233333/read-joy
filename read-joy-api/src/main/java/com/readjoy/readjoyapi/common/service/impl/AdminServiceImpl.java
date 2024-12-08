@@ -3,6 +3,7 @@ package com.readjoy.readjoyapi.common.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.readjoy.readjoyapi.common.dto.admin.AdminLoginDTO;
 import com.readjoy.readjoyapi.common.dto.admin.AdminUpdatePwdDTO;
+import com.readjoy.readjoyapi.common.enums.SysUserTypeEnum;
 import com.readjoy.readjoyapi.common.pojo.Admin;
 import com.readjoy.readjoyapi.common.repository.AdminRepository;
 import com.readjoy.readjoyapi.common.service.AdminService;
@@ -29,7 +30,7 @@ public class AdminServiceImpl implements AdminService {
         // 生成token
         String token = JWTUtil.createToken(new UserTokenUtil()
                 .setId(admin.getId())
-                .setUserType(UserType.ADMIN.getType()));
+                .setUserType(SysUserTypeEnum.ADMIN.getType()));
         return new AdminLoginVO()
                 .setToken(token)
                 .setUsername(admin.getUsername());

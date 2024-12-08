@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 /**
  * mybatis plus字段自动填充
  *
@@ -17,9 +19,9 @@ public class FillMetaHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         // 插入操作时候自动填充
-//        Date date = new Date();
+        Date date = new Date();
 //        this.setFieldValByName("updateTime", date, metaObject);
-//        this.setFieldValByName("createTime", date, metaObject);
+        this.setFieldValByName("createTime", date, metaObject);
     }
 
     @Override

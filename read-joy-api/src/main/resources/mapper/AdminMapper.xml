@@ -4,13 +4,4 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.readjoy.readjoyapi.common.mapper.AdminMapper">
 
-    <resultMap id="BaseResultMap" type="com.readjoy.readjoyapi.common.pojo.Admin">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="username" column="username" jdbcType="VARCHAR"/>
-            <result property="password" column="password" jdbcType="VARCHAR"/>
-    </resultMap>
-
-    <sql id="Base_Column_List">
-        id,username,password
-    </sql>
 </mapper>

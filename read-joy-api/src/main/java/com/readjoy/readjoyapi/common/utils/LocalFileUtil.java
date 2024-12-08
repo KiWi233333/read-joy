@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -66,5 +65,21 @@ public class LocalFileUtil {
             return null;
         }
         return "%s/%s".formatted(fileDownloadPrefix, fileName); // files/xx
+    }
+
+
+    public boolean deleteFile(String imgUrl) {
+        String fullPath = rootPath + "%s/%s".formatted(fileDownloadPrefix, imgUrl);
+        Path filePath = Path.of(fullPath); // 使用 Path 对象表示文件路径
+        if (Files.exists(filePath)) {
+            try {
+                Files.delete(filePath); // 使用 Files.delete 方法删除文件
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace(); // 打印异常堆栈跟踪
+                return false; // 处理异常时返回 false
+            }
+        }
+        return false;
     }
 }

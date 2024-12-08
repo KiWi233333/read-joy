@@ -1,4 +1,4 @@
-package com.readjoy.readjoyapi.common.utils;
+package com.readjoy.readjoyapi.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

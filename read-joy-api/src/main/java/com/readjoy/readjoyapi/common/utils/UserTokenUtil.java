@@ -1,5 +1,6 @@
 package com.readjoy.readjoyapi.common.utils;
 
+import com.readjoy.readjoyapi.common.enums.SysUserTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,15 +24,15 @@ public class UserTokenUtil {
     /**
      * 用户类型 0 用户 1 管理员
      *
-     * @see UserType
+     * @see SysUserTypeEnum
      */
     private Integer userType;
 
     public boolean checkAdmin() {
-        return UserType.ADMIN.getType() == userType;
+        return SysUserTypeEnum.ADMIN.getType() == userType;
     }
 
     public boolean checkCustomer() {
-        return UserType.CUSTOMER.getType() == userType;
+        return SysUserTypeEnum.CUSTOMER.getType() == userType;
     }
 }

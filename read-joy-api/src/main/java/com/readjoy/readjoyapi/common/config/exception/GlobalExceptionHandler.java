@@ -2,7 +2,7 @@ package com.readjoy.readjoyapi.common.config.exception;
 
 import ch.qos.logback.core.util.StringUtil;
 import com.readjoy.readjoyapi.common.utils.Result;
-import com.readjoy.readjoyapi.common.utils.ResultStatus;
+import com.readjoy.readjoyapi.common.enums.ResultStatus;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;

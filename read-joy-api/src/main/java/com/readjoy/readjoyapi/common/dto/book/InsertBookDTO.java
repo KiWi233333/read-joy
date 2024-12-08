@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
@@ -55,11 +56,12 @@ public class InsertBookDTO {
     private String publisher;
 
     @Schema(description = "封面图片URL", example = "cover1.jpg")
-    private MultipartFile coverImage;
+    private MultipartFile coverImage = null;
 
     @Schema(description = "出版日期", example = "2024-01-01 00:00:00")
     @NotNull(message = "出版日期不能为空")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date publishionDate;
 
 

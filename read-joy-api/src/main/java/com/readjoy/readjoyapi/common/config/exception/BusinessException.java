@@ -1,6 +1,6 @@
 package com.readjoy.readjoyapi.common.config.exception;
 
-import com.readjoy.readjoyapi.common.utils.ResultStatus;
+import com.readjoy.readjoyapi.common.enums.ResultStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

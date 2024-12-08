@@ -1,4 +1,4 @@
-package com.readjoy.readjoyapi.common.utils;
+package com.readjoy.readjoyapi.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,9 +8,8 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum UserType {
-    CUSTOMER(0, "用户"),
-    ADMIN(1, "管理员"),
+public enum CustomerUserTypeEnum {
+    NORMAL(1, "普通用户"),
     ;
     private final int type;
     private final String label;

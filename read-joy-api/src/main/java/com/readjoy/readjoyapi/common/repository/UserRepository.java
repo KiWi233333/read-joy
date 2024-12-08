@@ -15,7 +15,37 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserRepository extends JoinCrudRepository<UserMapper, User> {
 
-    public User selectOntByLoginName(String loginName) {
-        return baseMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getLoginName, loginName));
+    public User selectByLoginNameAndPwd(String loginName, String password, Boolean isChecked) {
+        return this.getOne(new LambdaQueryWrapper<User>()
+                .select(User::getId,
+                        User::getLoginName,
+                        User::getTelephone,
+                        User::getImgUrl,
+                        User::getIsChecked,
+                        User::getTrueName,
+                        User::getUserType,
+                        User::getCreateTime
+                )
+                .eq(isChecked != null, User::getIsChecked, isChecked)
+                .eq(User::getLoginName, loginName)
+                .eq(User::getLoginPassword, password));
+    }
+
+    public boolean updatePwd(Integer id, String newPassword) {
+        return this.update(
+                new User().setLoginPassword(newPassword),
+                new LambdaQueryWrapper<User>()
+                        .eq(User::getId, id));
+    }
+
+    /**
+     * 判断是否存在该用户名
+     *
+     * @param loginName 用户名
+     * @return true：存在，false：不存在
+     */
+    public boolean existsByLoginName(String loginName) {
+        return this.exists(new LambdaQueryWrapper<User>()
+                .eq(User::getLoginName, loginName));
     }
 }
