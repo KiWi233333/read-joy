@@ -20,6 +20,6 @@ public class AdminLoginDTO {
 
 
     @NotBlank(message = "密码不能为空")
-    @Length(min = 6, max = 50, message = "密码长度不正确，请重试！")
+    @Length(min = 6, max = 20, message = "密码长度不正确，请重试！")
     private String password;
 }

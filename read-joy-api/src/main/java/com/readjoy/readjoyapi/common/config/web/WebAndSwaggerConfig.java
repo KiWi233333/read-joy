@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
@@ -19,15 +20,22 @@ import org.springframework.web.servlet.config.annotation.*;
 //@EnableSwagger2 // 开启Swagger
 public class WebAndSwaggerConfig implements WebMvcConfigurer { // 覆写addResourceHandlers跨域
 
+    @Value("${file.download.prefix}")
+    private String prefixPath;
+
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
+    // 拦截器
+    @Autowired
+    AuthInterceptor authInterceptor;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-        registry.addResourceHandler("/**").addResourceLocations(
+        String resUrl = "file:" + System.getProperty("user.dir").replace("\\", "/") + "/files/";
+        log.info("文件下载路径将在目录: " + resUrl);
+        registry.addResourceHandler("/files/**").addResourceLocations(resUrl);
+        registry.addResourceHandler("/static/**").addResourceLocations(
                 "classpath:/static/");
-        registry.addResourceHandler("swagger-ui.html").addResourceLocations(
-                "classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**").addResourceLocations(
-                "classpath:/META-INF/resources/webjars/");
         WebMvcConfigurer.super.addResourceHandlers(registry);
     }
 
@@ -55,9 +63,6 @@ public class WebAndSwaggerConfig implements WebMvcConfigurer { // 覆写addResou
                 .exposedHeaders("*");
     }
 
-    // 拦截器
-    @Autowired
-    AuthInterceptor authInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -69,7 +74,17 @@ public class WebAndSwaggerConfig implements WebMvcConfigurer { // 覆写addResou
                         "/swagger-ui.html/**",
                         "/doc.html/**", // swagger
                         // 管理员
-                        "/admin/login"
+                        "/admin/login",
+                        // 用户
+                        "/user/login",
+                        "/user/register",
+                        // 访客
+                        prefixPath + "/**",
+                        "/res/file/**",
+                        "/book/**",
+                        "/book/category/**",
+                        "/book/resource/**"
                 );
     }
+
 }

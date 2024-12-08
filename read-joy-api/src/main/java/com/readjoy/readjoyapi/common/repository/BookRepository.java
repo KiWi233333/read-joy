@@ -1,9 +1,18 @@
 package com.readjoy.readjoyapi.common.repository;
 
-import com.baomidou.mybatisplus.extension.repository.CrudRepository;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.github.yulichang.repository.JoinCrudRepository;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
+import com.readjoy.readjoyapi.common.dto.book.SelectBookDTO;
 import com.readjoy.readjoyapi.common.mapper.BookMapper;
 import com.readjoy.readjoyapi.common.pojo.Book;
+import com.readjoy.readjoyapi.common.pojo.Category;
+import com.readjoy.readjoyapi.common.pojo.Resource;
+import com.readjoy.readjoyapi.common.vo.book.BookDetailVO;
+import com.readjoy.readjoyapi.common.vo.book.BookVO;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @className: BookRepository
@@ -12,6 +21,46 @@ import org.springframework.stereotype.Component;
  * @date: 2024/12/7 18:22
  */
 @Component
-public class BookRepository extends CrudRepository<BookMapper, Book> {
+public class BookRepository extends JoinCrudRepository<BookMapper, Book> {
+
+    public IPage<BookVO> selectPageByDTO(SelectBookDTO dto) {
+        final MPJLambdaWrapper<Book> qw = new MPJLambdaWrapper<Book>()
+                .selectAll(Book.class)
+                .selectAs(Category::getCategoryName, BookVO::getCategoryName) // 分类名称
+                .and(StringUtils.isNotBlank(dto.getKeyword()), q -> q // 关键字
+                        .eq(Book::getTitle, dto.getKeyword())
+                        .or().eq(Book::getIntroduction, dto.getKeyword())
+                        .or().eq(Book::getIsbn, dto.getKeyword())
+                        .or().eq(Book::getAuthor, dto.getKeyword())
+                )
+                .eq(dto.getCategoryId() != null, Book::getCategoryId, dto.getCategoryId())
+                .leftJoin(Category.class, Category::getCategoryId, Book::getCategoryId);
+        return this.selectJoinListPage(dto.toPage(), BookVO.class, qw);
+    }
+
+
+    /**
+     * 根据id查询书籍详情 和 资源
+     *
+     * @param book 图书实体
+     * @return BookDetailVO
+     */
+    public BookDetailVO selectDetailAndResources(Book book) {
+        final MPJLambdaWrapper<Book> qw = new MPJLambdaWrapper<Book>()
+                .selectAll(Book.class)
+                .selectAs(Category::getCategoryName, BookDetailVO::getCategoryName)
+                .leftJoin(Category.class, Category::getCategoryId, Book::getCategoryId)
+                .leftJoin(Resource.class, Resource::getBookId, Book::getBookId)
+                // 资源
+                .selectCollection(Resource.class, BookDetailVO::getResourceList)
+                // 图书详情
+                .eq(book.getBookId() != null, Book::getBookId, book.getBookId())
+                .eq(StringUtils.isNotBlank(book.getIsbn()), Book::getIsbn, book.getIsbn());
+        return this.selectJoinOne(BookDetailVO.class, qw);
+    }
+
+    public Integer batchDelete(Integer[] longs) {
+        return this.getBaseMapper().deleteByIds(CollectionUtils.arrayToList(longs));
+    }
 
 }

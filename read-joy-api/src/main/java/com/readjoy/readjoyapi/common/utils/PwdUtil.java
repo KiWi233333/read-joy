@@ -9,19 +9,18 @@ import org.springframework.stereotype.Component;
 /**
  * 密码加密解密工具类
  */
-
 @Component
 @PropertySource(value = "classpath:application.properties")
 public class PwdUtil {
 
     @Value("${bcrypt.salt}")
-    private static String slat;
+    private String slat = "$2a$10$rCJA1lRiGtniek27XQujbe";
 
-    public static String encrypt(String password) {
+    public String encrypt(String password) {
         return BCrypt.hashpw(password, slat);
     }
 
-    public static boolean check(String password, String checkPassword) {
+    public boolean check(String password, String checkPassword) {
         return BCrypt.checkpw(password, encrypt(checkPassword));
     }
 }

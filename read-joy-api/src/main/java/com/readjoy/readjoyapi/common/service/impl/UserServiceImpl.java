@@ -20,16 +20,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Resource
     private UserRepository userRepository;
 
-    /**
-     * 根据用户名查询用户
-     *
-     * @param username 用户名
-     * @return 用户
-     */
-    @Override
-    public User getUserByUsername(String username) {
-        return userRepository.selectOntByLoginName(username);
-    }
 }
 
 

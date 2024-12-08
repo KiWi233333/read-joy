@@ -1,6 +1,6 @@
 package com.readjoy.readjoyapi.common.repository;
 
-import com.baomidou.mybatisplus.extension.repository.CrudRepository;
+import com.github.yulichang.repository.JoinCrudRepository;
 import com.readjoy.readjoyapi.common.mapper.ResourceMapper;
 import com.readjoy.readjoyapi.common.pojo.Resource;
 import org.springframework.stereotype.Component;
@@ -12,6 +12,6 @@ import org.springframework.stereotype.Component;
  * @date: 2024/12/7 18:22
  */
 @Component
-public class ResourceRepository extends CrudRepository<ResourceMapper, Resource> {
+public class ResourceRepository extends JoinCrudRepository<ResourceMapper, Resource> {
 
 }

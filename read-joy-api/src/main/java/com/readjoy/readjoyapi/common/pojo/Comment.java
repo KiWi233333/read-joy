@@ -37,7 +37,7 @@ public class Comment implements Serializable {
     private String commentBody;
 
     /**
-     * 评论状态，控制是否暂停评论
+     * 评论状态：1待审核 2已审核 3已驳回
      */
     private Integer commentStatus;
 

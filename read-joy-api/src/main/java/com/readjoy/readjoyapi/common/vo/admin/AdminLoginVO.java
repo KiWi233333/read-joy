@@ -18,4 +18,8 @@ public class AdminLoginVO {
     @Schema(type = "string", description = "token")
     private String token;
 
+    @Schema(type = "string", description = "用户名")
+    private String username;
+
+
 }

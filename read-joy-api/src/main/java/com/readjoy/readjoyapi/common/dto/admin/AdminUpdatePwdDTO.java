@@ -15,9 +15,9 @@ import org.hibernate.validator.constraints.Length;
 public class AdminUpdatePwdDTO {
 
     @NotBlank(message = "旧密码不能为空")
-    @Length(min = 6, max = 50, message = "旧密码长度不正确，请重试！")
+    @Length(min = 6, max = 20, message = "旧密码长度不正确，请重试！")
     private String oldPassword;
     @NotBlank(message = "新密码不能为空")
-    @Length(min = 6, max = 50, message = "新密码长度不正确，请重试！")
+    @Length(min = 6, max = 20, message = "新密码长度不正确，请重试！")
     private String newPassword;
 }
