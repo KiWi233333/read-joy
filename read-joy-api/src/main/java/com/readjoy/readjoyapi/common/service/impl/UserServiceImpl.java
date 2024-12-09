@@ -1,11 +1,10 @@
 package com.readjoy.readjoyapi.common.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.readjoy.readjoyapi.common.dto.user.UserLoginDTO;
-import com.readjoy.readjoyapi.common.dto.user.UserRegisterDTO;
-import com.readjoy.readjoyapi.common.dto.user.UserUpdateInfoDTO;
-import com.readjoy.readjoyapi.common.dto.user.UserUpdatePwdDTO;
+import com.readjoy.readjoyapi.common.dto.user.*;
+import com.readjoy.readjoyapi.common.enums.ResultStatus;
 import com.readjoy.readjoyapi.common.enums.SysUserTypeEnum;
 import com.readjoy.readjoyapi.common.mapper.UserMapper;
 import com.readjoy.readjoyapi.common.pojo.User;
@@ -18,6 +17,9 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * @author 13296
@@ -36,8 +38,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public UserLoginVO login(UserLoginDTO loginDTO) {
-        User user = userRepository.selectByLoginNameAndPwd(loginDTO.getLoginName(), loginDTO.getPassword(), true);
+        User user = userRepository.selectByLoginNameAndPwd(loginDTO.getLoginName(), loginDTO.getPassword(), null);
         AssertUtil.isNotEmpty(user, "用户不存在或密码错误！");
+        // 校验用户状态
+        AssertUtil.isTrue(user.getIsChecked() == 1, ResultStatus.STATUS_OFF_ERR,"账号被封禁，详情联系客服！");
         // 生成token
         String token = JWTUtil.createToken(new UserTokenUtil()
                 .setUserType(SysUserTypeEnum.CUSTOMER.getType())
@@ -118,6 +122,37 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         AssertUtil.isNotEmpty(user, "用户不存在！");
         // 返回用户信息
         return UserInfoVO.toVO(user);
+    }
+
+
+    @Override
+    public IPage<UserInfoVO> getPageByDTO(SelectUserPageDTO dto) {
+        return userRepository.selectPageByDTO(dto);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Integer batchDeleteUser(Integer[] ids) {
+        long count = userRepository.getBaseMapper().deleteByIds(Arrays.asList(ids));
+        AssertUtil.isTrue(count == ids.length, "部分删除用户失败，请稍后重试！");
+        return ids.length;
+    }
+
+    /**
+     * 更新用户状态
+     *
+     * @param id     用户id
+     * @param status 用户状态
+     * @return 更新结果
+     */
+    @Override
+    public Integer updateUserStatus(Integer id, Integer status) {
+        AssertUtil.isNotEmpty(id, "用户id不能为空！");
+        AssertUtil.isNotEmpty(status, "用户状态不能为空！");
+        // status: 0-禁用，1-启用
+        AssertUtil.isTrue(status == 0 || status == 1, "用户状态不正确！");
+        AssertUtil.isTrue(userRepository.updateStatus(id, status), "用户状态更新失败，请稍后重试！");
+        return 1;
     }
 }
 

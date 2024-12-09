@@ -46,16 +46,18 @@ public class SelectBookDTO extends PageDTO<BookVO> {
 
 
     public boolean checkIsSortByPubDate() {
-        return sortType == 1;
+        return sortType != null && sortType == 1;
     }
+
     public boolean checkIsSortByPrice() {
-        return sortType == 2;
+        return sortType != null && sortType == 2;
     }
+
     public boolean checkDesc() {
-        return sortOrder == 1;
+        return sortOrder != null && sortOrder == 1;
     }
 
     public boolean checkAsc() {
-        return sortOrder == 2;
+        return sortOrder != null && sortOrder == 2;
     }
 }

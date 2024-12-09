@@ -33,7 +33,7 @@ public class LocalFileUtil {
         String rootPath = "";
         if (activeProfile.equals("dev")) {
             rootPath = System.getProperty("user.dir");
-        }else if (activeProfile.equals("prod")) { // 生产环境待修改
+        } else if (activeProfile.equals("prod")) { // 生产环境待修改
             rootPath = System.getProperty("user.dir");
         }
         this.rootPath = rootPath;
@@ -54,7 +54,10 @@ public class LocalFileUtil {
         String fileName = new Date().getTime() + suffixName;
         // 指定上传到文件夹
         String saveFullPath = rootPath + "%s/%s".formatted(fileDownloadPrefix, fileName);
-        log.info("用户uid: {}, 上传图片, 文件路径: {}", RequestHolderUtil.get().getId(), saveFullPath);
+        final UserTokenUtil tokenUtil = RequestHolderUtil.get();
+        if (tokenUtil != null) {
+            log.info("用户uid: {}, 上传图片, 文件路径: {}", tokenUtil.getId(), saveFullPath);
+        }
         // 保存文件
         try {
             Path path = Paths.get(saveFullPath);
@@ -64,7 +67,7 @@ public class LocalFileUtil {
             e.printStackTrace();
             return null;
         }
-        return "%s/%s".formatted(fileDownloadPrefix, fileName); // files/xx
+        return "%s/%s".formatted(fileDownloadPrefix.replaceFirst("/", ""), fileName); // files/xx
     }
 
 

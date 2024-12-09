@@ -1,10 +1,8 @@
 package com.readjoy.readjoyapi.common.service;
 
 
-import com.readjoy.readjoyapi.common.dto.user.UserLoginDTO;
-import com.readjoy.readjoyapi.common.dto.user.UserRegisterDTO;
-import com.readjoy.readjoyapi.common.dto.user.UserUpdateInfoDTO;
-import com.readjoy.readjoyapi.common.dto.user.UserUpdatePwdDTO;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.readjoy.readjoyapi.common.dto.user.*;
 import com.readjoy.readjoyapi.common.vo.user.UserInfoVO;
 import com.readjoy.readjoyapi.common.vo.user.UserLoginVO;
 
@@ -26,4 +24,16 @@ public interface UserService {
     UserInfoVO updateUserBaseInfo(UserUpdateInfoDTO dto);
 
     UserInfoVO getUserInfo();
+
+    IPage<UserInfoVO> getPageByDTO(SelectUserPageDTO dto);
+
+    Integer batchDeleteUser(Integer[] ids);
+
+    /**
+     * 更新用户状态
+     * @param id 用户id
+     * @param status 用户状态
+     * @return 更新结果
+     */
+    Integer updateUserStatus(Integer id, Integer status);
 }

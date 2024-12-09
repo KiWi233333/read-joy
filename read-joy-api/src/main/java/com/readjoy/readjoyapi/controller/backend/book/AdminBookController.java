@@ -36,7 +36,7 @@ public class AdminBookController {
 
     @Operation(description = "获取图书列表（分页）")
     @GetMapping("/page")
-    Result<IPage<BookVO>> getGoodsListByPage(
+    Result<IPage<BookVO>> getBookListByPage(
             @RequestHeader(name = HEADER_NAME) String token,
             @Valid SelectBookDTO dto) {
         return Result.ok(bookService.getPageByDTO(dto));
