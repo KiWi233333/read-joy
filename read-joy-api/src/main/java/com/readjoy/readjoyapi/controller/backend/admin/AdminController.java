@@ -35,7 +35,7 @@ public class AdminController {
     @Resource
     private AdminService adminService;
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     @Operation(summary = "管理员登录")
     Result<AdminLoginVO> login(@Valid @RequestBody AdminLoginDTO loginDTO) {
         return Result.ok(adminService.login(loginDTO));

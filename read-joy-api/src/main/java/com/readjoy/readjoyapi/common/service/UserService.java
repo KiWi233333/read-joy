@@ -24,4 +24,6 @@ public interface UserService {
     Integer updatePwd(UserUpdatePwdDTO dto);
 
     UserInfoVO updateUserBaseInfo(UserUpdateInfoDTO dto);
+
+    UserInfoVO getUserInfo();
 }

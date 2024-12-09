@@ -6,7 +6,6 @@ import com.readjoy.readjoyapi.common.dto.user.UserLoginDTO;
 import com.readjoy.readjoyapi.common.dto.user.UserRegisterDTO;
 import com.readjoy.readjoyapi.common.dto.user.UserUpdateInfoDTO;
 import com.readjoy.readjoyapi.common.dto.user.UserUpdatePwdDTO;
-import com.readjoy.readjoyapi.common.enums.BoolEnum;
 import com.readjoy.readjoyapi.common.enums.SysUserTypeEnum;
 import com.readjoy.readjoyapi.common.mapper.UserMapper;
 import com.readjoy.readjoyapi.common.pojo.User;
@@ -111,6 +110,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         AssertUtil.isTrue(isSuccess, "用户信息更新失败，请稍后重试！");
         // 返回用户信息
         return UserInfoVO.toVO(newUser);
+    }
+
+    @Override
+    public UserInfoVO getUserInfo() {
+        User user = userRepository.getById(RequestHolderUtil.get().getId());
+        AssertUtil.isNotEmpty(user, "用户不存在！");
+        // 返回用户信息
+        return UserInfoVO.toVO(user);
     }
 }
 

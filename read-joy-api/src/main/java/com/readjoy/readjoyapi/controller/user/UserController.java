@@ -35,10 +35,17 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     @Operation(summary = "用户登录")
     Result<UserLoginVO> login(@Valid @RequestBody UserLoginDTO loginDTO) {
         return Result.ok(userService.login(loginDTO));
+    }
+
+    @GetMapping("")
+    @Operation(summary = "获取用户信息")
+    @Parameter(name = HEADER_NAME, in = ParameterIn.HEADER, description = "token", required = true)
+    public Result<UserInfoVO> getUserInfo(@RequestHeader(name = HEADER_NAME) String token) {
+        return Result.ok(userService.getUserInfo());
     }
 
     @PostMapping("/register")
