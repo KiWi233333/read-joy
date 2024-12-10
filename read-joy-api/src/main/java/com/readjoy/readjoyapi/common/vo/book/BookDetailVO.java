@@ -50,7 +50,7 @@ public class BookDetailVO {
     private String coverImageUrl;
 
     @Schema(description = "出版日期", example = "2019-04-01")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date publishionDate;
 
     @Schema(description = "资源列表")

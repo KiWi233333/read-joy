@@ -81,7 +81,7 @@ public class WebAndSwaggerConfig implements WebMvcConfigurer { // 覆写addResou
                         // 访客
                         prefixPath + "/**",
                         "/res/file/**",
-                        "/book/**",
+                        "/book/*",
                         "/book/category/**",
                         "/book/resource/**"
                 );

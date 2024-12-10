@@ -51,7 +51,7 @@ public class UpdateBookDTO {
     private MultipartFile coverImage = null;
 
     @Schema(description = "出版日期", example = "2024-01-01 00:00:00")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date publishionDate;
 

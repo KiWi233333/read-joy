@@ -1,4 +1,4 @@
-package com.readjoy.readjoyapi.common.service.impl;
+package com.readjoy.readjoyapi.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -8,8 +8,8 @@ import com.readjoy.readjoyapi.common.enums.ResultStatus;
 import com.readjoy.readjoyapi.common.enums.SysUserTypeEnum;
 import com.readjoy.readjoyapi.common.mapper.UserMapper;
 import com.readjoy.readjoyapi.common.pojo.User;
-import com.readjoy.readjoyapi.common.repository.UserRepository;
-import com.readjoy.readjoyapi.common.service.UserService;
+import com.readjoy.readjoyapi.repository.UserRepository;
+import com.readjoy.readjoyapi.service.UserService;
 import com.readjoy.readjoyapi.common.utils.*;
 import com.readjoy.readjoyapi.common.vo.user.UserInfoVO;
 import com.readjoy.readjoyapi.common.vo.user.UserLoginVO;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * @author 13296

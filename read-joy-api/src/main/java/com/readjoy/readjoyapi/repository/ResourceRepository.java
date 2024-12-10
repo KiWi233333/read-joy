@@ -1,4 +1,4 @@
-package com.readjoy.readjoyapi.common.repository;
+package com.readjoy.readjoyapi.repository;
 
 import com.github.yulichang.repository.JoinCrudRepository;
 import com.readjoy.readjoyapi.common.mapper.ResourceMapper;

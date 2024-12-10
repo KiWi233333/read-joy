@@ -2,7 +2,7 @@ package com.readjoy.readjoyapi.controller.backend.user;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.readjoy.readjoyapi.common.dto.user.SelectUserPageDTO;
-import com.readjoy.readjoyapi.common.service.UserService;
+import com.readjoy.readjoyapi.service.UserService;
 import com.readjoy.readjoyapi.common.utils.Result;
 import com.readjoy.readjoyapi.common.vo.user.UserInfoVO;
 import io.swagger.v3.oas.annotations.Operation;

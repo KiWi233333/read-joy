@@ -4,12 +4,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.readjoy.readjoyapi.common.mapper.CategoryMapper">
 
-    <resultMap id="BaseResultMap" type="com.readjoy.readjoyapi.common.pojo.Category">
-            <id property="categoryid" column="categoryId" jdbcType="INTEGER"/>
-            <result property="categoryname" column="categoryName" jdbcType="VARCHAR"/>
-    </resultMap>
-
-    <sql id="Base_Column_List">
-        categoryId,categoryName
-    </sql>
+    <select id="getCategoryAndBookCountByKeyword"
+            resultType="com.readjoy.readjoyapi.common.vo.category.CategoryVO">
+        SELECT c.categoryId, c.categoryName, COUNT(b.bookId) AS bookCount
+        FROM category c
+        LEFT JOIN book b ON c.categoryId = b.categoryId
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and c.categoryName like concat('%',#{keyword},'%')
+            </if>
+            <if test="categoryId != null and categoryId != ''">
+                and c.categoryId = #{categoryId}
+            </if>
+        </where>
+        GROUP BY c.categoryId
+    </select>
 </mapper>

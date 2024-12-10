@@ -2,7 +2,7 @@ package com.readjoy.readjoyapi.controller.backend.admin;
 
 import com.readjoy.readjoyapi.common.dto.admin.AdminLoginDTO;
 import com.readjoy.readjoyapi.common.dto.admin.AdminUpdatePwdDTO;
-import com.readjoy.readjoyapi.common.service.AdminService;
+import com.readjoy.readjoyapi.service.AdminService;
 import com.readjoy.readjoyapi.common.utils.Result;
 import com.readjoy.readjoyapi.common.vo.admin.AdminLoginVO;
 import io.swagger.v3.oas.annotations.Operation;

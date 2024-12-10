@@ -1,8 +1,8 @@
-package com.readjoy.readjoyapi.common.service.impl;
+package com.readjoy.readjoyapi.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.readjoy.readjoyapi.common.pojo.Resource;
-import com.readjoy.readjoyapi.common.service.ResourceService;
+import com.readjoy.readjoyapi.service.ResourceService;
 import com.readjoy.readjoyapi.common.mapper.ResourceMapper;
 import org.springframework.stereotype.Service;
 

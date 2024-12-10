@@ -1,4 +1,4 @@
-package com.readjoy.readjoyapi.common.repository;
+package com.readjoy.readjoyapi.repository;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.yulichang.repository.JoinCrudRepository;

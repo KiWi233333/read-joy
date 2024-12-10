@@ -4,7 +4,7 @@ import com.readjoy.readjoyapi.common.dto.user.UserLoginDTO;
 import com.readjoy.readjoyapi.common.dto.user.UserRegisterDTO;
 import com.readjoy.readjoyapi.common.dto.user.UserUpdateInfoDTO;
 import com.readjoy.readjoyapi.common.dto.user.UserUpdatePwdDTO;
-import com.readjoy.readjoyapi.common.service.UserService;
+import com.readjoy.readjoyapi.service.UserService;
 import com.readjoy.readjoyapi.common.utils.Result;
 import com.readjoy.readjoyapi.common.vo.user.UserInfoVO;
 import com.readjoy.readjoyapi.common.vo.user.UserLoginVO;

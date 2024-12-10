@@ -1,4 +1,4 @@
-package com.readjoy.readjoyapi.common.service;
+package com.readjoy.readjoyapi.service;
 
 import com.readjoy.readjoyapi.common.dto.admin.AdminLoginDTO;
 import com.readjoy.readjoyapi.common.dto.admin.AdminUpdatePwdDTO;

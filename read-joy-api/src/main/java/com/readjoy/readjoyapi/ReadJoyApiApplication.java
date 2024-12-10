@@ -2,7 +2,7 @@ package com.readjoy.readjoyapi;
 
 import com.readjoy.readjoyapi.common.config.auth.SuperAdminConfig;
 import com.readjoy.readjoyapi.common.pojo.Admin;
-import com.readjoy.readjoyapi.common.service.AdminService;
+import com.readjoy.readjoyapi.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;

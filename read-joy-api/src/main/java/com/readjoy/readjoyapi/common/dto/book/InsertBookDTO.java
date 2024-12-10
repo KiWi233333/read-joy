@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
@@ -55,12 +54,13 @@ public class InsertBookDTO {
     @Length(min = 1, max = 20, message = "出版社长度必须在1到20之间")
     private String publisher;
 
-    @Schema(description = "封面图片URL", example = "cover1.jpg")
+    @Schema(description = "封面图片", example = "cover1.jpg")
+    @NotNull(message = "封面图片不能为空")
     private MultipartFile coverImage = null;
 
     @Schema(description = "出版日期", example = "2024-01-01 00:00:00")
     @NotNull(message = "出版日期不能为空")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date publishionDate;
 

@@ -1,4 +1,4 @@
-package com.readjoy.readjoyapi.common.repository;
+package com.readjoy.readjoyapi.repository;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;

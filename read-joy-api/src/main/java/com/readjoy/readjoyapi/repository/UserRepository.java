@@ -1,4 +1,4 @@
-package com.readjoy.readjoyapi.common.repository;
+package com.readjoy.readjoyapi.repository;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.repository.JoinCrudRepository;
 import com.readjoy.readjoyapi.common.dto.user.SelectUserPageDTO;
 import com.readjoy.readjoyapi.common.mapper.UserMapper;
-import com.readjoy.readjoyapi.common.pojo.Category;
 import com.readjoy.readjoyapi.common.pojo.User;
 import com.readjoy.readjoyapi.common.vo.user.UserInfoVO;
 import org.springframework.stereotype.Component;

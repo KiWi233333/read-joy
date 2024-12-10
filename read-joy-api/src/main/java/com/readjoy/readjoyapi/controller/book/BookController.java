@@ -2,7 +2,7 @@ package com.readjoy.readjoyapi.controller.book;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.readjoy.readjoyapi.common.dto.book.SelectBookDTO;
-import com.readjoy.readjoyapi.common.service.BookService;
+import com.readjoy.readjoyapi.service.BookService;
 import com.readjoy.readjoyapi.common.utils.Result;
 import com.readjoy.readjoyapi.common.vo.book.BookDetailVO;
 import com.readjoy.readjoyapi.common.vo.book.BookVO;
@@ -12,8 +12,6 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Tag;
 import org.springframework.web.bind.annotation.*;
-
-import static com.readjoy.readjoyapi.common.utils.UserTokenUtil.HEADER_NAME;
 
 /**
  * 图书模块
@@ -40,7 +38,6 @@ public class BookController {
     @Operation(description = "获取图书详情")
     @GetMapping("/{id}")
     Result<BookDetailVO> getBookDetail(
-            @RequestHeader(name = HEADER_NAME) String token,
             @PathVariable("id") Integer id) {
         return Result.ok(bookService.getBookDetail(id));
     }

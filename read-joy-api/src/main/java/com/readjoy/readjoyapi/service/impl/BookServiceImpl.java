@@ -1,4 +1,4 @@
-package com.readjoy.readjoyapi.common.service.impl;
+package com.readjoy.readjoyapi.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -8,13 +8,13 @@ import com.readjoy.readjoyapi.common.dto.book.SelectBookDTO;
 import com.readjoy.readjoyapi.common.dto.book.UpdateBookDTO;
 import com.readjoy.readjoyapi.common.mapper.BookMapper;
 import com.readjoy.readjoyapi.common.pojo.Book;
-import com.readjoy.readjoyapi.common.repository.BookRepository;
-import com.readjoy.readjoyapi.common.repository.CategoryRepository;
-import com.readjoy.readjoyapi.common.service.BookService;
 import com.readjoy.readjoyapi.common.utils.AssertUtil;
 import com.readjoy.readjoyapi.common.utils.LocalFileUtil;
 import com.readjoy.readjoyapi.common.vo.book.BookDetailVO;
 import com.readjoy.readjoyapi.common.vo.book.BookVO;
+import com.readjoy.readjoyapi.repository.BookRepository;
+import com.readjoy.readjoyapi.repository.CategoryRepository;
+import com.readjoy.readjoyapi.service.BookService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,7 +91,3 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
     }
 
 }
-
-
-
-

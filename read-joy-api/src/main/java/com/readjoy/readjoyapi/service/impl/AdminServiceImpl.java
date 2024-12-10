@@ -1,12 +1,12 @@
-package com.readjoy.readjoyapi.common.service.impl;
+package com.readjoy.readjoyapi.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.readjoy.readjoyapi.common.dto.admin.AdminLoginDTO;
 import com.readjoy.readjoyapi.common.dto.admin.AdminUpdatePwdDTO;
 import com.readjoy.readjoyapi.common.enums.SysUserTypeEnum;
 import com.readjoy.readjoyapi.common.pojo.Admin;
-import com.readjoy.readjoyapi.common.repository.AdminRepository;
-import com.readjoy.readjoyapi.common.service.AdminService;
+import com.readjoy.readjoyapi.repository.AdminRepository;
+import com.readjoy.readjoyapi.service.AdminService;
 import com.readjoy.readjoyapi.common.utils.*;
 import com.readjoy.readjoyapi.common.vo.admin.AdminLoginVO;
 import jakarta.annotation.Resource;
