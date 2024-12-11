@@ -2,6 +2,7 @@ package com.readjoy.readjoyapi.common.vo.resource;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,60 +18,40 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResourceVO implements Serializable {
-    /**
-     * 资源ID
-     */
-    @TableId
+    @Schema(description = "资源ID")
     private Integer resourceId;
 
-    /**
-     * 资源类型，视频，教学大纲，课件等
-     */
+    @Schema(description = "资源类型：1 - 文件，2 - 图片， 3 - 视频， 4 - 音频，more - 其他")
     private String type;
 
-    /**
-     * 关联的图书ID
-     */
+    @Schema(description = "关联的图书ID")
     private Integer bookId;
 
-    /**
-     * 资源标题
-     */
+    @Schema(description = "关联的图书标题")
+    private String bookTitle;
+
+    @Schema(description = "资源标题")
     private String title;
 
-    /**
-     * 资源大小
-     */
+    @Schema(description = "资源大小（单位：字节）")
     private Integer size;
 
-    /**
-     * 资源保存地址
-     */
+    @Schema(description = "资源保存地址")
     private String url;
 
-    /**
-     * 资源提交者
-     */
+    @Schema(description = "资源提交者")
     private String submitter;
 
-    /**
-     * 创建时间
-     */
+    @Schema(description = "创建时间")
     private Date createTime;
 
-    /**
-     * 是否删除
-     */
+    @Schema(description = "是否删除（0 - 否，1 - 是）")
     private Integer isDeleted;
 
-    /**
-     * 下载数
-     */
+    @Schema(description = "下载数")
     private Integer downloadCount;
 
-    /**
-     * 点赞数
-     */
+    @Schema(description = "点赞数")
     private Integer likeCount;
 
     @Serial

@@ -23,6 +23,8 @@ public class LocalFileUtil {
     @Value("${file.download.prefix}")
     private String fileDownloadPrefix;
 
+    public static final Long MAX_FILE_SIZE = 100 * 1024 * 1024L;
+
     @Value("${spring.profiles.active}")
     private String activeProfile;
 
@@ -37,6 +39,24 @@ public class LocalFileUtil {
             rootPath = System.getProperty("user.dir");
         }
         this.rootPath = rootPath;
+    }
+
+    /**
+     * 格式化大小
+     *
+     * @param size 字节数
+     * @return 格式化后的字符串
+     */
+    public static String formatSize(long size) {
+        if (size < 1024) {
+            return size + "B";
+        } else if (size < 1024 * 1024) {
+            return String.format("%.2fKB", (double) size / 1024);
+        } else if (size < 1024 * 1024 * 1024) {
+            return String.format("%.2fMB", (double) size / (1024 * 1024));
+        } else {
+            return String.format("%.2fGB", (double) size / (1024 * 1024 * 1024));
+        }
     }
 
     /**
@@ -71,6 +91,12 @@ public class LocalFileUtil {
     }
 
 
+    /**
+     * 删除文件
+     *
+     * @param imgUrl 文件路径
+     * @return 是否删除成功
+     */
     public boolean deleteFile(String imgUrl) {
         String fullPath = rootPath + "%s/%s".formatted(fileDownloadPrefix, imgUrl);
         Path filePath = Path.of(fullPath); // 使用 Path 对象表示文件路径
@@ -84,5 +110,22 @@ public class LocalFileUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * 获取文件大小
+     *
+     * @param fileUrl 文件路径
+     * @return 文件大小，单位：字节
+     */
+    public Long getFileSize(String fileUrl) {
+        String fullPath = rootPath + "%s/%s".formatted(fileDownloadPrefix, fileUrl);
+        Path filePath = Path.of(fullPath); // 使用 Path 对象表示文件路径
+        try {
+            return Files.size(filePath); // 使用 Files.size 方法获取文件大小
+        } catch (IOException e) {
+            e.printStackTrace(); // 打印异常堆栈跟踪
+            return null; // 处理异常时返回 0
+        }
     }
 }

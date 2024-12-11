@@ -36,7 +36,7 @@ public class BookRepository extends JoinCrudRepository<BookMapper, Book> {
                 )
                 .eq(dto.getCategoryId() != null, Book::getCategoryId, dto.getCategoryId())
                 .leftJoin(Category.class, Category::getCategoryId, Book::getCategoryId);
-        if (dto.getSortType() != null) {
+        if (dto.getSortType() != null && dto.getSortOrder() != null) {
             qw.orderBy(dto.checkIsSortByPubDate(), dto.checkAsc(), Book::getPublishionDate);
             qw.orderBy(dto.checkIsSortByPrice(), dto.checkAsc(), Book::getPrice);
         }

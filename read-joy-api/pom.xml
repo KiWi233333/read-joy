@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.readjoy</groupId>
     <artifactId>read-joy-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>read-joy-api</name>
     <description>read-joy-api</description>
     <properties>
