@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.readjoy.readjoyapi.common.dto.resource.InsertResourceDTO;
 import com.readjoy.readjoyapi.common.dto.resource.SelectResourceDTO;
 import com.readjoy.readjoyapi.common.dto.resource.UpdateResourceDTO;
+import com.readjoy.readjoyapi.common.vo.resource.CuResourceVO;
 import com.readjoy.readjoyapi.common.vo.resource.ResourceVO;
+
+import java.util.List;
 
 /**
  * 资源服务层
@@ -58,4 +61,12 @@ public interface ResourceService {
      * @return 删除数量
      */
     Integer batchDeleteResource(Integer[] integers);
+
+    /**
+     * 根据书籍ID获取资源列表
+     *
+     * @param bookId 书籍ID
+     * @return 资源列表
+     */
+    List<CuResourceVO> getResourceListByBooKId(Integer bookId);
 }

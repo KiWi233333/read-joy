@@ -7,13 +7,12 @@ import com.readjoy.readjoyapi.common.mapper.CommentMapper;
 import org.springframework.stereotype.Service;
 
 /**
-* @author 13296
-* @description 针对表【comment(评论表)】的数据库操作Service实现
-* @createDate 2024-12-07 17:55:09
-*/
+ * @author 13296
+ * @description 针对表【comment(评论表)】的数据库操作Service实现
+ * @createDate 2024-12-07 17:55:09
+ */
 @Service
-public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
-    implements CommentService{
+public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
 
 }
 

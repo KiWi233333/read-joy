@@ -1,10 +1,11 @@
-package com.readjoy.readjoyapi.controller.backend.book;
+package com.readjoy.readjoyapi.controller.book;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.readjoy.readjoyapi.common.dto.resource.InsertResourceDTO;
 import com.readjoy.readjoyapi.common.dto.resource.SelectResourceDTO;
 import com.readjoy.readjoyapi.common.dto.resource.UpdateResourceDTO;
 import com.readjoy.readjoyapi.common.utils.Result;
+import com.readjoy.readjoyapi.common.vo.resource.CuResourceVO;
 import com.readjoy.readjoyapi.common.vo.resource.ResourceVO;
 import com.readjoy.readjoyapi.service.ResourceService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,10 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Tag;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.readjoy.readjoyapi.common.utils.UserTokenUtil.HEADER_NAME;
 
 /**
- * 管理员模块/资源管理
+ * 资源模块
  *
  * @className: ResourceController
  * @author: Kiwi23333
@@ -25,31 +28,32 @@ import static com.readjoy.readjoyapi.common.utils.UserTokenUtil.HEADER_NAME;
  * @date: 2024/12/7 16:30
  */
 @RestController
-@RequestMapping("/admin/book/resource")
-@Tag("管理员模块/资源管理")
+@RequestMapping("/book/resource")
+@Tag("资源模块")
 @Slf4j
-public class AdminResourceController {
+public class ResourceController {
 
     @Resource
     private ResourceService resourceService;
 
-    @Operation(description = "获取资源列表（分页）")
-    @GetMapping("/page")
-    Result<IPage<ResourceVO>> getResourceListByPage(
+    @Operation(description = "获取图书的资源列表")
+    @GetMapping("/list/{bookId}")
+    Result<List<CuResourceVO>> getResourceListByPage(
             @RequestHeader(name = HEADER_NAME) String token,
-            @Valid SelectResourceDTO dto) {
-        return Result.ok(resourceService.getPageByDTO(dto));
+            @PathVariable("bookId") Integer bookId
+            ) {
+        return Result.ok(resourceService.getResourceListByBooKId(bookId));
     }
 
-    @Operation(description = "获取资源详情")
-    @GetMapping("/{id}")
-    Result<ResourceVO> getResourceDetail(
-            @RequestHeader(name = HEADER_NAME) String token,
-            @PathVariable("id") Integer id) {
-        return Result.ok(resourceService.getResourceDetail(id));
-    }
+//    @Operation(description = "获取资源详情")
+//    @GetMapping("/{id}")
+//    Result<ResourceVO> getResourceDetail(
+//            @RequestHeader(name = HEADER_NAME) String token,
+//            @PathVariable("id") Integer id) {
+//        return Result.ok(resourceService.getResourceDetail(id));
+//    }
 
-    @Operation(description = "添加资源")
+    @Operation(description = "行为操作资源(点赞/)")
     @PostMapping
     Result<Integer> addResource(
             @RequestHeader(name = HEADER_NAME) String token,

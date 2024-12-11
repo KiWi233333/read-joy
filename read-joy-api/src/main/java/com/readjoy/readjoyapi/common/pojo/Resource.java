@@ -37,7 +37,7 @@ public class Resource implements Serializable {
     /**
      * 资源类型，视频，教学大纲，课件等
      */
-    @Schema(description = "资源类型", example = "视频")
+    @Schema(description = "资源类型：application/pdf, image/jpeg, video/mp4, audio/mp3, 等")
     private String type;
 
     /**

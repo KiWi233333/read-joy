@@ -3,6 +3,7 @@ package com.readjoy.readjoyapi.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.readjoy.readjoyapi.common.config.exception.BusinessException;
 import com.readjoy.readjoyapi.common.dto.resource.InsertResourceDTO;
 import com.readjoy.readjoyapi.common.dto.resource.SelectResourceDTO;
@@ -11,10 +12,12 @@ import com.readjoy.readjoyapi.common.enums.BoolEnum;
 import com.readjoy.readjoyapi.common.enums.ResultStatus;
 import com.readjoy.readjoyapi.common.mapper.ResourceMapper;
 import com.readjoy.readjoyapi.common.pojo.Admin;
+import com.readjoy.readjoyapi.common.pojo.Book;
 import com.readjoy.readjoyapi.common.pojo.Resource;
 import com.readjoy.readjoyapi.common.utils.AssertUtil;
 import com.readjoy.readjoyapi.common.utils.LocalFileUtil;
 import com.readjoy.readjoyapi.common.utils.RequestHolderUtil;
+import com.readjoy.readjoyapi.common.vo.resource.CuResourceVO;
 import com.readjoy.readjoyapi.common.vo.resource.ResourceVO;
 import com.readjoy.readjoyapi.repository.AdminRepository;
 import com.readjoy.readjoyapi.repository.BookRepository;
@@ -24,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author 13296
@@ -78,11 +82,17 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         final Admin admin = adminRepository.getById(RequestHolderUtil.get().getId());
         AssertUtil.isNotEmpty(admin, "添加资源的用户不存在！");
         // 上传文件
-        final String fileUrl = localFileUtil.saveFile(dto.getResourceFile());
+        final String fileUrl = localFileUtil.saveAuthFile(dto.getResourceFile());
         // 获取文件大小
         final Long fileSize = localFileUtil.getFileSize(fileUrl);
+        // 获取文件类型
+        final String fileType = localFileUtil.getFileType(fileUrl);
         AssertUtil.isTrue(fileSize <= LocalFileUtil.MAX_FILE_SIZE, "上传文件大小不能超过" + LocalFileUtil.formatSize(LocalFileUtil.MAX_FILE_SIZE) + "！");
-        final Resource resource = InsertResourceDTO.toResource(dto, fileSize, fileUrl, admin.getUsername());
+        final Resource resource = InsertResourceDTO.toResource(dto,
+                fileSize,
+                fileUrl,
+                fileType == null ? LocalFileUtil.DEFAULT_FILE_MIME_TYPE : fileType,
+                admin.getUsername());
         try {
             final boolean save = resourceRepository.save(resource);
             AssertUtil.isTrue(save, "新增资源失败！");
@@ -115,16 +125,24 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         // 更新资源信息
         String fileUrl = null;
         Long fileSize = null;
+        String fileType = LocalFileUtil.DEFAULT_FILE_MIME_TYPE;
         try {
             // 更新文件
             if (dto.getResourceFile() != null) {
                 // 上传文件
-                fileUrl = localFileUtil.saveFile(dto.getResourceFile());
+                fileUrl = localFileUtil.saveAuthFile(dto.getResourceFile());
                 // 获取文件大小
                 fileSize = localFileUtil.getFileSize(fileUrl);
+                // 获取文件类型
+                fileType = localFileUtil.getFileType(fileUrl);
                 AssertUtil.isTrue(fileSize <= LocalFileUtil.MAX_FILE_SIZE, "上传文件大小不能超过" + LocalFileUtil.formatSize(LocalFileUtil.MAX_FILE_SIZE) + "！");
             }
-            final boolean update = resourceRepository.updateById(UpdateResourceDTO.toResource(dto, fileUrl, fileSize, admin.getUsername()));
+            final boolean update = resourceRepository.updateById(UpdateResourceDTO.toResource(
+                    dto,
+                    fileUrl,
+                    fileType,
+                    fileSize,
+                    admin.getUsername()));
             AssertUtil.isTrue(update, "更新资源失败！");
             if (update) {// 更新成功，删除原文件
                 Resource resource = resourceRepository.getById(id);
@@ -165,5 +183,29 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
                 .in(Resource::getResourceId, Arrays.asList(integers)));
         AssertUtil.isTrue(updateCount == integers.length, "部分资源删除失败！");
         return updateCount;
+    }
+
+
+    /**
+     * 根据书籍ID获取资源列表
+     *
+     * @param bookId 书籍ID
+     * @return 资源列表
+     */
+    @Override
+    public List<CuResourceVO> getResourceListByBooKId(Integer bookId) {
+        // 查询资源列表
+        return resourceRepository.selectJoinList(CuResourceVO.class, new MPJLambdaWrapper<Resource>()
+                .selectAs(Resource::getTitle, CuResourceVO::getTitle)
+                .selectAs(Resource::getResourceId, CuResourceVO::getResourceId)
+                .selectAs(Resource::getUrl, CuResourceVO::getUrl)
+                .selectAs(Resource::getType, CuResourceVO::getType)
+                .selectAs(Resource::getSize, CuResourceVO::getSize)
+                .selectAs(Resource::getLikeCount, CuResourceVO::getLikeCount)
+                .selectAs(Resource::getDownloadCount, CuResourceVO::getDownloadCount)
+                .selectAs(Resource::getCreateTime, CuResourceVO::getCreateTime)
+                .eq(Resource::getBookId, bookId)
+                .eq(Resource::getIsDeleted, BoolEnum.FALSE.getValue()) // 未删除
+                .leftJoin(Book.class, Book::getBookId, Resource::getBookId));
     }
 }

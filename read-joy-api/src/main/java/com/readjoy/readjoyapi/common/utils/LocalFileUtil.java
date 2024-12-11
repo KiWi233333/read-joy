@@ -22,6 +22,7 @@ public class LocalFileUtil {
 
     @Value("${file.download.prefix}")
     private String fileDownloadPrefix;
+    public static final String DEFAULT_FILE_MIME_TYPE = "application/octet-stream";
 
     public static final Long MAX_FILE_SIZE = 100 * 1024 * 1024L;
 
@@ -32,13 +33,7 @@ public class LocalFileUtil {
 
     @PostConstruct
     public void init() {
-        String rootPath = "";
-        if (activeProfile.equals("dev")) {
-            rootPath = System.getProperty("user.dir");
-        } else if (activeProfile.equals("prod")) { // 生产环境待修改
-            rootPath = System.getProperty("user.dir");
-        }
-        this.rootPath = rootPath;
+        this.rootPath = System.getProperty("user.dir");
     }
 
     /**
@@ -91,6 +86,34 @@ public class LocalFileUtil {
     }
 
 
+
+    public String saveAuthFile(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        String prePath = rootPath + "auth/";
+        if (originalFilename == null) {
+            throw new BusinessException("文件名不能为空");
+        }
+        String suffixName = originalFilename.substring(originalFilename.lastIndexOf("."));
+        String fileName = new Date().getTime() + suffixName;
+        // 指定上传到文件夹
+        String saveFullPath = prePath + "%s/%s".formatted(fileDownloadPrefix, fileName);
+        final UserTokenUtil tokenUtil = RequestHolderUtil.get();
+        if (tokenUtil != null) {
+            log.info("用户uid: {}, 上传图片, 文件路径: {}", tokenUtil.getId(), saveFullPath);
+        }
+        // 保存文件
+        try {
+            Path path = Paths.get(saveFullPath);
+            Files.createDirectories(path.getParent());
+            file.transferTo(path);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return "%s/%s".formatted(fileDownloadPrefix.replaceFirst("/", ""), fileName); // files/xx
+    }
+
+
     /**
      * 删除文件
      *
@@ -106,6 +129,7 @@ public class LocalFileUtil {
                 return true;
             } catch (IOException e) {
                 e.printStackTrace(); // 打印异常堆栈跟踪
+                log.error("删除文件失败: {}", fullPath);
                 return false; // 处理异常时返回 false
             }
         }
@@ -124,8 +148,27 @@ public class LocalFileUtil {
         try {
             return Files.size(filePath); // 使用 Files.size 方法获取文件大小
         } catch (IOException e) {
+            log.warn("获取文件大小失败: {}", fullPath);
             e.printStackTrace(); // 打印异常堆栈跟踪
             return null; // 处理异常时返回 0
+        }
+    }
+
+    /**
+     * 获取文件类型
+     *
+     * @param fileUrl 文件路径
+     * @return 文件类型
+     */
+    public String getFileType(String fileUrl) {
+        String fullPath = rootPath + "%s/%s".formatted(fileDownloadPrefix, fileUrl);
+        Path filePath = Path.of(fullPath); // 使用 Path 对象表示文件路径
+        try {
+            return Files.probeContentType(filePath); // 使用 Files.probeContentType 方法获取文件类型
+        } catch (IOException e) {
+            log.warn("获取文件类型失败: {}", fullPath);
+            e.printStackTrace(); // 打印异常堆栈跟踪
+            return null; // 处理异常时返回 null
         }
     }
 }

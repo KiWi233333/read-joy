@@ -1,7 +1,6 @@
 package com.readjoy.readjoyapi.common.dto.resource;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.readjoy.readjoyapi.common.enums.ResourceTypeEnum;
 import com.readjoy.readjoyapi.common.pojo.Resource;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -21,16 +20,6 @@ import java.util.Objects;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class InsertResourceDTO {
-
-    /**
-     * 资源类型  1 - 文件，2 - 图片， 3 - 视频， 4 - 音频
-     *
-     * @see ResourceTypeEnum
-     */
-    @Schema(description = "资源类型", example = "视频")
-    @NotNull(message = "资源类型不能为空！")
-    @Range(min = 1, max = 7, message = "选择资源类型错误！")
-    private Integer type;
 
     /**
      * 关联的图书ID
@@ -63,12 +52,12 @@ public class InsertResourceDTO {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
-    public static Resource toResource(InsertResourceDTO dto, Long size, String fileUrl, String submitter) {
+    public static Resource toResource(InsertResourceDTO dto, Long size, String fileUrl,String fileType, String submitter) {
         return new Resource()
-                .setType(Objects.requireNonNull(ResourceTypeEnum.fromCode(dto.getType())).getValue())
                 .setBookId(dto.getBookId())
                 .setTitle(dto.getTitle())
                 .setSize(size)
+                .setType(fileType)
                 .setUrl(fileUrl)
                 .setSubmitter(submitter)
                 .setIsDeleted(dto.getIsDeleted() == null ? 0 : dto.getIsDeleted())

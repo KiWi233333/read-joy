@@ -16,8 +16,7 @@ import org.springframework.web.servlet.config.annotation.*;
 
 @Slf4j
 @Configuration
-@EnableWebMvc // 解决spring>2.6.0版本 适配Swagger
-//@EnableSwagger2 // 开启Swagger
+@EnableWebMvc
 public class WebAndSwaggerConfig implements WebMvcConfigurer { // 覆写addResourceHandlers跨域
 
     @Value("${file.download.prefix}")
@@ -33,7 +32,7 @@ public class WebAndSwaggerConfig implements WebMvcConfigurer { // 覆写addResou
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String resUrl = "file:" + System.getProperty("user.dir").replace("\\", "/") + "/files/";
         log.info("文件下载路径将在目录: " + resUrl);
-        registry.addResourceHandler("/files/**").addResourceLocations(resUrl);
+        registry.addResourceHandler("/files/*").addResourceLocations(resUrl);
         registry.addResourceHandler("/static/**").addResourceLocations(
                 "classpath:/static/");
         WebMvcConfigurer.super.addResourceHandlers(registry);
@@ -79,8 +78,7 @@ public class WebAndSwaggerConfig implements WebMvcConfigurer { // 覆写addResou
                         "/user/login",
                         "/user/register",
                         // 访客
-                        prefixPath + "/**",
-                        "/res/file/**",
+                        prefixPath + "/*",
                         "/book/*",
                         "/book/category/**",
                         "/book/resource/**"

@@ -1,7 +1,6 @@
 package com.readjoy.readjoyapi.common.dto.resource;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.readjoy.readjoyapi.common.enums.ResourceTypeEnum;
 import com.readjoy.readjoyapi.common.pojo.Resource;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -17,13 +16,6 @@ import java.util.Objects;
 @Data
 @Accessors(chain = true)
 public class UpdateResourceDTO {
-
-    /**
-     * @see ResourceTypeEnum
-     */
-    @Schema(description = "资源类型", example = "视频")
-    @Range(min = 1, max = 7, message = "资源类型错误！")
-    private Integer type;
 
     /**
      * 关联的图书ID
@@ -54,12 +46,12 @@ public class UpdateResourceDTO {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
-    public static Resource toResource(UpdateResourceDTO dto, String fileUrl, Long size, String submitter) {
+    public static Resource toResource(UpdateResourceDTO dto, String fileUrl, String fileType, Long size, String submitter) {
         return new Resource()
-                .setType(Objects.requireNonNull(ResourceTypeEnum.fromCode(dto.getType())).getValue())
                 .setBookId(dto.getBookId())
                 .setTitle(dto.getTitle())
                 .setSize(size)
+                .setType(fileType)
                 .setUrl(fileUrl)
                 .setSubmitter(submitter)
                 .setIsDeleted(dto.getIsDeleted());
