@@ -1,0 +1,42 @@
+<script lang="ts" setup>
+import { BaseUrlImg } from "~/composables/utils/useBaseUrl";
+
+const { defaultSrc, src } = defineProps<{
+  src?: string
+  defaultSrc?: string
+  loadClass?: string
+  loadRootClass?: string
+  errorRootClass?: string
+  errorClass?: string
+}>();
+</script>
+
+<template>
+  <el-image
+    :src="defaultSrc ? BaseUrlImg + defaultSrc : src"
+    fit="cover"
+    hide-on-click-modal
+    v-bind="$attrs"
+  >
+    <!-- 占位 -->
+    <template #placeholder>
+      <slot name="placeholder">
+        <div :class="loadClass !== undefined ? loadClass : 'sky-loading h-full w-full'" />
+      </slot>
+    </template>
+    <!-- 错误 -->
+    <template #error>
+      <slot name="error">
+        <div class="h-full w-full flex-row-c-c" :class="errorRootClass">
+          <i class="icon i-solar-gallery-remove-bold-duotone op-60" :class="errorClass" />
+        </div>
+      </slot>
+    </template>
+  </el-image>
+</template>
+
+<style scoped lang="scss">
+.icon {
+  --at-apply: "block max-w-4/5 min-h-5 min-w-5"
+}
+</style>

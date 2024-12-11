@@ -16,8 +16,9 @@ function toggleFn(e: MouseEvent) {
 </script>
 
 <template>
-  <button
-    class="flex cursor-pointer gap-2 rounded-4 p-1 border-default card-default hover:shadow"
+  <ElButton
+    id="toggle-theme-btn"
+    circle
     @click="toggleFn"
   >
     <ClientOnly>
@@ -37,7 +38,7 @@ function toggleFn(e: MouseEvent) {
         alt="sun 日间模式"
       >
     </ClientOnly>
-  </button>
+  </ElButton>
 </template>
 
 <style lang="scss" scoped>

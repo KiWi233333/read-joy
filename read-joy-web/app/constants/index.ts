@@ -1,2 +1,2 @@
-export const appName = "图书借阅";
-export const appDescription = "图书借阅 - 借阅图书，共享知识";
+export const appName = "悦读时光";
+export const appDescription = "悦读时光 - 让阅读更美好! ";

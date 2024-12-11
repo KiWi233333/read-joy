@@ -1,7 +1,12 @@
+
+<script setup lang="ts">
+
+</script>
+
 <template>
-  <main>
-    <MenuHeader />
-    <div class="mx-a container">
+  <main relative>
+    <MenuHeader class="sticky top-0 z-999 w-full" />
+    <div class="layout-default">
       <slot />
     </div>
   </main>

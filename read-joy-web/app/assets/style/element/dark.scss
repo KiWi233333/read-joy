@@ -1,0 +1,36 @@
+// /* 覆盖你需要的变量 */
+@forward "element-plus/theme-chalk/src/dark/var.scss" with (
+  $bg-color: (
+    "page": #1e2327,
+    "overlay": #1d1e1f
+  ),
+  $border-color: (
+    "primary": #fff
+  ),
+  $colors: (
+    "white": #ffffffe1,
+    "black": #131313,
+    "main": #3583fd,
+    "primary": (
+      "base": #3583fd,
+      "tip": #dc284d,
+      "tip2": #fdae2f,
+      "tip3": #00e9ce
+    ),
+    "success": (
+      "base": #56c220
+    ),
+    "warning": (
+      "base": #fdae2f
+    ),
+    "danger": (
+      "base": #ff5644
+    ),
+    "error": (
+      "base": #f12323
+    ),
+    "info": (
+      "base": #11e08a
+    )
+  )
+);

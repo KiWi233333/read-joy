@@ -1,0 +1,240 @@
+:root {
+  --font-family: "Alimama", --animate-duration: $transition-delay;
+}
+
+*,
+.cursor-pointer {
+  // 移动端点击有蓝色底
+  -webkit-tap-highlight-color: transparent;
+}
+* {
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-family), AlibabaHealthFont2, AlimamaDaoLiTi, sans-serif;
+  box-sizing: border-box;
+  outline: none !important;
+}
+.h-100dvh {
+  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
+}
+
+a {
+  text-decoration: none;
+  // color: var(--el-text-color);
+}
+
+a:active,
+a:focus,
+a:valid,
+a:active {
+  background-color: none;
+}
+
+li {
+  list-style: none;
+}
+
+span {
+  line-height: 100%;
+}
+// 页面
+html,
+body {
+  font-family: Alimama, Helvetica, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background-color: var(--el-color-primary);
+  color: #f0f0f0;
+}
+.dark ::selection {
+  background-color: var(--el-color-primary);
+  color: #f0f0f0;
+}
+
+// 字体
+@font-face {
+  font-display: swap;
+  font-family: Alimama;
+  src: url("/font/Alimama.woff2") format("woff2");
+}
+
+
+
+// 全局滚动条
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background-color: transparent;
+}
+
+/* 定义滚动条轨道 内部
+  内阴影+圆角 */
+::-webkit-scrollbar-track {
+  background-color: #fff;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background-color: #141414;
+}
+
+/* 定义滑块 内阴影+圆角 */
+::-webkit-scrollbar-thumb {
+  border-radius: 0.8rem;
+  background-color: rgb(68, 68, 68);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  border-radius: 0.8rem;
+  background-color: rgba(85, 85, 85, 0.479);
+}
+
+
+// 关闭所有动画渐变保证变化的流畅
+html.stop-transition {
+  &,
+  * {
+    transition: none !important;
+  }
+}
+html.stop-transition-all {
+  &,
+  * {
+    transition: none !important;
+    backdrop-filter: none !important;
+    animation: none !important;
+  }
+}
+
+// 夜间模式切换动画
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  transition: none !important;
+  mix-blend-mode: normal;
+}
+
+/**  ------------------------------element-plus---------------------------------------  **/
+// 文本折叠
+.text-overflow-2 {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.text-overflow-3 {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.text-overflow-4 {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+.text-overflow-h {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: var(--h);
+  -webkit-box-orient: vertical;
+}
+
+.text-overflow-5 {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
+// element-plus
+// 消息确认框
+.el-message-box {
+  .el-message-box__btns {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0.4em 0 0.4em 0;
+
+    .el-button {
+      min-width: 42%;
+      height: auto;
+      margin: 0 auto;
+    }
+  }
+
+  .el-message-box__header {
+    font-size: 2em;
+    text-align: center;
+    letter-spacing: 0.1em;
+  }
+
+  .el-message-box__content {
+    margin: 0.4em 0.5em;
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+
+  .el-message-box__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+}
+
+// 单选钮
+.el-radio-group {
+  font-size: medium;
+
+  .el-radio__inner {
+    border-radius: 4px;
+    transform: scale(1.1);
+  }
+}
+
+// 按钮
+.el-button {
+  transition: $transition-delay;
+}
+
+// popper
+.el-popper-init {
+  padding: 2px 4px;
+} 
+/**  ------------------------------right-menu---------------------------------------  **/
+.mx-context-menu-items .mx-item-row {
+  margin: 6px 0;
+  
+}
+.mx-context-menu {
+  .mx-icon-placeholder {
+    i {
+      font-size: 0.9em;
+      transition: all 0.2s;
+    }
+  }
+  
+}
+
+
+// 消息框
+body .el-message {
+  width: max-content;
+  max-width: 94%;
+  padding: 0.4rem 0.6rem;
+  transform: translate(-50%, 0) !important;
+  --at-apply: "text-14px rounded-2rem shadow-md";
+  .el-message__content {
+    --at-apply: "truncate text-12px mt-1px";
+  }
+}

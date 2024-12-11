@@ -8,8 +8,14 @@ export const useSettingStore = defineStore(
     // 主题
     const isThemeChangeLoad = ref(false);
     const theme = ref("system");
+    // 是否关闭所有动画
+    const isCloseAllTransition = ref(false);
+    // 是否通过新标签页打开书籍
+    const isNewTabOpenBook = ref(false);
 
     return {
+      isCloseAllTransition,
+      isNewTabOpenBook,
       isThemeChangeLoad,
       theme,
     };
@@ -17,7 +23,7 @@ export const useSettingStore = defineStore(
   {
     // https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt-3.html
     persist: {
-      storage: piniaPluginPersistedstate.localStorage(),
+      storage: piniaPluginPersistedstate.cookies(),
     },
   },
 );

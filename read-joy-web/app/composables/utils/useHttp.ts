@@ -1,4 +1,6 @@
-import { StatusCode, StatusCodeText } from "~/types/result";
+import { ResultStatus, ResultStatusText } from "../api/types/result";
+import { useUserStore } from "../sotre/useUserStore";
+import { BaseUrl } from "./useBaseUrl";
 
 type FetchType = typeof $fetch;
 type ReqType = Parameters<FetchType>[0];
@@ -29,18 +31,17 @@ export function httpRequest<T = unknown>(
       const data = config.response._data;
       let msg = "";
       const type = "error";
-      const code: StatusCode = data.code;
-      if (data.code !== StatusCode.SUCCESS)
-        msg = StatusCodeText[code] || "";
-      if (data.code === StatusCode.TOKEN_ERR || data.code === StatusCode.TOKEN_EXPIRED_ERR || data.code === StatusCode.TOKEN_DEVICE_ERR) {
+      const code: ResultStatus = data.code;
+      if (data.code !== ResultStatus.SUCCESS)
+        msg = ResultStatusText[code] || "";
+      if (data.code === ResultStatus.TOKEN_ERR || data.code === ResultStatus.TOKEN_EXPIRED_ERR || data.code === ResultStatus.TOKEN_DEVICE_ERR) {
         ElMessage.closeAll();
         // 登录失效，清除用户信息，跳转登录页
         user.clearUserStore();
-        if (useRoute().path !== "/msg")
-          navigateTo("/login", { replace: true });
+        user.showLoginForm = true;
         return;
       }
-      else if (data.code === StatusCode.STATUS_OFF_ERR) {
+      else if (data.code === ResultStatus.STATUS_OFF_ERR) {
         // 用户被禁用
         ElMessage.error("账号被禁用，请联系管理员！");
         return;
@@ -49,7 +50,7 @@ export function httpRequest<T = unknown>(
       if (config.response.headers?.Authorization) {
         user.token = config.response.headers?.Authorization;
       }
-      if (msg !== "") {
+      if (msg !== "" && window) {
         ElMessage.closeAll("error");
         // 组件
         ElMessage.error({
@@ -62,11 +63,13 @@ export function httpRequest<T = unknown>(
     // 请求错误
     onRequestError() {
       (() => {
-        ElMessage.error({
-          grouping: true,
-          repeatNum: 0,
-          message: "请求出错，请重试！",
-        });
+        if (window) {
+          ElMessage.error({
+            grouping: true,
+            repeatNum: 0,
+            message: "请求出错，请重试！",
+          });
+        }
       })();
     },
     // 不同响应码
@@ -89,10 +92,12 @@ export function httpRequest<T = unknown>(
           break;
       }
       // 客户端报错
-      if (msg && document && ElMessage) {
-        setTimeout(() => {
-          ElMessage.error(msg);
-        }, 40);
+      if (msg && window) {
+        nextTick(() => {
+          if (window) {
+            ElMessage.error(msg);
+          }
+        });
       }
     },
   } as FetchOptions;

@@ -1,16 +1,16 @@
-<script setup lang="ts">
+<script lang="ts" setup>
+definePageMeta({
+  key: route => route.path,
+  layout: false,
+});
 </script>
 
 <template>
-  <main p="x4 y10" text="center dark:gray-200">
-    <div text-4xl>
-      <div i-carbon-warning inline-block />
-    </div>
-    <div>404 页面不存在！</div>
-    <div>
-      <button text-sm btn m="3 t8" @click="$router.back()">
-        返回
-      </button>
-    </div>
-  </main>
+  <div>
+    <NuxtLayout name="error">
+      <OtherError :msg="$route.query?.errorMsg ? $route.query?.errorMsg.toString() : '404, 找不到页面❌'" />
+    </NuxtLayout>
+  </div>
 </template>
+
+<style scoped lang="scss"></style>

@@ -1,0 +1,106 @@
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
+  //  node_modules/element-plus/theme-chalk/src/common/var.scss"
+  $border-radius: ("base": 6px, "small": 12px, "round": 20px, "circle": 100%),
+  $loading: (
+    'spinner-size': 2.4rem,
+    'fullscreen-spinner-size': 2.6rem,
+  ),
+
+  $colors: (
+    "white": #ffffffe1,
+    "black": #131313,
+    "main": #3583fd,
+    "primary": (
+      "base": #3583fd,
+      "tip": #dc284d,
+      "tip2": #fdae2f,
+      "tip3": #00e9ce
+    ),
+    "success": (
+      "base": #56c220
+    ),
+    "warning": (
+      "base": #fdae2f
+    ),
+    "danger": (
+      "base": #ff5644
+    ),
+    "error": (
+      "base": #f12323
+    ),
+    "info": (
+      "base": #11e08a
+    )
+  ),
+  
+  $bg-color: ("black": #111111, "primary": #303133),
+  $text-color: (
+    "primary": #303133,
+    "regular": #606266,
+    "secondary": #909399,
+    "placeholder": #a8abb2,
+    "disabled": #c0c4cc
+  ),
+
+  // $drawer
+  $drawer: ("padding-primary": 0px),
+  //
+  $carousel:
+    (
+      "arrow-font-size": 20px,
+      "arrow-size": 36px,
+      "arrow-background": rgba(31, 45, 61, 0.4),
+      "arrow-hover-background": rgba(31, 45, 61, 0.4),
+      "indicator-width": 30px,
+      "indicator-height": 2px,
+      "indicator-padding-horizontal": 4px,
+      "indicator-padding-vertical": 12px,
+      "indicator-out-color": getCssVar("border-color-hover")
+    ),
+  // el-card
+  $card:
+    (
+      "border-color": getCssVar("border-color", "light"),
+      "border-radius": 4px,
+      "padding": 2px,
+      "bg-color": getCssVar("fill-color", "blank")
+    ),
+  // message
+  $message:
+    (
+      "bg-color": getCssVar("color", "info", "light-9"),
+      "border-color": getCssVar("border-color-lighter"),
+      "padding": 0.5rem 0.8rem,
+      "close-size": 1rem,
+      "close-icon-color": getCssVar("text-color-placeholder"),
+      "close-hover-color": getCssVar("text-color-secondary")
+    ),
+  $messagebox: (
+    "title-color": getCssVar("text-color-primary"),
+    "width": 300px,
+    "border-radius": 8px,
+    "font-size": getCssVar("font-size-base"),
+    "content-font-size": getCssVar("font-size-base"),
+    "content-color": getCssVar("text-color-regular"),
+    "error-font-size": 14px,
+    "padding-primary": 0.8rem,
+  ),
+  $checkbox: ("font-size": 1em, "input-height": 1em, "input-width": 1em, "border-radius": 4px),
+  $radio: ("font-size": 1em, "input-height": 1em, "input-width": 1em, "input-border-radius": 4px),
+  $menu: (
+      // 'active-color': getCssVar('color-primary'),
+      // 'text-color': getCssVar('text-color-primary'),
+      // 'hover-text-color': getCssVar('color-primary'),
+      // 'bg-color': getCssVar('fill-color', 'blank'),
+      // 'hover-bg-color': getCssVar('color-primary-light-9'),
+      // 'item-height': 56px,
+      // 'sub-item-height': calc(#{getCssVar('menu-item-height')} - 6px),
+      // 'horizontal-sub-item-height': 36px,
+      // 'item-font-size': getCssVar('font-size-base'),
+      // 'item-hover-fill': getCssVar('color-primary-light-9'),
+      // 'border-color': getCssVar('border-color'),
+      // 'base-level-padding': 20px,
+      // 'level-padding': 20px,
+      // 'icon-width': 24px,
+    ) 
+);

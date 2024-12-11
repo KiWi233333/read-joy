@@ -15,6 +15,8 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "@nuxtjs/tailwindcss",
     "@nuxt/image",
+    "@element-plus/nuxt",
+    "@formkit/auto-animate",
   ],
   ssr: true,
   devtools: {
@@ -38,8 +40,9 @@ export default defineNuxtConfig({
   },
   css: [
     "@unocss/reset/tailwind.css",
-    "./app/assets/css/ui.css",
-    "./app/assets/css/init.scss",
+    "./app/assets/style/ui.css",
+    "./app/assets/style/init.scss",
+    "./app/assets/style/animate.scss",
   ],
   colorMode: {
     classSuffix: "",
@@ -76,6 +79,24 @@ export default defineNuxtConfig({
   },
   vite: {
     envPrefix: ["VITE_", "TAURI_"],
+
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `
+          @use "@/assets/style/element/index.scss" as element;
+          @use "@/assets/style/element/dark.scss" as dark;
+          @use "@/assets/style/var.scss" as *;
+          `,
+        },
+      },
+    },
+  },
+  elementPlus: {
+    icon: "ElIcon",
+    importStyle: "scss",
+    themes: ["dark"],
+    defaultLocale: "zh-cn",
   },
   // eslint
   eslint: {
