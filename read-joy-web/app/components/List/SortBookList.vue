@@ -8,55 +8,57 @@ import { useSettingStore } from "~/composables/sotre/useSettingStore";
 const {
   showLoad = true,
   showMoreText = true,
-  animated = false,
-  limit = undefined,
+  animated = "auto",
+  limit,
   ssr = true,
-  dto = undefined,
+  dto,
+  debounce = 0,
 } = defineProps<{
   dto?: Partial<SelectBookPageDTO>
   autoStop?: boolean
   showLoad?: boolean
   showMoreText?: boolean
   ssr?: boolean
-  animated?: boolean
-  limit?: number
   title?: string
   bookClass?: string
   bookImgClass?: string
+  animated?: "auto" | boolean
+  limit?: number
+  debounce?: number
 }>();
-
-const setting = useSettingStore();
 const store = useDefaultStore();
-interface PageType extends Partial< IPage<BookDetailVO>> {
+const setting = useSettingStore();
+interface PageType extends Partial<IPage<BookDetailVO>> {
   page: number
 }
 const [autoAnimateRef, enable] = useAutoAnimate();
 const isLoading = ref<boolean>(false);
 const pageInfo = ref <PageType> ({
+  page: 0,
   size: limit || 20,
-  page: 1,
-  current: 1,
+  current: undefined,
   total: undefined,
   pages: undefined,
   records: [] as BookDetailVO[],
 });
-const noMore = computed(() => !!(pageInfo.value.current && pageInfo.value.current >= (pageInfo.value?.pages || 0)));
+const noMore = computed(() => !!(pageInfo.value.current !== undefined && pageInfo.value.pages !== undefined && pageInfo.value.current === pageInfo.value.pages));
 
 /**
  * 加载图书列表
  */
-async function loadData(dto?: Partial<SelectBookPageDTO>) {
-  if (isLoading.value || pageInfo.value.page > 0 && pageInfo.value?.current && pageInfo.value?.current >= (pageInfo.value?.pages || 0))
+async function loadData() {
+  if (isLoading.value || noMore.value)
     return;
   if (limit !== undefined && pageInfo.value.records && +pageInfo?.value?.records.length >= limit) {
     isLoading.value = false;
     return;
   }
   isLoading.value = true;
+  pageInfo.value.page++;
   const res = await getBookPageByDTOApi({
-    page: pageInfo.value.page || 1,
-    size: pageInfo.value.size || limit || 20,
     ...dto,
+    size: limit || dto?.size || 20,
+    page: pageInfo.value.page,
   });
   if (res.code === ResultStatus.SUCCESS) {
     pageInfo.value = {
@@ -68,20 +70,21 @@ async function loadData(dto?: Partial<SelectBookPageDTO>) {
       records: [...(pageInfo.value.records || []), ...res.data.records],
     };
   }
-  pageInfo.value.page++;
-  isLoading.value = false;
+  setTimeout(() => {
+    isLoading.value = false;
+  }, debounce);
 }
 
 async function reload() {
   pageInfo.value = {
-    page: 1,
-    current: 0,
+    page: 0,
+    current: undefined,
     size: limit || 20,
-    total: 0,
-    pages: 0,
+    total: undefined,
+    pages: undefined,
     records: [],
   };
-  await loadData(dto);
+  await loadData();
 }
 
 defineExpose({
@@ -89,13 +92,37 @@ defineExpose({
   noMore,
   reload,
 });
+
+const unWatch = watchDebounced(
+  () => dto,
+  () => {
+    reload();
+  },
+  {
+    debounce,
+    deep: true,
+  },
+);
+
+
+watch(() => animated, (val) => {
+  if (val === "auto" || val) {
+    enable(!setting.isCloseAllTransition);
+  }
+  else {
+    enable(false);
+  }
+});
 // 初始化
 await reload();
 onMounted(() => {
-  enable(animated === false ? false : !setting.isCloseAllTransition);
+  enable(animated === false ? false : animated === "auto" ? false : !setting.isCloseAllTransition);
 });
 onActivated(() => {
-  enable(animated === false ? false : !setting.isCloseAllTransition);
+  enable(animated === false ? false : animated === "auto" ? false : !setting.isCloseAllTransition);
+});
+onDeactivated(() => {
+  unWatch();
 });
 
 // 路由跳转
@@ -112,7 +139,7 @@ function resolveRouteDetail(bookId?: number) {
     :auto-stop="limit !== undefined || autoStop"
     :no-more="noMore"
     :loading-class="showLoad ? 'op-100' : 'op-0'"
-    @load="loadData(dto)"
+    @load="loadData()"
   >
     <slot name="header">
       <h4 v-if="title" class="mb-4">
@@ -131,8 +158,8 @@ function resolveRouteDetail(bookId?: number) {
         :href="`/book/${book.bookId}`"
         @click.prevent.stop="resolveRouteDetail(book?.bookId)"
       >
-        <CardElImage
-          class="book h-25 w-18 shadow card-default"
+        <CardNuxtImg
+          class="book h-25 w-18 shrink-0 shadow card-default"
           :class="bookImgClass"
           :default-src="book.coverImageUrl"
         >
@@ -141,16 +168,20 @@ function resolveRouteDetail(bookId?: number) {
               暂无图片
             </small>
           </template>
-        </CardElImage>
-        <div truncate px-4>
-          <h4 truncate>
+        </CardNuxtImg>
+        <div flex flex-col px-4 leading-1.8em>
+          <h4 class="max-w-6rem sm:max-w-9em" truncate>
+            {{ book.title }}
             {{ book.title }}
           </h4>
-          <small class="truncate text-mini">
+          <p class="text-overflow-2 mt-1 max-w-8em text-mini">
             {{ book.author }}
-          </small>
-          <div class="truncate text-mini">
-            出版于：{{ book.publishionDate || "未填写" }}
+          </p>
+          <div class="mt-1 truncate text-mini">
+            出版于:{{ book.publishionDate || "未填写" }}
+          </div>
+          <div class="!text-warning mt-a truncate text-small">
+            <small>售价:</small><span>￥{{ book?.price === 0 ? '免费' : book?.price || '-' }}</span>
           </div>
         </div>
       </a>

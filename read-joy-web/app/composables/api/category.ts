@@ -31,11 +31,11 @@ export interface CategoryVO {
   /**
    * 分类ID
    */
-  categoryId?: number;
+  categoryId: number;
   /**
    * 分类名称
    */
-  categoryName?: string;
+  categoryName: string;
 
   bookCount?: number;
 }

@@ -24,7 +24,7 @@ function onSearch() {
   navigateTo({
     path: "/search",
     query: {
-      name: word.value.trim(),
+      keyword: word.value.trim(),
     },
   });
 }
@@ -92,8 +92,8 @@ $scle-input-width: min(70vw, 32rem);
     height: 2rem;
     font-size: 14px;
     border: 0;
-    background-color: #f6f7f9;
-    box-shadow: inset 0 0 2px 1px #f8f8f8, inset 0 0 2px 1px #f8f8f8;
+    background-color: #f3f3f3c2;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 2px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
     input::placeholder {
       letter-spacing: 0.3em;
       transition: width $transition-delay;
@@ -107,22 +107,18 @@ $scle-input-width: min(70vw, 32rem);
     &.is-focus {
       width: $scle-input-width;
     }
+    &.is-focus {
+      box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
+    }
     .el-input__suffix {
       position: absolute;
       right: 3%;
     }
-
   }
-
-  // :deep(.el-input__inner):focus {
-  //   width: $scle-input-width;
-  //   padding: 0 4rem 0 0.4rem;
-  // }
 }
 .dark .search :deep(.el-input__wrapper) {
   background-color: rgb(15, 15, 15);
   box-shadow: inset 0 0 2px 1px rgb(15, 15, 15), inset 0 0 2px 1px rgb(15, 15, 15);
-  // box-shadow: inset 0 0 2px 1px #000, inset 0 0 2px 1px #000;
   input::placeholder {
     color: #ffffffb3;
   }

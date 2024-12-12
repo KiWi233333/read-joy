@@ -23,6 +23,9 @@ export default defineNuxtConfig({
     enabled: false,
   },
   app: {
+    // https://nuxt.com.cn/docs/getting-started/transitions
+    pageTransition: { name: "page", mode: "out-in" },
+    layoutTransition: { name: "layout", mode: "out-in" },
     head: {
       viewport: "width=device-width,initial-scale=1",
       link: [
@@ -61,7 +64,7 @@ export default defineNuxtConfig({
     payloadExtraction: false,
     renderJsonPayloads: true,
     typedPages: true,
-    viewTransition: true,
+    // viewTransition: true,
     crossOriginPrefetch: true, // 使用 Speculation Rules API 启用跨源预取。
   },
   compatibilityDate: "2024-08-14",
@@ -105,6 +108,28 @@ export default defineNuxtConfig({
       nuxt: {
         sortConfigKeys: true,
       },
+    },
+  },
+  image: {
+    domains: [
+      "kiwi2333.top",
+      "kiwi233.top",
+      "netlify.app",
+    ],
+    format: [
+      "webp",
+      "avif",
+      "jpeg",
+      "png",
+    ],
+    screens: {
+      "xs": 320,
+      "sm": 640,
+      "md": 768,
+      "lg": 1024,
+      "xl": 1280,
+      "xxl": 1536,
+      "2xl": 1536,
     },
   },
   pwa,

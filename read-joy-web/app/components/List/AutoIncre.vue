@@ -6,7 +6,8 @@ const {
   autoStop = true,
   delay = 400,
   offset = 10,
-  loadingClass = "mx-a my-0.6em h-1.2em w-1.2em animate-[spin_2s_infinite_linear] rounded-6px bg-[var(--el-color-primary)]",
+  loadingParentClass = "min-h-4",
+  loadingClass = "mx-a my-0.6em h-1.4rem w-1.4rem animate-spin animate-[spin_2s_infinite_linear] rounded-6px bg-[var(--el-color-primary)]",
   appendLoadingClass = "",
 } = defineProps<{
   noMore?: boolean
@@ -14,6 +15,7 @@ const {
   delay?: number
   loading?: boolean
   loadingClass?: string
+  loadingParentClass?: string
   appendLoadingClass?: string
   ssr?: boolean
   autoStop?: boolean
@@ -48,7 +50,7 @@ watch(isSee, (val) => {
 
 
 function callBack() {
-  if (loading && isSee.value) {
+  if (!loading && isSee.value) {
     emit("load");
     timer = setTimeout(callBack, delay);
   }
@@ -58,6 +60,7 @@ function callBack() {
   }
 }
 
+const showLoad = computed(() => !noMore && !loading);
 onUnmounted(() => {
   clearTimeout(timer);
   stop();
@@ -73,13 +76,13 @@ defineExpose({
   <slot name="default" />
   <!-- 加载 -->
   <div
-    v-if="loading"
+    v-show="showLoad"
     ref="loadMoreRef"
-    key="loadMoreRef"
-    class="z-9 min-h-1em"
+    key="load-more-dom"
+    :class="loadingParentClass"
   >
     <slot name="load">
-      <div key="load" w-full flex-row-c-c py-2 text-center text-bluegray>
+      <div key="load" w-full flex-row-c-c text-center text-bluegray>
         <div
           :class="`${loadingClass} ${appendLoadingClass}`"
         />
@@ -87,7 +90,7 @@ defineExpose({
     </slot>
   </div>
   <!-- 完成 -->
-  <div v-else-if="!loading" :style="{ minHeight: `${offset}px` }">
+  <div v-if="noMore" key="load" :style="{ minHeight: `${offset}px` }">
     <slot name="done">
       <div key="done" class="animate-fade-in" w-full text-center text-bluegray @click="!isSupported && $emit('load')" />
     </slot>

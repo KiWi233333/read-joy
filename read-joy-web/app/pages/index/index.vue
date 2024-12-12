@@ -3,25 +3,25 @@ import { BookSortOrder, BookSortType, type SelectBookPageDTO } from "~/composabl
 
 // 大家都在看
 const recommendListRef = ref();
-const recommendListDto = reactive<SelectBookPageDTO>({
-  page: 1,
-  size: 6,
-});
 function reloadRecommon() {
   if (!recommendListRef.value?.reload) {
     return;
   }
   const pageInfo = recommendListRef.value.pageInfo;
   if (pageInfo) {
-    recommendListDto.page = pageInfo.pages > recommendListDto.page ? pageInfo.current + 1 : 1;
+    // recommendListDto.page = pageInfo.pages > recommendListDto.page ? pageInfo.current + 1 : 1;
+    recommendListRef.value?.reload({
+      page: pageInfo.pages > pageInfo.current ? pageInfo.current + 1 : 1,
+    });
   }
-  recommendListRef.value.reload?.();
 }
+
+// 定义最小高度
 const recommendListRefHeight = ref(0);
 onMounted(() => {
   setTimeout(async () => {
     await nextTick();
-    const dom = document.querySelector(".recommendListDom");
+    const dom = document.querySelector("#home-recommend-list");
     if (dom) {
       recommendListRefHeight.value = dom.clientHeight;
     }
@@ -41,7 +41,7 @@ interface BookListParams {
     sortType: BookSortType;
     sortOrder: BookSortOrder;
   };
-  animated?: boolean;
+  animated?: boolean | "auto";
   limit?: number;
 }
 const bookListCards: BookListParams[] = [
@@ -54,10 +54,10 @@ const bookListCards: BookListParams[] = [
     dto: {
       page: 1,
       size: 6,
-      sortType: BookSortType.PUBLISH_TIME,
+      sortType: BookSortType.PRICE,
       sortOrder: BookSortOrder.DESC,
     },
-    animated: false,
+    animated: "auto",
     limit: 6,
   },
   {
@@ -72,14 +72,14 @@ const bookListCards: BookListParams[] = [
       sortType: BookSortType.PUBLISH_TIME,
       sortOrder: BookSortOrder.DESC,
     },
-    animated: false,
+    animated: "auto",
     limit: 6,
   },
 ];
 </script>
 
 <template>
-  <div data-fades style="--lv: 0;">
+  <div data-fades class="py-4 pb-20vh">
     <!-- 大家都在看 -->
     <h2 class="title">
       大家都在看
@@ -92,29 +92,29 @@ const bookListCards: BookListParams[] = [
         换一批
       </BtnElButton>
     </h2>
-    <ListBookList
-      ref="recommendListRef"
-      class="recommendListDom rounded"
+    <div
+      id="home-recommend-list"
       :style="{ minHeight: `${recommendListRefHeight}px` }"
-      :show-load="false"
-      :show-more-text="false"
-      :ssr="true"
-      :dto="recommendListDto"
-      :animated="false"
-      :limit="recommendListDto.size"
-    />
+    >
+      <ListBookList
+        ref="recommendListRef"
+        :show-load="false"
+        :show-more-text="false"
+        :ssr="true"
+        :limit="6"
+      />
+    </div>
     <!-- 榜单 -->
     <h2 class="title">
       榜单
     </h2>
-    <div grid cols-1 gap-4 sm:cols-2 sm:gap-8>
-      <div v-for="(item, index) in bookListCards" :key="index" class="p-4 shadow-sm card-default sm:(px-6 py-6 pb-4)">
+    <div grid cols-1 gap-8 lg:cols-2>
+      <div v-for="(item, index) in bookListCards" :key="index" class="p-4 border-default card-default sm:(px-6 py-6 pb-4)">
         <ListSortBookList
           :ssr="true"
           :show-load="item.showLoad"
           :show-more-text="item.showMoreText"
           :dto="item.dto"
-          :animated="item.animated"
           :limit="item.limit"
         >
           <template #header>
@@ -143,7 +143,7 @@ const bookListCards: BookListParams[] = [
         更多
       </NuxtLink>
     </h2>
-    <ListCategoryList />
+    <ListCategoryList class="gap-4 lg:gap-4 md:gap-6" />
   </div>
 </template>
 

@@ -5,7 +5,7 @@
 
 <template>
   <main relative>
-    <MenuHeader class="sticky top-0 z-999 w-full" />
+    <MenuHeader />
     <div class="layout-default">
       <slot />
     </div>

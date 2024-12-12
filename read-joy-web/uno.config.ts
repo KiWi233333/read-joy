@@ -12,10 +12,12 @@ import {
 export default defineConfig({
   shortcuts: [
     ["card-default", "bg-[#ffffff] dark:bg-dark-7 rounded-2"],
+    ["card-rounded-df", "rounded-2"],
     ["card-default-sm", "bg-[#ffffff] dark:bg-dark-7 rounded-1"],
     ["card-default-br", "bg-(light-4 op-60) dark:(bg-dark-5 bg-op-60) rounded-1.5 backdrop-blur-12px backdrop-saturate-180"],
     // 颜色
     ["text-color", "text-dark dark:text-white"],
+    ["text-default", "text-1em text-dark dark:text-white"],
     ["text-small", "text-gray dark:text-[#979898] text-sm"],
     ["text-mini", "text-gray dark:text-[#979898] text-xs"],
     ["text-color-primary", "text-[var(--el-color-primary)]"],
@@ -35,7 +37,7 @@ export default defineConfig({
     // 布局
     ["flex-row-c-c", "flex flex-row flex-justify-center flex-items-center"],
     ["flex-row-bt-c", "flex flex-row flex-justify-between flex-items-center"],
-    ["layout-default", "mx-a px-4 py-3 sm:(max-w-640px px-6 py-4) md:(max-w-960px px-4) lg:(px-6 max-w-1120px)"],
+    ["layout-default", "mx-a px-4 sm:(max-w-640px px-6) md:(max-w-960px px-4) lg:(px-6 max-w-1120px)"],
     ["absolute-center", "absolute left-1/2 -translate-x-1/2"],
     ["absolute-center-center", "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"],
     ["absolute-center-x", "absolute left-1/2 -translate-x-1/2"],
@@ -43,11 +45,18 @@ export default defineConfig({
     ["rounded-default", "border-8px"],
 
     // element风格按钮
+    ["text-info", "text-[var(--el-color-info)]"],
+    ["text-success", "text-[var(--el-color-success)]"],
+    ["text-primary", "text-[var(--el-color-primary)]"],
+    ["text-danger", "text-[var(--el-color-danger)]"],
+    ["text-warning", "text-[var(--el-color-warning)]"],
+
     ["btn-info", "transition-200 cursor-pointer rounded-4px hover:text-[var(--el-color-info)]"],
     ["btn-success", "transition-200 cursor-pointer rounded-4px hover:text-[var(--el-color-success)]"],
     ["btn-primary", "transition-200 cursor-pointer rounded-4px hover:text-[var(--el-color-primary)]"],
     ["btn-danger", "transition-200 cursor-pointer rounded-4px hover:text-[var(--el-color-danger)]"],
     ["btn-warning", "transition-200 cursor-pointer rounded-4px hover:text-[var(--el-color-warning)]"],
+
     ["btn-info-text", "transition-200 cursor-pointer rounded-4px hover:text-[var(--el-color-info)]"],
     ["btn-success-text", "transition-200 cursor-pointer rounded-4px hover:text-[var(--el-color-success)]"],
     ["btn-primary-text", "transition-200 cursor-pointer rounded-4px hover:text-[var(--el-color-primary)]"],

@@ -2,6 +2,8 @@
 import type { BookDetailVO } from "../api/book";
 import { acceptHMRUpdate, defineStore } from "pinia";
 import { getBookDetailApi } from "~/composables/api/book";
+import { type CategoryVO, getCategoryListByDTOApi } from "../api/category";
+import { ResultStatus } from "../api/types/result";
 import { useSettingStore } from "./useSettingStore";
 // @unocss-include
 // https://pinia.web3doc.top/ssr/nuxt.html#%E5%AE%89%E8%A3%85
@@ -13,6 +15,9 @@ export const useDefaultStore = defineStore(
       bookId: undefined,
     });
     const showBookDetail = ref(false);
+    // 分类
+    const categoryList = ref<CategoryVO[]>([]);
+    const categoryMap = shallowRef<Record<number, CategoryVO>>({});
 
     // 设置book
     async function setBook(bookId: number, callback = () => {
@@ -41,9 +46,26 @@ export const useDefaultStore = defineStore(
       }
     }
 
+    async function init() {
+      // 分类
+      const res = await getCategoryListByDTOApi({});
+      if (res.code === ResultStatus.SUCCESS) {
+        categoryList.value = res.data;
+        categoryList.value.forEach((item) => {
+          categoryMap.value[item.categoryId] = item;
+        });
+      }
+      else {
+        categoryList.value = [];
+      }
+    }
+
     return {
       showBookDetail,
       theBookDetail,
+      categoryList,
+      categoryMap,
+      init,
       setBook,
       openBookDetail,
     };

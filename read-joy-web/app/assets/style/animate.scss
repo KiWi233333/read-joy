@@ -771,6 +771,7 @@ html.stop-transition-all {
 }
 
 /* 单个 */
+.data-fade,
 [data-fade] {
   --lv: 0;
   --delay: 0.1s;
@@ -778,12 +779,14 @@ html.stop-transition-all {
   --anima: latter-slice-top;
 }
 @for $i from 1 through 20 {
+  .data-fades > *:nth-child(#{$i}),
   [data-fades] > *:nth-child(#{$i}) {
     --lv: #{$i};
   }
 }
 
 /* 段落 */
+.data-fades > *,
 [data-fades] > * {
   --lv: 0;
   --delay: 0.1s;
@@ -812,7 +815,7 @@ html.stop-transition-all {
 @keyframes latter-slice-top {
   0% {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(0.5rem);
   }
 
   to {
@@ -822,7 +825,7 @@ html.stop-transition-all {
 @keyframes latter-slice-bottom {
   0% {
     opacity: 0;
-    transform: translateY(-12px);
+    transform: translateY(-0.5rem);
   }
 
   to {
@@ -833,7 +836,7 @@ html.stop-transition-all {
 @keyframes latter-slice-left {
   0% {
     opacity: 0;
-    transform: translateX(12px);
+    transform: translateX(0.5rem);
   }
   to {
     transform: none;
@@ -842,7 +845,7 @@ html.stop-transition-all {
 @keyframes latter-slice-right {
   0% {
     opacity: 0;
-    transform: translateX(-12px);
+    transform: translateX(-0.5rem);
   }
   to {
     transform: none;

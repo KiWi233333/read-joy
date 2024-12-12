@@ -9,7 +9,7 @@ const isLoading = ref<boolean>(false);
 const categoryList = ref<CategoryVO[]>([]);
 
 /**
- * 加载图书列表
+ * 加载分类列表
  */
 async function loadData(dto?: SelectCategoryListDTO) {
   if (isLoading.value)

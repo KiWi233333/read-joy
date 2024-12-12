@@ -220,7 +220,7 @@ async function onLogin(formEl: any | undefined) {
     </template>
     <template v-else>
       <div data-fades class="flex-row-c-c flex-col gap-4 pb-2 sm:gap-6">
-        <CardElImage :src="user.userInfo.imgUrl ? BaseUrlImg + user.userInfo.imgUrl : ''" class="h-6rem w-6rem sm:(h-7rem w-7rem) border-default card-default" />
+        <CardNuxtImg :src="user.userInfo.imgUrl ? BaseUrlImg + user.userInfo.imgUrl : ''" class="h-6rem w-6rem sm:(h-7rem w-7rem) border-default card-default" />
         <div text-center>
           <span>
             {{ user.userInfo.loginName || "未登录" }}

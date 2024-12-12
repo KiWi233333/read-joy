@@ -23,13 +23,13 @@ defineExpose({
     </template>
     <div class="w-60vw flex flex-col overflow-hidden border rounded-8px sm:w-15rem">
       <div class="h-18 w-full bg-[var(--el-color-primary)]" />
-      <CardElImage :default-src="user.userInfo.imgUrl" class="mx-auto h-16 w-16 border-2px border-white rounded-full rounded-full transition-shadow -mt-8 dark:border-gray bg-color-br hover:shadow">
+      <CardNuxtImg :default-src="user.userInfo.imgUrl" class="mx-auto h-16 w-16 border-2px border-white rounded-full rounded-full transition-shadow -mt-8 dark:border-gray bg-color-br hover:shadow">
         <template #error>
           <div h-full w-full flex-row-c-c text-lg>
             {{ user?.userInfo?.loginName?.[0] || "未设置" }}
           </div>
         </template>
-      </CardElImage>
+      </CardNuxtImg>
       <h4 mt-4 truncate text-center font-500>
         {{ user.userInfo.loginName }}
       </h4>
@@ -45,7 +45,7 @@ defineExpose({
         <BtnElButton
           transition-icon
           icon-class="i-solar:home-2-outline"
-          type="primary" class="w-full shadow" @click="user.exitLogin"
+          type="primary" class="w-full shadow" @click="ElMessage.warning('功能还未上线')"
         >
           我的主页
         </BtnElButton>

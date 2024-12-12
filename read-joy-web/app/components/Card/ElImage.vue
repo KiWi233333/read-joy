@@ -8,23 +8,24 @@ const { defaultSrc, src } = defineProps<{
   loadRootClass?: string
   errorRootClass?: string
   errorClass?: string
+  quality?: number
 }>();
+const url = computed(() => defaultSrc ? `${BaseUrlImg}${defaultSrc}` : (src || ""));
 </script>
 
 <template>
   <el-image
-    :src="defaultSrc ? BaseUrlImg + defaultSrc : src"
+    :src="url"
     fit="cover"
     hide-on-click-modal
+    loading="lazy"
     v-bind="$attrs"
   >
-    <!-- 占位 -->
     <template #placeholder>
       <slot name="placeholder">
         <div :class="loadClass !== undefined ? loadClass : 'sky-loading h-full w-full'" />
       </slot>
     </template>
-    <!-- 错误 -->
     <template #error>
       <slot name="error">
         <div class="h-full w-full flex-row-c-c" :class="errorRootClass">
