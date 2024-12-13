@@ -47,7 +47,6 @@ export default withNuxt(
       "vue/no-mutating-props": "off", // 禁止修改props
       "vue/no-side-effects-in-computed-properties": "off", // 禁止在计算属性中使用副作用
       "vue/return-in-computed-property": "off", // 禁止在计算属性中使用return语句
-      "vue/multi-word-component-names": "off",
       // base
       "no-case-declarations": "off", // 禁止在case子句中声明变量
       "node/prefer-global/process": "off", // 禁止使用process全局变量

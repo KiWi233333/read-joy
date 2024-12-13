@@ -101,7 +101,7 @@ const bookListCards: BookListParams[] = [
         :show-load="false"
         :show-more-text="false"
         :ssr="true"
-        :limit="6"
+        :limit="5"
       />
     </div>
     <!-- 榜单 -->

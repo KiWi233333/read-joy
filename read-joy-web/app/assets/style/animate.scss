@@ -769,7 +769,6 @@ html.stop-transition-all {
     }
   }
 }
-
 /* 单个 */
 .data-fade,
 [data-fade] {
@@ -820,6 +819,21 @@ html.stop-transition-all {
 
   to {
     transform: none;
+  }
+}
+@keyframes latter-slice-blur-top {
+  0% {
+    opacity: 0;
+    transform: translateY(0.5rem);
+    filter: blur(10px);
+  }
+
+  80%  {
+    filter: none;
+  }
+  100% {
+    transform: none;
+    filter: none;
   }
 }
 @keyframes latter-slice-bottom {

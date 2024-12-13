@@ -5,7 +5,7 @@ const emit = defineEmits(["showSearch"]);
 <template>
   <BtnToggleTheme />
   <div class="block sm:hidden">
-    <ElButton :icon="ElIconSearch" circle @click="emit('showSearch')" />
+    <el-button :icon="ElIconSearch" circle @click="emit('showSearch')" />
   </div>
 </template>
 

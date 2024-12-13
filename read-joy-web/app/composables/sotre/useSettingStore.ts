@@ -12,8 +12,10 @@ export const useSettingStore = defineStore(
     const isCloseAllTransition = ref(false);
     // 是否通过新标签页打开书籍
     const isNewTabOpenBook = ref(false);
+    const isMobileSize = ref(false);
 
     return {
+      isMobileSize,
       isCloseAllTransition,
       isNewTabOpenBook,
       isThemeChangeLoad,

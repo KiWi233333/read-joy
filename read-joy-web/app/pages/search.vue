@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import Button from "~/components/ui/button/Button.vue";
 import { BookSortOrder, BookSortType, type SelectBookPageDTO } from "~/composables/api/book";
 import { useDefaultStore } from "~/composables/sotre/useDefaultStore";
 import { useSettingStore } from "~/composables/sotre/useSettingStore";
 import { useUserStore } from "~/composables/sotre/useUserStore";
-import { DATE_SELECTOR_OPTIONS } from "~/composables/utils/useUtils";
+import { DATE_FORMAT, DATE_SELECTOR_OPTIONS } from "~/composables/utils/useUtils";
 
 const emit = defineEmits(["update:modelValue", "open", "close"]);
 definePageMeta({
@@ -53,7 +52,7 @@ function clickHistory(keyword: string) {
   onSearch();
 }
 
-const showFilter = useLocalStorage("searcj_show_filter", false);
+const showFilter = useLocalStorage("search_show_filter", false);
 // 排序
 const sortGroupModel = computed({
   get() {
@@ -120,7 +119,17 @@ const dateGroupModel = computed({
     onSearch();
   },
 });
-
+function toggleSort() {
+  showFilter.value = !showFilter.value;
+  if (!showFilter.value) { // 清空
+    dto.value = {
+      page: 1,
+      size: 10,
+    };
+    onSearch();
+  }
+}
+const showSearchResource = computed(() => Object.values({ ...dto.value, page: undefined, size: undefined }).some(Boolean));
 onMounted(() => {
   enable(!setting.isCloseAllTransition);
 });
@@ -128,13 +137,13 @@ onMounted(() => {
 
 <template>
   <main class="py-0 layout-default">
-    <header class="flex-row-c-c flex-col py-10 sm:(py-12)">
+    <header class="flex-row-c-c flex-col pb-4 pt-10 sm:(pb-4 pt-12)">
       <NuxtLink to="/" class="hidden sm:block">
         <NuxtImg src="logo-text-light.png" class="block h-10 select-none dark:hidden" />
         <NuxtImg src="logo-text-dark.png" class="hidden h-10 select-none dark:block" />
       </NuxtLink>
       <div class="relative my-8 flex-row-c-c">
-        <ElInput
+        <el-input
           ref="inputRef"
           v-model.trim="dto.keyword"
           type="search"
@@ -179,65 +188,109 @@ onMounted(() => {
         </div>
       </ClientOnly>
     </header>
-    <ListBookList
-      :show-load="true"
-      :show-more-text="true"
-      :auto-stop="false"
-      :debounce="300"
-      :ssr="true"
-      books-class="data-fades relative grid cols-2 w-full items-center gap-4 md:cols-5 sm:cols-4 md:gap-4"
-      :dto="dtoTemp"
-      book-class="mx-a"
-      :animated="false"
-    >
-      <template #header="{ pageInfo }">
-        <!-- 搜索区域 -->
-        <div class="group flex-row-bt-c py-4 sm:(pb-8 pt-4)">
-          <h2 class="text-lg font-bold">
-            {{ dtoTemp?.categoryId ? store.categoryMap?.[dtoTemp?.categoryId]?.categoryName || '全部' : "全部" }}
-            <span v-if="!!pageInfo.current" font-500 text-small>
-              共{{ pageInfo?.total }}本图书
-            </span>
-          </h2>
-          <div class="w-fit flex flex-wrap items-center op-50 transition-opacity group-hover:op-100">
+    <template v-if="showSearchResource">
+      <ListBookList
+        :show-load="true"
+        :show-more-text="true"
+        :auto-stop="false"
+        :debounce="300"
+        :ssr="true"
+        books-class="data-fades relative grid cols-2 w-full items-center gap-4 md:cols-5 sm:cols-4 md:gap-4"
+        :dto="dtoTemp"
+        book-class="mx-a"
+        :animated="false"
+      >
+        <template #header="{ pageInfo }">
+          <!-- 搜索区域 -->
+          <div class="group mb-4 min-h-4rem flex-row-bt-c flex-wrap border-default-b">
+            <h2 class="text-lg font-bold">
+              {{ dtoTemp?.categoryId ? store.categoryMap?.[dtoTemp?.categoryId]?.categoryName || '全部' : "全部" }}
+              <span v-if="!!pageInfo.current" font-500 text-small>
+                共{{ pageInfo?.total }}本图书
+              </span>
+            </h2>
+            <div class="w-fit flex flex-wrap items-center op-80 transition-opacity group-hover:op-100">
+              <ClientOnly>
+                <div v-show="showFilter" data-fade hidden items-center sm:flex style="--anima: latter-slice-left;">
+                  <!-- 分类select -->
+                  <el-segmented
+                    :model-value="sortGroupModel"
+                    :options="sortOptions"
+                    class="ml-2 border-default card-default !bg-color"
+                  >
+                    <template #default="{ item }">
+                      <div class="flex gap-2" @click="sortGroupModel = item.value">
+                        <i p-2 :class="sortGroupModel === item.value ? (dtoTemp.sortOrder === BookSortOrder.DESC ? item.descIcon : item.ascIcon) : item.icon" />
+                        <div>{{ item.label }}</div>
+                      </div>
+                    </template>
+                  </el-segmented>
+                  <FormDatePicker
+                    v-model="dateGroupModel"
+                    :format="DATE_FORMAT"
+                    :preload-dates="DATE_SELECTOR_OPTIONS"
+                    :popover-props="{
+                      class: 'w-14rem',
+                    }"
+                    size="default"
+                    :btn-props="{
+                      class: 'ml-2 !block bg-color  w-14rem hover:bg-color',
+                    }"
+                  />
+                  <el-select
+                    v-model="dto.categoryId"
+                    class="ml-2 bg-color"
+                    style="width: 9rem;box-shadow: none;border: none; border-radius: 10px;"
+                    placeholder="图书分类"
+                    filterable
+                    @change="onSearch"
+                  >
+                    <el-option v-for="item in store.categoryList" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId">
+                      <span>{{ item.categoryName }}</span>
+                    </el-option>
+                  </el-select>
+                </div>
+                <el-button class="ml-2" :type="showFilter ? 'danger' : 'default'" :size="setting.isMobileSize ? 'small' : 'default'" @click="toggleSort">
+                  {{ showFilter ? '清空' : '筛选' }}
+                </el-button>
+              </ClientOnly>
+            </div>
             <ClientOnly>
-              <div v-show="showFilter" data-fade flex flex-wrap items-center style="--anima: latter-slice-left;">
+              <!-- 移动端显示 -->
+              <div v-if="showFilter && setting.isMobileSize" data-fade class="grid cols-2 w-full items-center gap-2 py-4" style="--anima: latter-slice-bottom;">
                 <!-- 分类select -->
                 <el-segmented
                   :model-value="sortGroupModel"
                   :options="sortOptions"
-                  class="ml-2"
                   size="small"
+                  class="border-default card-default"
                 >
                   <template #default="{ item }">
-                    <!-- @vue-expect-error -->
                     <div class="flex gap-2" @click="sortGroupModel = item.value">
-                      <!-- @vue-expect-error -->
                       <i p-2 :class="sortGroupModel === item.value ? (dtoTemp.sortOrder === BookSortOrder.DESC ? item.descIcon : item.ascIcon) : item.icon" />
-                      <!-- @vue-expect-error -->
-                      <div>{{ item?.label || "" }}</div>
+                      <div text-xs>
+                        {{ item.label }}
+                      </div>
                     </div>
                   </template>
                 </el-segmented>
-                <el-date-picker
+                <FormDatePicker
                   v-model="dateGroupModel"
-                  type="daterange"
-                  unlink-panels
-                  class="ml-2"
-                  style="width: 14rem;"
-                  range-separator="至"
-                  start-placeholder="起始"
-                  end-placeholder="截至"
-                  :shortcuts="DATE_SELECTOR_OPTIONS"
-                  size="small"
+                  :format="DATE_FORMAT"
+                  :preload-dates="DATE_SELECTOR_OPTIONS"
+                  :popover-props="{
+                  }"
+                  size="sm"
+                  :btn-props="{
+                    class: ' block bg-color  w-full sm:w-14rem hover:bg-color',
+                  }"
                 />
                 <el-select
                   v-model="dto.categoryId"
-                  size="small"
-                  class="ml-2"
                   style="width: 9rem;box-shadow: none;border: none; border-radius: 10px;"
-                  placeholder="分类"
-                  filterable
+                  placeholder="图书分类"
+                  class="bg-color"
+                  filterable size="small"
                   @change="onSearch"
                 >
                   <el-option v-for="item in store.categoryList" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId">
@@ -246,18 +299,21 @@ onMounted(() => {
                 </el-select>
               </div>
             </ClientOnly>
-            <el-button size="small" class="ml-2" @click="showFilter = !showFilter">
-              筛选
-            </el-button>
           </div>
-        </div>
-      </template>
-      <template #empty>
-        <div data-fade class="flex flex-col items-center justify-center gap-2">
-          <span class="text-color-secondary text-small">没有找到相关书籍</span>
-        </div>
-      </template>
-    </ListBookList>
+        </template>
+        <template #empty>
+          <div data-fade class="flex flex-col items-center justify-center gap-2">
+            <span class="text-color-secondary text-small">没有找到相关书籍</span>
+          </div>
+        </template>
+      </ListBookList>
+    </template>
+    <div v-else class="h-40vh flex-row-c-c text-small">
+      <!-- 空白搜索模块 -->
+      <h3 data-fade text-lg font-500 style="--delay: 1s;--anima: latter-slice-blur-top;">
+        快开始搜寻图书吧 🎉
+      </h3>
+    </div>
   </main>
 </template>
 
@@ -276,7 +332,7 @@ $scle-input-width: min(85vw, 56rem);
     font-weight: 500;
     border: 0;
     background-color: #ffffff;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    box-shadow: rgba(218, 218, 218, 0.1) 0px 1px 3px 0px, rgba(218, 218, 218, 0.1) 0px 0px 0px 1px;
     input::placeholder {
       letter-spacing: 0.3em;
       color: var(--el-text-color-placeholder);

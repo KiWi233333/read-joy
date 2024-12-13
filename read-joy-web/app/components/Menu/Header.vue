@@ -31,8 +31,8 @@ function showSearch() {
           class="scale-10 text-center text-lg text-light font-500 transition-300 absolute-center -translate-y-5em"
           :class="{ '-translate-y-5em scale-100 drop-shadow-2xl': isShowSearch }"
         >
-          <NuxtImg src="logo-text-light.png" class="block h-30px select-none dark:hidden" />
-          <NuxtImg src="logo-text-dark.png" class="hidden h-30px select-none dark:block" />
+          <NuxtImg preload src="/logo-text-light.png" class="block h-30px select-none dark:hidden" />
+          <NuxtImg src="/logo-text-dark.png" class="hidden h-30px select-none dark:block" />
         </h2>
       </div>
       <transition name="fade" :duration="200">

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ElScrollbar } from "#build/components";
 import type { SelectBookPageDTO } from "~/composables/api/book";
 import { type CategoryVO, getCategoryListByDTOApi, type SelectCategoryListDTO } from "~/composables/api/category";
 import { ResultStatus } from "~/composables/api/types/result";
@@ -7,6 +8,7 @@ const route = useRoute();
 // 分类
 const categoryList = ref<Partial<CategoryVO>[]>([]);
 const isLoading = ref(false);
+const categoryRef = ref<InstanceType<typeof ElScrollbar>>();
 
 // 图书
 // @ts-expect-error
@@ -41,6 +43,14 @@ async function loadCategoryData(dto?: SelectCategoryListDTO) {
   isLoading.value = false;
 }
 const categoryText = computed(() => categoryList.value.find(c => c.categoryId === pageDTO.categoryId || initCid)?.categoryName || "全部");
+function scrollBottom() {
+  console.log(categoryRef.value);
+
+  categoryRef.value?.scrollTo({
+    top: categoryRef.value?.$el.scrollHeight,
+    behavior: "smooth",
+  });
+}
 await loadCategoryData();
 </script>
 
@@ -49,8 +59,8 @@ await loadCategoryData();
     pt-4 sm:pt-10
     class="relative grid cols-[1fr_4fr] min-h-86vh w-full gap-4 grid-items-start sm:(cols-[1fr_5fr] gap-6)"
   >
-    <el-scrollbar height="86vh" class="sticky left-0 top-0">
-      <ul class="categoryList">
+    <el-scrollbar ref="categoryRef" height="86vh" style="height: fit-content;" class="sticky left-0 top-0">
+      <ul class="categoryList pb-20">
         <NuxtLink
           v-for="p in categoryList" :key="p.categoryId"
           class="item block px-2 py-1 text-sm"
@@ -70,7 +80,7 @@ await loadCategoryData();
           {{ p.categoryName }}{{ p.bookCount ? `(${p.bookCount})` : undefined }}
         </NuxtLink>
       </ul>
-      <div class="scroll-btm absolute bottom-0 left-0 z-2 h-8 w-full text-center leading-8 btn-primary-text">
+      <div class="scroll-btm absolute bottom-0 left-0 z-2 h-8 w-full text-center leading-8 btn-primary-text" @click="scrollBottom">
         <i class="i-solar:double-alt-arrow-down-line-duotone p-3" />
       </div>
     </el-scrollbar>

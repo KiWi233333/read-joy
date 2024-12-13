@@ -3,11 +3,11 @@
 
 <template>
   <div class="hidden sm:block">
-    <NuxtImg :quality="60" src="logo-text-light.png" class="block h-8 select-none dark:hidden" />
+    <NuxtImg preload :quality="60" src="logo-text-light.png" class="block h-8 select-none dark:hidden" />
     <NuxtImg :quality="60" src="logo-text-dark.png" class="hidden h-8 select-none dark:block" />
   </div>
   <div class="block sm:hidden">
-    <NuxtImg :quality="60" src="logo.png" class="h-8 select-none" />
+    <NuxtImg preload :quality="60" src="logo.png" class="h-8 select-none" />
   </div>
 </template>
 

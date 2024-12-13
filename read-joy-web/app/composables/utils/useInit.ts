@@ -12,6 +12,23 @@ export function useInit() {
   onMounted(() => {
     // 1、模式切换
     window.addEventListener("keydown", keyToggleTheme);
+    // 2、监听窗口大小变化
+    setting.isMobileSize = window?.innerWidth <= 768; // 判断是否为移动端
+    let timer: NodeJS.Timeout | null = null;
+    window.addEventListener("resize", resizeWind);
+    function resizeWind() {
+      if (timer)
+        clearTimeout(timer); // 清除之前的定时器，避免重复触发
+      const app = document.documentElement;
+      if (app)
+        app.classList.add("stop-transition");
+      timer = setTimeout(() => {
+        if (app)
+          app.classList.remove("stop-transition");
+        setting.isMobileSize = window?.innerWidth <= 768; // 判断是否为移动端
+        timer = null;
+      }, 150);
+    }
   });
 
 

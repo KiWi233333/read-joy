@@ -144,7 +144,7 @@ await reload();
     :no-more="noMore"
     :offset="limit !== undefined ? 0 : 20"
     :loading="isLoading"
-    :loading-class="showLoad ? 'op-100' : 'op-0'"
+    :loading-class="showLoad ? 'op-100 load-chaotic-orbit' : 'op-0'"
     @load="loadData()"
   >
     <div
@@ -170,10 +170,8 @@ await reload();
     </template>
     <div v-if="pageInfo.total === 0">
       <slot name="empty">
-        <div
-          class="w-full animate-[fade-in_0.4s_ease-out] pb-6 pt-4 text-center text-small"
-        >
-          暂无数据
+        <div data-fade class="flex flex-col items-center justify-center gap-2">
+          <span class="text-color-secondary text-small">没有找到相关书籍</span>
         </div>
       </slot>
     </div>
