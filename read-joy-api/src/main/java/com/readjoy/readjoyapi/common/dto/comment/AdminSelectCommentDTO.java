@@ -1,6 +1,5 @@
 package com.readjoy.readjoyapi.common.dto.comment;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.readjoy.readjoyapi.common.dto.defaults.PageDTO;
 import com.readjoy.readjoyapi.common.enums.BoolEnum;

@@ -1,10 +1,7 @@
 package com.readjoy.readjoyapi.common.enums;
 
-import cn.hutool.core.collection.CollectionUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.Collection;
 
 /**
  * Comment状态枚举类
