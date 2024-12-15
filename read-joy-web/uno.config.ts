@@ -34,7 +34,7 @@ export default defineConfig({
     ["border-default-t", "border-solid border-gray-200 border-0 border-t-1px  dark:border-dark-300"],
     ["border-default-b", "border-solid border-gray-200 border-0 border-b-1px  dark:border-dark-300"],
     ["border-hover-primary", "transition-200 border-1px border-solid border-gray-200 dark:border-dark-500 hover:border-color-[var(--el-color-primary)]"],
-    ["border-default-hover", "transition-200 border-1px border-solid border-gray-200 dark:border-dark-500 hover:(border-gray-400 dark:border-dark-100)"],
+    ["border-default-hover", "transition-200 border-1px border-solid border-gray-200 dark:border-dark-500 hover:(border-gray-300 dark:border-dark-100)"],
     ["border-default-dashed", "border-2px  border-default border-dashed"],
     ["border-default-dashed-hover", "transition-200 hover:border-solid hover:border-[var(--el-color-primary)]  border-default-dashed"],
     // 布局

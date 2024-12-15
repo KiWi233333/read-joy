@@ -158,7 +158,7 @@ export interface UserUpdatePwdDTO {
  * @returns 是否成功
  */
 export function updateUserInfoApi(dto: UserUpdateInfoDTO, token: string) {
-  return useHttp.put<Result<BoolEnum>>("/user", {
+  return useHttp.put<Result<UserInfoVO>>("/user", {
     ...dto,
   }, {
     headers: {

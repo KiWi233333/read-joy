@@ -157,7 +157,7 @@ await reload();
       v-bind="$attrs"
     >
       <slot v-for="item in pageInfo.records" name="item" :item="item">
-        <div :key="item.id" class="flex gap-4 p-2 border-default-hover card-default sm:p-4" :class="itemClass">
+        <div :key="item.id" class="flex gap-4 card-rounded-df p-2 sm:p-4 border-default-hover" :class="itemClass">
           <CardNuxtImg :default-src="item.commentatorAvatar" class="h-12 w-12 flex-shrink-0 rounded-full border-default card-default">
             <template #error>
               <div h-full w-full flex-row-c-c text-lg>

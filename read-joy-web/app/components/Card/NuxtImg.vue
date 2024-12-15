@@ -26,6 +26,7 @@ const url = computed(() => defaultSrc ? `${BaseUrlImg}${defaultSrc}` : (src || "
     :src="url"
     :quality="quality"
     loading="lazy"
+    class="object-cover"
     :placeholder="img(url, { f: 'png', blur: 2, q: 40 })"
   />
   <div

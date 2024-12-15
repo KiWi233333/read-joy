@@ -115,11 +115,11 @@ function likeResource(item: ResourceVO) {
           价格：<small>￥</small>{{ bookDetial?.price }}
         </div>
         <div class="mt-4 pt-4 border-default-t">
-          <BtnElButton @click="activeName = 'resorce'">
+          <BtnElButton icon-class="i-solar:eye-outline mr-2" transition-icon @click="activeName = 'resorce'">
             查看资源
           </BtnElButton>
-          <BtnElButton type="primary" @click="activeName = 'read'">
-            在线阅读
+          <BtnElButton type="primary" class="border-default" @click="activeName = 'read'">
+            查看详情
           </BtnElButton>
         </div>
       </div>
@@ -128,7 +128,7 @@ function likeResource(item: ResourceVO) {
       v-model="activeName"
       class="mt-4 pb-10vh pb-12"
     >
-      <el-tab-pane label="内容摘要" name="read" class="min-h-20vh">
+      <el-tab-pane label="内容摘要" name="read" class="tab-pane">
         <div
           data-fade style="--anima: latter-slice-blur-top;"
           class="card-rounded-df p-4 border-default"
@@ -136,7 +136,7 @@ function likeResource(item: ResourceVO) {
           {{ bookDetial?.introduction }}
         </div>
       </el-tab-pane>
-      <el-tab-pane lazy label="课程资源" name="resorce" class="min-h-20vh">
+      <el-tab-pane lazy label="课程资源" name="resorce" class="tab-pane">
         <ul class="grid cols-2 gap-2 sm:cols-3 sm:gap-4" data-fade style="--anima: latter-slice-blur-top;">
           <li
             v-for="item in bookDetial?.resourceList"
@@ -181,7 +181,7 @@ function likeResource(item: ResourceVO) {
           暂无资源
         </li>
       </el-tab-pane>
-      <el-tab-pane label="评论区" lazy name="comment" class="min-h-20vh">
+      <el-tab-pane label="评论区" lazy name="comment" class="tab-pane">
         <BookCommentView
           :book-id="bookDetial?.bookId"
           data-fade style="--anima: latter-slice-blur-top;"
@@ -197,5 +197,8 @@ function likeResource(item: ResourceVO) {
   .el-tabs__active-bar {
     height: 1px;
   }
+}
+.tab-pane {
+  --at-apply: "mt-2 min-h-20vh";
 }
 </style>
