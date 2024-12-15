@@ -12,7 +12,7 @@ const {
   animated = "auto",
   limit = undefined,
   ssr = true,
-  dto = undefined,
+  dto,
   debounce = 300,
   bookNode = CardBookInfo,
   booksClass = "relative grid cols-2 w-full items-start gap-4 md:cols-5 sm:cols-4 md:gap-10 cols-[repeat(auto-fill,_minmax(min(30vw,_10rem),_1fr))] ",
@@ -72,7 +72,7 @@ async function loadData(appendDTO?: Partial<SelectBookPageDTO>) {
       size: res.data.size,
       total: res.data.total,
       pages: res.data.pages,
-      records: [...(pageInfo.value.records || []), ...res.data.records],
+      records: [...(pageInfo.value.records || []), ...res.data.records] as BookDetailVO[],
     };
   }
   setTimeout(() => {

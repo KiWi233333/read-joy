@@ -15,7 +15,7 @@ function showSearch() {
 </script>
 
 <template>
-  <div class="sticky top-0 z-999 h-16 w-full">
+  <div class="fixed top-0 z-999 h-16 w-full">
     <ClientOnly>
       <template #fallback>
         <div class="top-4 z-4 h-2.1rem w-22rem translate-y-0 cursor-pointer truncate border border-1px border-color-transparent rounded-full transition-300 transition-border transition-ease-in-out absolute-center hover:border-default card-default-br text-small" />
@@ -39,7 +39,7 @@ function showSearch() {
         <div
           v-if="search"
           v-show="isShowSearch"
-          class="fixed left-0 top-0 z-2 h-100vh w-full bg-[rgba(222,222,222,0.9)] backdrop-blur-12px dark:bg-[rgba(20,20,20,0.92)] sm-dark:bg-[rgba(10,10,10,0.4)]"
+          class="fixed left-0 top-0 z-2 h-100vh w-full bg-[rgba(240,240,240,0.9)] backdrop-blur-12px dark:bg-[rgba(20,20,20,0.92)] sm-dark:bg-[rgba(10,10,10,0.4)]"
           @click="isShowSearch = false"
         />
       </transition>
@@ -58,6 +58,7 @@ function showSearch() {
             </div>
           </template>
           <div flex items-center gap-2 text-sm sm:gap-4>
+            <BtnTool @show-search="showSearch" />
             <LazyPopperUserInfo v-if="user.isLogin">
               <CardNuxtImg :default-src="user.userInfo.imgUrl" class="h-32px w-32px rounded-full rounded-full btn-primary-border border-default bg-color-br">
                 <template #error>
@@ -80,7 +81,6 @@ function showSearch() {
                 登录
               </button>
             </template>
-            <BtnTool @show-search="showSearch" />
           </div>
         </ClientOnly>
       </div>

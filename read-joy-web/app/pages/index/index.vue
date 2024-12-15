@@ -1,32 +1,46 @@
 <script setup lang="ts">
 import { BookSortOrder, BookSortType, type SelectBookPageDTO } from "~/composables/api/book";
+import { useSettingStore } from "~/composables/sotre/useSettingStore";
 
+const setting = useSettingStore();
 // 大家都在看
 const recommendListRef = ref();
-function reloadRecommon() {
+const isLodaing = ref(false);
+async function reloadRecommon() {
   if (!recommendListRef.value?.reload) {
     return;
   }
+  if (isLodaing.value) {
+    return;
+  }
+  isLodaing.value = true;
   const pageInfo = recommendListRef.value.pageInfo;
   if (pageInfo) {
-    // recommendListDto.page = pageInfo.pages > recommendListDto.page ? pageInfo.current + 1 : 1;
-    recommendListRef.value?.reload({
+    await recommendListRef.value?.reload({
       page: pageInfo.pages > pageInfo.current ? pageInfo.current + 1 : 1,
     });
+    await nextTick();
+    isLodaing.value = false;
   }
 }
 
 // 定义最小高度
-const recommendListRefHeight = ref(0);
-onMounted(() => {
-  setTimeout(async () => {
-    await nextTick();
-    const dom = document.querySelector("#home-recommend-list");
-    if (dom) {
-      recommendListRefHeight.value = dom.clientHeight;
-    }
-  }, 300);
-});
+// const recommendListRefHeight = ref(0);
+// onMounted(() => {
+//   setTimeout(() => {
+//     computedRecommendListRefHeight();
+//   }, 300);
+// });
+// async function computedRecommendListRefHeight() {
+//   await nextTick();
+//   const dom = document.querySelector("#home-recommend-list");
+//   if (dom) {
+//     recommendListRefHeight.value = dom.clientHeight;
+//   }
+// }
+// watch(() => setting.isMobileSize, () => {
+//   computedRecommendListRefHeight();
+// });
 
 
 interface BookListParams {
@@ -79,7 +93,7 @@ const bookListCards: BookListParams[] = [
 </script>
 
 <template>
-  <div data-fades class="py-4 pb-20vh">
+  <div class="relative py-4 pb-20vh">
     <!-- 大家都在看 -->
     <h2 class="title">
       大家都在看
@@ -94,14 +108,14 @@ const bookListCards: BookListParams[] = [
     </h2>
     <div
       id="home-recommend-list"
-      :style="{ minHeight: `${recommendListRefHeight}px` }"
+      class="h-35rem overflow-hidden md:h-17rem"
     >
       <ListBookList
         ref="recommendListRef"
         :show-load="false"
         :show-more-text="false"
         :ssr="true"
-        :limit="5"
+        :limit="setting.isMobileSize ? 4 : 5"
       />
     </div>
     <!-- 榜单 -->

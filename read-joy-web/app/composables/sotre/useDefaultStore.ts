@@ -5,6 +5,7 @@ import { getBookDetailApi } from "~/composables/api/book";
 import { type CategoryVO, getCategoryListByDTOApi } from "../api/category";
 import { ResultStatus } from "../api/types/result";
 import { useSettingStore } from "./useSettingStore";
+import { useUserStore } from "./useUserStore";
 // @unocss-include
 // https://pinia.web3doc.top/ssr/nuxt.html#%E5%AE%89%E8%A3%85
 export const useDefaultStore = defineStore(
@@ -28,18 +29,21 @@ export const useDefaultStore = defineStore(
         theBookDetail.value = {};
         return;
       }
-      const res = await getBookDetailApi(bookId);
+      const user = useUserStore();
+      const res = await getBookDetailApi(bookId, user.token);
       theBookDetail.value = res.data;
       callback && callback();
+      return res.data;
     }
 
     // 打开图书详情
-    async function openBookDetail(bookId: number) {
+    async function openBookDetail(bookId: number, newTab = false) {
       if (!bookId)
         return;
       const setting = useSettingStore();
-      if (setting.isNewTabOpenBook) {
-        await navigateTo(`/book/${bookId}`);
+      if (newTab || setting.isNewTabOpenBook) {
+        showBookDetail.value = false;
+        navigateTo(`/book/${bookId}`);
       }
       else {
         await setBook(bookId);
@@ -72,9 +76,7 @@ export const useDefaultStore = defineStore(
   },
   {
     // https://prazdevs.github.io/pinia-plugin-persistedstate/frameworks/nuxt-3.html
-    persist: {
-      storage: piniaPluginPersistedstate.localStorage(),
-    },
+    persist: false,
   },
 );
 if (import.meta.hot)

@@ -29,26 +29,26 @@ onMounted(() => {
       :transition="true"
     />
   </NuxtLayout>
-  <LazyBookDetailDrawer v-model:open="store.showBookDetail" :book="store.theBookDetail" />
   <ClientOnly>
     <LazyFormLoginDialog />
+    <BookDetailDrawer v-model:open="store.showBookDetail" :book="store.theBookDetail" />
   </ClientOnly>
   <!-- 图书详情 -->
 </template>
 
 <style>
-.layout-enter-active,
+/* .layout-enter-active,
 .layout-leave-active {
-  transition: all 0.2s;
+  transition: opacity,filter 0.1s;
 }
 .layout-enter-from,
 .layout-leave-to {
   opacity: 0;
   filter: blur(1rem);
-}
+} */
 .page-enter-active,
 .page-leave-active {
-  transition: all 0.2s;
+  transition: opacity,filter 0.1s;
 }
 .page-enter-from,
 .page-leave-to {

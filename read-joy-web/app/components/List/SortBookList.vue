@@ -39,7 +39,7 @@ const pageInfo = ref <PageType> ({
   current: undefined,
   total: undefined,
   pages: undefined,
-  records: [] as BookDetailVO[],
+  records: [],
 });
 const noMore = computed(() => !!(pageInfo.value.current !== undefined && pageInfo.value.pages !== undefined && pageInfo.value.current === pageInfo.value.pages));
 
@@ -67,7 +67,7 @@ async function loadData() {
       size: res.data.size,
       total: res.data.total,
       pages: res.data.pages,
-      records: [...(pageInfo.value.records || []), ...res.data.records],
+      records: [...(pageInfo.value.records || []), ...res.data.records] as BookDetailVO[],
     };
   }
   setTimeout(() => {
@@ -142,7 +142,7 @@ function resolveRouteDetail(bookId?: number) {
     @load="loadData()"
   >
     <slot name="header">
-      <h4 v-if="title" class="mb-4">
+      <h4 v-if="title" :title="title" class="mb-4">
         {{ title }}
       </h4>
     </slot>
@@ -159,7 +159,7 @@ function resolveRouteDetail(bookId?: number) {
         @click.prevent.stop="resolveRouteDetail(book?.bookId)"
       >
         <CardNuxtImg
-          class="book h-25 w-18 shrink-0 shadow card-default"
+          class="book h-25 w-18 shrink-0 rounded-1 shadow"
           :class="bookImgClass"
           :default-src="book.coverImageUrl"
         >
@@ -169,18 +169,18 @@ function resolveRouteDetail(bookId?: number) {
             </small>
           </template>
         </CardNuxtImg>
-        <div flex flex-col px-4 leading-1.8em>
-          <h4 class="max-w-6rem sm:max-w-9em" truncate>
-            {{ book.title }}
+        <div flex flex-col px-2 leading-1.8em sm:px-4 :title="book.title">
+          <h4 class="max-w-5rem sm:max-w-9em" truncate>
             {{ book.title }}
           </h4>
           <p class="text-overflow-2 mt-1 max-w-8em text-mini">
             {{ book.author }}
           </p>
           <div class="mt-1 truncate text-mini">
-            出版于:{{ book.publishionDate || "未填写" }}
+            <span hidden sm:inline>出版于:</span>
+            {{ book.publishionDate || "未填写" }}
           </div>
-          <div class="!text-warning mt-a truncate text-small">
+          <div class="mt-a truncate !text-warning text-small">
             <small>售价:</small><span>￥{{ book?.price === 0 ? '免费' : book?.price || '-' }}</span>
           </div>
         </div>

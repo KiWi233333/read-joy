@@ -1,13 +1,20 @@
 
 <script setup lang="ts">
-
+const ignoreRoute: Record<string, boolean> = {
+  // "index-book-bid": true,
+};
 </script>
 
 <template>
-  <main relative>
-    <MenuHeader />
-    <div class="layout-default">
+  <el-scrollbar height="100vh" relative>
+    <MenuHeader v-if="!ignoreRoute[$route.name]" />
+    <div class="pt-4rem layout-default">
       <slot />
     </div>
-  </main>
+    <ClientOnly>
+      <el-backtop :bottom="40" class="border-default card-default-br">
+        <i i-solar:alt-arrow-up-linear />
+      </el-backtop>
+    </ClientOnly>
+  </el-scrollbar>
 </template>

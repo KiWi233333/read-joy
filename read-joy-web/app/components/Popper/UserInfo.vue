@@ -7,6 +7,7 @@ const isVisible = ref(false);
 defineExpose({
   isVisible,
 });
+const showEditForm = ref(false);
 </script>
 
 <template>
@@ -30,10 +31,19 @@ defineExpose({
           </div>
         </template>
       </CardNuxtImg>
-      <h4 mt-4 truncate text-center font-500>
-        {{ user.userInfo.loginName }}
+      <h4 mt-2 truncate pb-2 text-center text-1rem font-500 border-default-b>
+        {{ user.userInfo.loginName || "未填写" }}
       </h4>
-      <div class="mt-4 flex justify-between gap-2 p-2 border-default-t">
+      <div mt-2 truncate px-4 font-500>
+        登录账号：{{ user.userInfo.loginName || "-" }}
+      </div>
+      <div mt-2 truncate px-4 font-500>
+        真实姓名：{{ user.userInfo.trueName || "-" }}
+      </div>
+      <div mt-2 truncate px-4 font-500>
+        电话：{{ user.userInfo.telephone || "-" }}
+      </div>
+      <div class="mt-2 flex justify-between gap-2 p-2 border-default-t">
         <BtnElButton
           plain
           transition-icon
@@ -44,10 +54,11 @@ defineExpose({
         </BtnElButton>
         <BtnElButton
           transition-icon
-          icon-class="i-solar:home-2-outline"
-          type="primary" class="w-full shadow" @click="ElMessage.warning('功能还未上线')"
+          icon-class="i-solar:user-outline"
+          type="primary" class="w-full shadow"
+          @click="showEditForm = true"
         >
-          我的主页
+          修改信息
         </BtnElButton>
       </div>
     </div>

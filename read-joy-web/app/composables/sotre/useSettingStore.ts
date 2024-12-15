@@ -1,5 +1,6 @@
 
 import { acceptHMRUpdate, defineStore } from "pinia";
+import { downloadFile } from "../utils/useFile";
 // @unocss-include
 // https://pinia.web3doc.top/ssr/nuxt.html#%E5%AE%89%E8%A3%85
 export const useSettingStore = defineStore(
@@ -12,7 +13,15 @@ export const useSettingStore = defineStore(
     const isCloseAllTransition = ref(false);
     // 是否通过新标签页打开书籍
     const isNewTabOpenBook = ref(false);
+    // 是否是移动尺寸
     const isMobileSize = ref(false);
+
+
+    function onDownloadFile(url: string, name: string, token: string, callback?: () => void) {
+      downloadFile(url, name, {
+        Authorization: token,
+      }, callback);
+    }
 
     return {
       isMobileSize,
@@ -20,6 +29,8 @@ export const useSettingStore = defineStore(
       isNewTabOpenBook,
       isThemeChangeLoad,
       theme,
+
+      onDownloadFile,
     };
   },
   {

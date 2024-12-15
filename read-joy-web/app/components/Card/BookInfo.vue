@@ -8,12 +8,10 @@ const {
 } = defineProps<{
   book: BookVO
 }>();
-
+const setting = useSettingStore();
 // 路由跳转
 function resolveRouteDetail(bookId?: number) {
-  const setting = useSettingStore();
   const store = useDefaultStore();
-
   if (bookId === undefined)
     return;
   if (setting.isNewTabOpenBook) {
@@ -43,7 +41,7 @@ function resolveRouteDetail(bookId?: number) {
           </small>
         </template>
       </CardNuxtImg>
-      <div class="absolute bottom-0 left-0 w-full truncate rounded-b-2 p-1 text-right text-xs leading-1.6em op-0 transition-opacity bg-color-br group-hover:(op-100)">
+      <div class="absolute bottom-0 left-0 w-full truncate rounded-b-2 bg-(light op-50) p-1 text-right text-xs font-500 leading-1.6em op-0 backdrop-blur transition-opacity dark:bg-(dark op-20) group-hover:(op-100)">
         {{ book?.publisher || "暂无出版社" }}
         <div v-if="book?.publishionDate">{{ book?.publishionDate }}</div>
       </div>

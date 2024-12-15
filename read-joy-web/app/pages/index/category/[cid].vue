@@ -5,7 +5,7 @@ const route = useRoute();
 // 图书
 // @ts-expect-error
 const initCid = String(route?.params?.cid || "all") === "all" ? undefined : +route.params?.cid;
-const pageDTO = reactive<SelectBookPageDTO>({
+const pageDTO = ref<SelectBookPageDTO>({
   page: 1,
   size: 20,
   categoryId: initCid,
@@ -13,6 +13,7 @@ const pageDTO = reactive<SelectBookPageDTO>({
 });
 // 搜索
 const inputRef = ref();
+const tempDto = ref(JSON.parse(JSON.stringify(pageDTO.value)));
 </script>
 
 <template>
@@ -24,7 +25,7 @@ const inputRef = ref();
       :debounce="300"
       :ssr="true"
       animated="auto"
-      :dto="pageDTO"
+      :dto="tempDto"
     >
       <template #header="{ pageInfo }">
         <div class="sticky left-0 top-0 z-2 mb-4 flex flex-col items-center justify-between gap-4 pb-2 sm:flex-row bg-color-layout">
@@ -45,12 +46,18 @@ const inputRef = ref();
               @keyup.esc="() => {
                 inputRef?.blur()
               }"
+              @keydown.prevent.enter="() => {
+                tempDto = JSON.parse(JSON.stringify(pageDTO))
+              }"
             />
             <el-button
               type="primary"
               class="btn absolute right-0 group-hover:(scale-100 opacity-100)"
               round
               style="font-size: 0.5em;height: 60%;margin: 0 0.8rem;box-shadow: none;"
+              @click="() => {
+                tempDto = JSON.parse(JSON.stringify(pageDTO))
+              }"
             >
               搜索
             </el-button>

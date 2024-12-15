@@ -3,8 +3,10 @@ import type { ElScrollbar } from "#build/components";
 import type { SelectBookPageDTO } from "~/composables/api/book";
 import { type CategoryVO, getCategoryListByDTOApi, type SelectCategoryListDTO } from "~/composables/api/category";
 import { ResultStatus } from "~/composables/api/types/result";
+import { useSettingStore } from "~/composables/sotre/useSettingStore";
 
 const route = useRoute();
+const setting = useSettingStore();
 // 分类
 const categoryList = ref<Partial<CategoryVO>[]>([]);
 const isLoading = ref(false);
@@ -63,8 +65,9 @@ await loadCategoryData();
       <ul class="categoryList pb-20">
         <NuxtLink
           v-for="p in categoryList" :key="p.categoryId"
-          class="item block px-2 py-1 text-sm"
+          class="item"
           prefetch
+          :title="p.categoryName"
           :class="String(pageDTO.categoryId) === String(p.categoryId) ? 'is-selected' : ''"
           :to="{
             path: `/category/${p.categoryId || 'all'}`,
@@ -95,7 +98,7 @@ await loadCategoryData();
   display: flex;
   flex-direction: column;
   .item {
-    --at-apply: "w-full h-10 mb-2 leading-8 px-4 truncate card-default-br";
+    --at-apply: " block text-sm px-2 w-full mb-2 leading-8 sm:(px-4 py-1) truncate card-default-br";
     &.is-selected {
       background-color: var(--el-color-primary);
       color: var(--el-color-white);

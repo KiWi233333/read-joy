@@ -25,7 +25,7 @@ function onBack(rollback?: string) {
 </script>
 
 <template>
-  <div data-fades>
+  <div data-fades relative>
     <i class="mx-a mb-4 block h-8rem w-8rem opacity-60" :class="icon" />
     <div
       flex-row-c-c

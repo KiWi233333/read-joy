@@ -122,11 +122,14 @@ export interface BookVO {
 /**
  * 获取图书详情信息
  * @param bookId 图书ID
+ * @param token 用户token(详情时候填)
  * @returns 图书详情
  */
-export function getBookDetailApi(bookId: number) {
+export function getBookDetailApi(bookId: number, token?: string) {
+  const headers = token ? { Authorization: token as string } : undefined;
   return useHttp.get<Result<BookDetailVO>>(`/book/${bookId}`, {
-    bookId,
+  }, {
+    headers,
   });
 }
 
@@ -138,21 +141,25 @@ export function getBookDetailApi(bookId: number) {
  */
 export interface BookDetailVO {
   /**
+   * 书名
+   */
+  title: string;
+  /**
    * 作者
    */
   author?: string;
   /**
    * 书籍ID
    */
-  bookId?: number;
+  bookId: number;
   /**
    * 分类ID
    */
-  categoryId?: number;
+  categoryId: number;
   /**
    * 分类名称
    */
-  categoryName?: string;
+  categoryName: string;
   /**
    * 封面图片URL
    */
@@ -164,7 +171,7 @@ export interface BookDetailVO {
   /**
    * 国际标准书号
    */
-  isbn?: string;
+  isbn: string;
   /**
    * 价格
    */
@@ -181,10 +188,6 @@ export interface BookDetailVO {
    * 资源列表
    */
   resourceList?: ResourceVO[];
-  /**
-   * 书名
-   */
-  title?: string;
 }
 
 /**
@@ -196,31 +199,31 @@ export interface ResourceVO {
   /**
    * 关联的图书ID
    */
-  bookId?: number;
+  bookId: number;
   /**
    * 创建时间
    */
-  createTime?: string;
+  createTime: string;
   /**
    * 下载数
    */
-  downloadCount?: number;
+  downloadCount: number;
   /**
    * 是否删除
    */
-  isDeleted?: number;
+  isDeleted: number;
   /**
    * 点赞数
    */
-  likeCount?: number;
+  likeCount: number;
   /**
    * 资源ID
    */
-  resourceId?: number;
+  resourceId: number;
   /**
    * 资源大小
    */
-  size?: number;
+  size: number;
   /**
    * 资源提交者
    */
@@ -228,14 +231,14 @@ export interface ResourceVO {
   /**
    * 资源标题
    */
-  title?: string;
+  title: string;
   /**
    * 资源类型，视频，教学大纲，课件等
    */
-  type?: string;
+  type: string;
   /**
    * 资源保存地址
    */
-  url?: string;
+  url: string;
   [property: string]: any;
 }

@@ -10,6 +10,10 @@ export function useInit() {
   user.showRegisterForm = false;
   user.showLoginForm = false;
   onMounted(() => {
+    // 1、用户信息获取
+    if (user.token) {
+      user.onCheckLogin();
+    }
     // 1、模式切换
     window.addEventListener("keydown", keyToggleTheme);
     // 2、监听窗口大小变化
@@ -27,7 +31,7 @@ export function useInit() {
           app.classList.remove("stop-transition");
         setting.isMobileSize = window?.innerWidth <= 768; // 判断是否为移动端
         timer = null;
-      }, 150);
+      }, 200);
     }
   });
 

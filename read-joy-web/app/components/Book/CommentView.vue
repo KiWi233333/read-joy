@@ -1,0 +1,110 @@
+<script setup lang="ts">
+import type { InsertCommentDTO } from "~/composables/api/comment";
+import { addCommentApi, CommentSortOrder } from "~/composables/api/comment";
+import { ResultStatus } from "~/composables/api/types/result";
+import { useUserStore } from "~/composables/sotre/useUserStore";
+
+const {
+  bookId,
+} = defineProps<{
+  bookId?: number
+}>();
+const user = useUserStore();
+const form = ref<Partial<InsertCommentDTO>>({
+  bookId,
+  commentBody: "",
+});
+const isSending = ref(false);
+const listCommentListRef = ref();
+const formRef = ref();
+
+function onSubmit() {
+  if (isSending.value)
+    return;
+  formRef.value?.validate(async (action: boolean) => {
+    if (!action)
+      return;
+    isSending.value = true;
+    const res = await addCommentApi(form.value as InsertCommentDTO, user.getToken);
+    if (res.code !== ResultStatus.SUCCESS) {
+      return;
+    }
+    form.value.commentBody = "";
+    isSending.value = false;
+    if (listCommentListRef?.value?.addComment) {
+      listCommentListRef.value.addComment(res.data);
+    }
+  });
+}
+</script>
+
+<template>
+  <div class="relative">
+    <el-form
+      ref="formRef" v-auth :model="form" class="w-full flex items-start gap-4 pb-4"
+      @submit.prevent="onSubmit"
+    >
+      <CardNuxtImg :default-src="user.userInfo.imgUrl" class="h-8 w-8 shrink-0 rounded-full border-default bg-color">
+        <template #error>
+          <div h-full w-full flex-row-c-c text-lg>
+            {{ user?.userInfo?.loginName?.[0] || " " }}
+          </div>
+        </template>
+      </CardNuxtImg>
+      <el-form-item
+        prop="commentBody" class="flex-row-c-c flex-1" style="margin: 0;" :rules="[{
+          required: true,
+          message: '评论内容不能为空！',
+          trigger: 'blur',
+        }, {
+          min: 1,
+          max: 500,
+          message: '评论内容长度在 1 到 200 个字符之间！',
+          trigger: 'blur',
+        }]"
+      >
+        <el-input
+          v-model.lazy.trim="form.commentBody"
+          type="textarea"
+          :rows="4"
+          :maxlength="200"
+          :autosize="false"
+          :minlength="1"
+          :disabled="isSending"
+          placeholder="说点什么吧" @keydown.enter.prevent="onSubmit"
+        />
+      </el-form-item>
+      <BtnElButton
+        class="group"
+        icon-class="i-solar:map-arrow-right-bold mr-1"
+        type="info"
+        :loading="isSending"
+        @click="onSubmit()"
+      >
+        评论&nbsp;
+      </BtnElButton>
+    </el-form>
+    <ListCommentList
+      v-if="user.isLogin"
+      ref="listCommentListRef"
+      :book-id="bookId"
+      :dto="{
+        sortOrder: CommentSortOrder.DESC,
+      }"
+      :show-load="false"
+      :show-more-text="false"
+      :ssr="true"
+    />
+    <li
+      v-else
+      data-fade style="--anima: latter-slice-blur-top;"
+      class="flex items-center p-3 border-default card-default text-small"
+    >
+      暂无权限，请先<span text-info btn-info @click="user.showLoginForm = true">登录</span>
+    </li>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+
+</style>

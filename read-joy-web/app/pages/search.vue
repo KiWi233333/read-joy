@@ -26,7 +26,7 @@ const dto = ref<SelectBookPageDTO>({
   endDate: undefined,
 });
 const store = useDefaultStore();
-const dtoTemp = ref<SelectBookPageDTO>(JSON.parse(JSON.stringify(dto.value)));
+const tempDto = ref<SelectBookPageDTO>(JSON.parse(JSON.stringify(dto.value)));
 const MAX_HISTORY = 6;
 function onSearch() {
   const len = dto.value.keyword?.trim()?.length || 0;
@@ -38,7 +38,7 @@ function onSearch() {
     return;
   }
   // 搜索
-  dtoTemp.value = JSON.parse(JSON.stringify(dto.value));
+  tempDto.value = JSON.parse(JSON.stringify(dto.value));
   // 添加搜索历史
   if (dto.value.keyword) {
     user.searchHistory = [dto.value.keyword, ...user.searchHistory.filter(item => item !== dto.value.keyword)].slice(0, MAX_HISTORY);
@@ -51,15 +51,17 @@ function clickHistory(keyword: string) {
   inputRef.value.focus();
   onSearch();
 }
-
+function clearHistorys() {
+  user.searchHistory = [];
+}
 const showFilter = useLocalStorage("search_show_filter", false);
 // 排序
 const sortGroupModel = computed({
   get() {
-    if (dtoTemp.value.sortType === BookSortType.PRICE && dtoTemp.value.sortOrder !== undefined) {
+    if (tempDto.value.sortType === BookSortType.PRICE && tempDto.value.sortOrder !== undefined) {
       return "price";
     }
-    else if (dtoTemp.value.sortType === BookSortType.PUBLISH_TIME && dtoTemp.value.sortOrder !== undefined) {
+    else if (tempDto.value.sortType === BookSortType.PUBLISH_TIME && tempDto.value.sortOrder !== undefined) {
       return "new";
     }
     else {
@@ -90,7 +92,7 @@ const sortOptions = [
     descIcon: "i-solar:sort-from-top-to-bottom-bold-duotone",
   },
   {
-    label: sortGroupModel.value === "price" ? (dtoTemp.value?.sortOrder === BookSortOrder.DESC ? "从高到低" : "从低到高") : "价格排序",
+    label: sortGroupModel.value === "price" ? (tempDto.value?.sortOrder === BookSortOrder.DESC ? "从高到低" : "从低到高") : "价格排序",
     value: "price",
     icon: "i-solar:sort-from-bottom-to-top-bold-duotone",
     ascIcon: "i-solar:sort-from-bottom-to-top-bold-duotone",
@@ -100,8 +102,8 @@ const sortOptions = [
 // 日期筛选
 const dateGroupModel = computed({
   get() {
-    if (dtoTemp.value.startDate && dtoTemp.value.endDate) {
-      return [dtoTemp.value.startDate, dtoTemp.value.endDate];
+    if (tempDto.value.startDate && tempDto.value.endDate) {
+      return [tempDto.value.startDate, tempDto.value.endDate];
     }
     else {
       return undefined;
@@ -129,7 +131,7 @@ function toggleSort() {
     onSearch();
   }
 }
-const showSearchResource = computed(() => Object.values({ ...dto.value, page: undefined, size: undefined }).some(Boolean));
+const showSearchResource = computed(() => Object.values({ ...tempDto.value, page: undefined, size: undefined }).some(Boolean));
 onMounted(() => {
   enable(!setting.isCloseAllTransition);
 });
@@ -182,7 +184,7 @@ onMounted(() => {
           </div>
         </template>
         <div ref="autoAnimateRef" class="flex items-start gap-2 sm:gap-4">
-          <div v-for="item in user.searchHistory" :key="item" :title="item" class="max-w-10em cursor-pointer truncate border border-1px border-color-transparent rounded-full px-2 transition-border sm:max-w-14em hover:border-default card-default-br text-small" @click="clickHistory(item)">
+          <div v-for="item in user.searchHistory" :key="item" :title="item" class="max-w-10em cursor-pointer truncate border border-1px rounded-full px-2 transition-border sm:max-w-14em card-default text-small border-default-hover" @click="clickHistory(item)">
             {{ item }}
           </div>
         </div>
@@ -193,10 +195,10 @@ onMounted(() => {
         :show-load="true"
         :show-more-text="true"
         :auto-stop="false"
-        :debounce="300"
+        :debounce="400"
         :ssr="true"
         books-class="data-fades relative grid cols-2 w-full items-center gap-4 md:cols-5 sm:cols-4 md:gap-4"
-        :dto="dtoTemp"
+        :dto="tempDto"
         book-class="mx-a"
         :animated="false"
       >
@@ -204,7 +206,7 @@ onMounted(() => {
           <!-- 搜索区域 -->
           <div class="group mb-4 min-h-4rem flex-row-bt-c flex-wrap border-default-b">
             <h2 class="text-lg font-bold">
-              {{ dtoTemp?.categoryId ? store.categoryMap?.[dtoTemp?.categoryId]?.categoryName || '全部' : "全部" }}
+              {{ tempDto?.categoryId ? store.categoryMap?.[tempDto?.categoryId]?.categoryName || '全部' : "全部" }}
               <span v-if="!!pageInfo.current" font-500 text-small>
                 共{{ pageInfo?.total }}本图书
               </span>
@@ -220,7 +222,7 @@ onMounted(() => {
                   >
                     <template #default="{ item }">
                       <div class="flex gap-2" @click="sortGroupModel = item.value">
-                        <i p-2 :class="sortGroupModel === item.value ? (dtoTemp.sortOrder === BookSortOrder.DESC ? item.descIcon : item.ascIcon) : item.icon" />
+                        <i p-2 :class="sortGroupModel === item.value ? (tempDto.sortOrder === BookSortOrder.DESC ? item.descIcon : item.ascIcon) : item.icon" />
                         <div>{{ item.label }}</div>
                       </div>
                     </template>
@@ -267,7 +269,7 @@ onMounted(() => {
                 >
                   <template #default="{ item }">
                     <div class="flex gap-2" @click="sortGroupModel = item.value">
-                      <i p-2 :class="sortGroupModel === item.value ? (dtoTemp.sortOrder === BookSortOrder.DESC ? item.descIcon : item.ascIcon) : item.icon" />
+                      <i p-2 :class="sortGroupModel === item.value ? (tempDto.sortOrder === BookSortOrder.DESC ? item.descIcon : item.ascIcon) : item.icon" />
                       <div text-xs>
                         {{ item.label }}
                       </div>

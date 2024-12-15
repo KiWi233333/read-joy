@@ -18,9 +18,10 @@ export default defineConfig({
     // 颜色
     ["text-color", "text-dark dark:text-white"],
     ["text-default", "text-1em text-dark dark:text-white"],
-    ["text-small", "text-gray dark:text-[#979898] text-sm"],
-    ["text-mini", "text-gray dark:text-[#979898] text-xs"],
+    ["text-small", "text-dark-50 dark:text-[#979898] text-sm"],
+    ["text-mini", "text-dark-50 dark:text-[#979898] text-xs"],
     ["text-color-primary", "text-[var(--el-color-primary)]"],
+    ["text-small-color", "text-dark-50 dark:text-[#979898]"],
     ["bg-color-layout", "bg-[#f4f5f7] dark:bg-[#141414]"],
     ["bg-color", "bg-white dark:bg-dark-7"],
     ["bg-color-br", "bg-[#ffffff93] dark:(bg-dark-5 bg-op-60) backdrop-blur-6px"],
@@ -32,12 +33,14 @@ export default defineConfig({
     ["border-default-l", "border-solid border-gray-200 border-0 border-l-1px  dark:border-dark-300"],
     ["border-default-t", "border-solid border-gray-200 border-0 border-t-1px  dark:border-dark-300"],
     ["border-default-b", "border-solid border-gray-200 border-0 border-b-1px  dark:border-dark-300"],
-    ["border-default-dashed", "hover:shadow-sm border-2px  border-default border-dashed"],
-    ["border-default-hover", "transition-200 hover:shadow hover:border-solid hover:border-[var(--el-color-primary)]  border-default-dashed"],
+    ["border-hover-primary", "transition-200 border-1px border-solid border-gray-200 dark:border-dark-500 hover:border-color-[var(--el-color-primary)]"],
+    ["border-default-hover", "transition-200 border-1px border-solid border-gray-200 dark:border-dark-500 hover:(border-gray-400 dark:border-dark-100)"],
+    ["border-default-dashed", "border-2px  border-default border-dashed"],
+    ["border-default-dashed-hover", "transition-200 hover:border-solid hover:border-[var(--el-color-primary)]  border-default-dashed"],
     // 布局
     ["flex-row-c-c", "flex flex-row flex-justify-center flex-items-center"],
     ["flex-row-bt-c", "flex flex-row flex-justify-between flex-items-center"],
-    ["layout-default", "mx-a px-4 sm:(max-w-640px px-6) md:(max-w-960px px-4) lg:(px-6 max-w-1120px)"],
+    ["layout-default", "mx-a px-4 sm:(max-w-640px px-6) md:(max-w-960px px-6) lg:(px-6 max-w-1120px)"],
     ["absolute-center", "absolute left-1/2 -translate-x-1/2"],
     ["absolute-center-center", "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"],
     ["absolute-center-x", "absolute left-1/2 -translate-x-1/2"],
@@ -78,8 +81,6 @@ export default defineConfig({
     presetUno(),
     presetAttributify(),
     presetIcons({
-      carbon: () =>
-        import("@iconify-json/carbon").then(i => i.icons as any),
       solar: () =>
         import("@iconify-json/solar").then(i => i.icons as any),
       scale: 1.2,

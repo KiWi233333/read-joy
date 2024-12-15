@@ -219,7 +219,7 @@ async function onLogin(formEl: any | undefined) {
       </el-form-item>
     </template>
     <template v-else>
-      <div data-fades class="flex-row-c-c flex-col gap-4 pb-2 sm:gap-6">
+      <div data-fades class="relative flex-row-c-c flex-col gap-4 pb-2 sm:gap-6">
         <CardNuxtImg :src="user.userInfo.imgUrl ? BaseUrlImg + user.userInfo.imgUrl : ''" class="h-6rem w-6rem sm:(h-7rem w-7rem) border-default card-default" />
         <div text-center>
           <span>
