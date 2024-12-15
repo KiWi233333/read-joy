@@ -1,6 +1,7 @@
 import { acceptHMRUpdate, defineStore } from "pinia";
 import { ResultStatus } from "../api/types/result";
 import { useGetUserInfoApi, type UserInfoVO } from "../api/user";
+import { useDefaultStore } from "./useDefaultStore";
 // @unocss-include
 // https://pinia.web3doc.top/ssr/nuxt.html#%E5%AE%89%E8%A3%85
 export const useUserStore = defineStore(
@@ -12,6 +13,7 @@ export const useUserStore = defineStore(
     const isLogin = ref<boolean>(false);
     // 是否打开登录
     const showLoginForm = ref<boolean>(false);
+    const showEditForm = ref<boolean>(false); // 是否打开修改个人信息
     const showRegisterForm = ref<boolean>(false);
     const showUpdatePwd = ref<boolean>(false);
     const isOnLogining = ref<boolean>(false);
@@ -103,6 +105,13 @@ export const useUserStore = defineStore(
       clearUserStore();
       await nextTick();
     }
+
+    function toLogin(closebookdetail: boolean = true) {
+      if (closebookdetail) {
+        useDefaultStore().showBookDetail = false;
+      }
+      showLoginForm.value = true;
+    }
     /**
      * 清空store缓存
      */
@@ -131,10 +140,12 @@ export const useUserStore = defineStore(
       isOnLogining,
       showUpdatePwd,
       showLoginForm,
+      showEditForm,
       showRegisterForm,
       searchHistory,
       // actions
       onUserLogin,
+      toLogin,
       onCheckLogin,
       callbackUserExit,
       exitLogin,

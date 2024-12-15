@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { UploadProps } from "element-plus";
-import type { UserInfoVO } from "~/composables/api/user";
 import { type Result, ResultStatus } from "~/composables/api/types/result";
+import { updateUserInfoApi, type UserInfoVO } from "~/composables/api/user";
 import { useUserStore } from "~/composables/sotre/useUserStore";
-import { BaseUrl, BaseUrlImg } from "~/composables/utils/useBaseUrl";
+import { BaseUrl } from "~/composables/utils/useBaseUrl";
 
 const user = useUserStore();
 const isVisible = ref(false);
@@ -11,8 +11,6 @@ const isVisible = ref(false);
 defineExpose({
   isVisible,
 });
-const showEditForm = ref(false);
-
 // 头像
 const avatatRef = ref();
 const formData = new FormData();
@@ -42,11 +40,67 @@ const onUpdateSuccess: UploadProps["onSuccess"] = async (data: Result<UserInfoVO
     ElMessage.error(data.message);
   }
 };
+
+const editFiled = ref<"loginName" | "trueName" | "telephone">();
+watch(editFiled, (val) => {
+  if (!val)
+    return;
+  const map: Record<("loginName" | "trueName" | "telephone"), any> = {
+    loginName: {
+      desc: "登录账号",
+      inputType: "text",
+      inputValue: user.userInfo.loginName,
+      center: true,
+      inputPattern: /^[\w-]{6,20}$/,
+      inputPlaceholder: "请输入新的登录账号",
+      inputErrorMessage: "登录账号格式错误",
+    },
+    trueName: {
+      desc: "真实姓名",
+      inputType: "text",
+      inputValue: user.userInfo.trueName,
+      center: true,
+      inputPattern: /^.{1,20}$/,
+      inputPlaceholder: "请输入新的真实姓名",
+      inputErrorMessage: "真实姓名格式错误",
+    },
+    telephone: {
+      desc: "联系电话",
+      inputType: "text",
+      inputValue: user.userInfo.telephone,
+      center: true,
+      inputPattern: /^1[3-9]\d{9}$/,
+      inputPlaceholder: "请输入新的联系电话",
+      inputErrorMessage: "联系电话格式错误",
+    },
+  };
+  ElMessageBox.prompt(`修改${map[val].desc}`, {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    ...map[val],
+    center: true,
+  }).then(async ({ value }) => {
+    if (value) {
+      const res = await updateUserInfoApi({ [`${val}`]: value }, user.token);
+      if (res.code === ResultStatus.SUCCESS) {
+        user.userInfo = res.data;
+        ElMessage.success("修改成功！");
+      }
+      else {
+        setTimeout(() => {
+          editFiled.value = val;
+        }, 300);
+      }
+    }
+    editFiled.value = undefined;
+  });
+});
 </script>
 
 <template>
   <el-popover
     placement="bottom"
+    v-bind="$attrs"
     width="fit-content"
     trigger="click"
     :offset="10"
@@ -92,19 +146,22 @@ const onUpdateSuccess: UploadProps["onSuccess"] = async (data: Result<UserInfoVO
         />
       </el-upload>
 
-      <h4 mt-2 truncate pb-2 text-center text-1rem font-500 border-default-b>
+      <h4 mt-3 truncate pb-3 text-center text-1rem font-500 border-default-b>
         {{ user.userInfo.loginName || "未填写" }}
       </h4>
-      <div mt-2 truncate px-4 font-500>
-        登录账号：{{ user.userInfo.loginName || "-" }}
+      <div class="group mt-3 truncate px-4 font-500">
+        登录账号：<BtnCopyText :text="user.userInfo.loginName || '-'" text-small />
+        <span class="float-right op-0 btn-info-text text-mini group-hover:op-100" @click="editFiled = 'loginName'">修改</span>
       </div>
-      <div mt-2 truncate px-4 font-500>
-        真实姓名：{{ user.userInfo.trueName || "-" }}
+      <div class="group mt-3 truncate px-4 font-500">
+        真实姓名：<span text-small>{{ user.userInfo.trueName || "-" }}</span>
+        <span class="float-right op-0 btn-info-text text-mini group-hover:op-100" @click="editFiled = 'trueName'">修改</span>
       </div>
-      <div mt-2 truncate px-4 font-500>
-        电话：{{ user.userInfo.telephone || "-" }}
+      <div class="group mt-3 truncate px-4 font-500">
+        联系电话：<span text-small>{{ user.userInfo.telephone ? user.userInfo.telephone.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2") : "-" }}</span>
+        <span class="float-right op-0 btn-info-text text-mini group-hover:op-100" @click="editFiled = 'telephone'">修改</span>
       </div>
-      <div class="mt-2 flex justify-between gap-2 p-2 border-default-t">
+      <div class="mt-3 flex justify-between gap-2 p-3 border-default-t">
         <BtnElButton
           plain
           transition-icon
@@ -115,11 +172,11 @@ const onUpdateSuccess: UploadProps["onSuccess"] = async (data: Result<UserInfoVO
         </BtnElButton>
         <BtnElButton
           transition-icon
-          icon-class="i-solar:user-outline"
-          type="primary" class="w-full shadow"
-          @click="showEditForm = true"
+          icon-class="i-solar:lock-outline"
+          type="danger" class="w-full shadow"
+          @click="user.showEditForm = true"
         >
-          修改信息
+          修改密码
         </BtnElButton>
       </div>
     </div>

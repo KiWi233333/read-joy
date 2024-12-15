@@ -158,9 +158,12 @@ export interface UserUpdatePwdDTO {
  * @returns 是否成功
  */
 export function updateUserInfoApi(dto: UserUpdateInfoDTO, token: string) {
-  return useHttp.put<Result<UserInfoVO>>("/user", {
+  return useHttp.post_params<Result<UserInfoVO>>("/user", {
     ...dto,
   }, {
+    params: {
+      ...dto,
+    },
     headers: {
       Authorization: token,
     },

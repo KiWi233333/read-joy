@@ -238,3 +238,11 @@ body .el-message {
     z-index: 1;
   }
 }
+
+
+.el-overlay.is-message-box {
+  z-index: 3000 !important;
+}
+.el-message-box__header.show-close {
+  padding-right: 0 !important;
+}

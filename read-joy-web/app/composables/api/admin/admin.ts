@@ -41,9 +41,13 @@ export interface AdminLoginVO {
  * @param dto 参数
  * @returns 是否成功
  */
-export function useUpdatePwdApi(dto: AdminUpdatePwdDTO) {
+export function useUpdatePwdApi(dto: AdminUpdatePwdDTO, token: string) {
   return useHttp.put<Result<BoolEnum>>("/user/pwd", {
     ...dto,
+  }, {
+    headers: {
+      Authorization: token,
+    },
   });
 }
 /**

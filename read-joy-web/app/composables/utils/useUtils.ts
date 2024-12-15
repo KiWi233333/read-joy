@@ -66,6 +66,14 @@ export const FILE_TYPE_ICON_MAP = {
   "application/x-pdf": "/images/icon/file/PDF.png",
   "application/x-bzpdf": "/images/icon/file/PDF.png",
   "application/x-gzpdf": "/images/icon/file/PDF.png",
+
+  "image/jpeg": "/images/icon/file/IMAGE.png",
+  "image/png": "/images/icon/file/IMAGE.png",
+  "image/gif": "/images/icon/file/IMAGE.png",
+  "image/svg+xml": "/images/icon/file/IMAGE.png",
+  "application/zip": "/images/icon/file/ZIP.png",
+
+  "application/octet-stream": "/images/icon/file/OTHER.png",
 } as Record<string, string>;
 export const FILE_UPLOAD_ACCEPT = Object.keys(FILE_TYPE_ICON_MAP).join(",");
 /**
@@ -107,3 +115,30 @@ export function formatDate(date: Date) {
   else
     return `${year}年${month}月${day}日 ${hours}:${minutes}`;
 }
+
+
+/**
+ * 复制文字
+ * @param text 复制的文本
+ */
+export function useCopyText(text: string, showToast?: boolean) {
+  // 动态创建 textarea 标签
+  const textarea: HTMLTextAreaElement = document.createElement("textarea");
+  // 将该 textarea 设为 readonly 防止 iOS 下自动唤起键盘，同时将 textarea 移出可视区域
+  textarea.readOnly = true;
+  textarea.style.position = "absolute";
+  textarea.style.opacity = "0";
+  textarea.style.left = "-500px";
+  // 将要 copy 的值赋给 textarea 标签的 value 属性
+  textarea.value = text;
+  // 将 textarea 插入到 body 中
+  document.body.appendChild(textarea);
+  // 选中值并复制
+  textarea.select();
+  const result = document.execCommand("Copy");
+  document.body.removeChild(textarea);
+  if (showToast)
+    ElMessage.success("复制成功！");
+  return result;
+}
+

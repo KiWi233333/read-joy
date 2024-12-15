@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { BookDetailVO, ResourceVO } from "~/composables/api/book";
-import { useSettingStore } from "~/composables/sotre/useSettingStore";
+import { useAddResourceLikeApi } from "~/composables/api/resorce";
+import { ResultStatus } from "~/composables/api/types/result";
+import { useDefaultStore } from "~/composables/sotre/useDefaultStore";
 import { useUserStore } from "~/composables/sotre/useUserStore";
 import { BaseUrlFile } from "~/composables/utils/useBaseUrl";
 import { downloadFile } from "~/composables/utils/useFile";
-import { FILE_TYPE_ICON_DEFAULT, FILE_TYPE_ICON_MAP, formatFileSize } from "~/composables/utils/useUtils";
+import { FILE_TYPE_ICON_DEFAULT, FILE_TYPE_ICON_MAP, formatFileSize, useCopyText } from "~/composables/utils/useUtils";
 import Progress from "../ui/progress/Progress.vue";
 
 const {
@@ -13,20 +15,15 @@ const {
   bookDetial?: Partial<BookDetailVO>
 }>();
 const user = useUserStore();
-const setting = useSettingStore();
-
+const store = useDefaultStore();
 const likeAllCount = computed(() => bookDetial?.resourceList?.reduce((pre, cur) => pre + cur.likeCount, 0) || 0);
 const downAllCount = computed(() => bookDetial?.resourceList?.reduce((pre, cur) => pre + cur.downloadCount, 0) || 0);
-// 获取评论
-onMounted(() => {
-
-});
 // tabs栏
 const activeName = ref("read");
 function downloadResource(resource: ResourceVO) {
   if (!user.isLogin) {
     ElMessage.error("没有权限，请先登录！");
-    user.showLoginForm = true;
+    user.toLogin(); // 登录后再下载
     return;
   }
   downloadFile(BaseUrlFile + resource.url, resource.title, {
@@ -37,14 +34,20 @@ function downloadResource(resource: ResourceVO) {
 }
 
 // 点赞
-const actionResorceMap = useSessionStorage("actionResorceMap", {
+const actionResorceMap = useSessionStorage(`${user.userId}_actionResorceMap`, {
 
 }) as any;
-function likeResource(item: ResourceVO) {
-  if (actionResorceMap.value[item.resourceId]) {
-    ElMessage.warning("请勿重复点赞！");
+async function likeResource(item: ResourceVO) {
+  // if (actionResorceMap.value[item.resourceId]) {
+  //   ElMessage.warning("一天只能点赞一次哟！");
+  //   return;
+  // }
+  const res = await useAddResourceLikeApi(item.resourceId, user.token);
+  if (res.code !== ResultStatus.SUCCESS) {
     return;
   }
+  ElMessage.success("点赞成功！");
+  item.likeCount++;
   actionResorceMap.value[item.resourceId] = true;
 }
 </script>
@@ -55,7 +58,7 @@ function likeResource(item: ResourceVO) {
       <!-- 左侧 -->
       <div w-full flex-row-c-c flex-col truncate>
         <CardNuxtImg
-          class="h-70 w-48 shadow-sm border-default card-default-br"
+          class="h-64 w-45 shadow-sm border-default card-default-br"
           :default-src="bookDetial?.coverImageUrl"
         >
           <template #error>
@@ -99,14 +102,14 @@ function likeResource(item: ResourceVO) {
         <div truncate text-1.6rem font-500>
           {{ bookDetial?.title }}
         </div>
-        <div text-small-color mt-4 max-w-full truncate>
+        <div mt-4 max-w-full truncate text-small-color>
           作者：{{ bookDetial?.author || "-" }}
         </div>
-        <div text-small-color mt-2 max-w-full truncate>
+        <div mt-2 max-w-full truncate text-small-color>
           出版社：{{ bookDetial?.publisher || "-" }}
         </div>
-        <div text-small-color mt-2 max-w-full truncate>
-          ISBN：<span btn-primary>{{ bookDetial?.isbn || "-" }}</span>
+        <div mt-2 max-w-full truncate text-small-color>
+          ISBN：<span btn-primary @click="useCopyText(bookDetial?.isbn || '', true)">{{ bookDetial?.isbn || "-" }}</span>
         </div>
         <div mt-2 max-w-full truncate text-small>
           发表时间：{{ bookDetial?.publishionDate || "-" }}
@@ -116,10 +119,10 @@ function likeResource(item: ResourceVO) {
         </div>
         <div class="mt-4 pt-4 border-default-t">
           <BtnElButton icon-class="i-solar:eye-outline mr-2" transition-icon @click="activeName = 'resorce'">
-            查看资源
+            下载资源
           </BtnElButton>
-          <BtnElButton type="primary" class="border-default" @click="activeName = 'read'">
-            查看详情
+          <BtnElButton icon-class="i-solar:command-bold mr-2" transition-icon type="primary" class="border-default" @click="activeName = 'read'">
+            查看摘要
           </BtnElButton>
         </div>
       </div>
@@ -170,7 +173,7 @@ function likeResource(item: ResourceVO) {
             v-if="bookDetial?.resourceList === null || bookDetial?.resourceList === undefined"
             class="flex items-center p-4 border-default card-default text-small"
           >
-            暂无权限，去<span text-info btn-info @click="user.showLoginForm = true">登录</span>
+            暂无权限，去<span text-info btn-info @click="user.toLogin()">登录</span>
           </li>
         </ul>
         <li

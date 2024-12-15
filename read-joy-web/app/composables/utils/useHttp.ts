@@ -11,6 +11,7 @@ export function httpRequest<T = unknown>(
   url: ReqType,
   bodyOrParams?: any,
   opts?: FetchOptions,
+  isParams = false,
 ) {
   let msg = "";
   const user = useUserStore();
@@ -102,12 +103,18 @@ export function httpRequest<T = unknown>(
     },
   } as FetchOptions;
   if (defaultOpts) {
-    if (method === "post" || method === "put")
-      defaultOpts.body = bodyOrParams;
-    else if (method === "delete" || method === "get")
+    if (method === "post" || method === "put") {
+      if (defaultOpts.params || isParams) // 兼容自定义参数
+        defaultOpts.body = bodyOrParams;
+      else
+        defaultOpts.body = bodyOrParams;
+    }
+    else if (method === "delete" || method === "get") {
       defaultOpts.params = bodyOrParams;
-    else
+    }
+    else {
       defaultOpts.body = bodyOrParams;
+    }
   }
   return $fetch(url, { ...defaultOpts, ...opts }) as Promise<T>;
 }
@@ -121,6 +128,13 @@ export const useHttp = {
     return httpRequest<T>("post", request, body, opts);
   },
 
+  put<T = unknown>(
+    request: ReqType,
+    body?: any | null | object,
+    opts?: FetchOptions,
+  ) {
+    return httpRequest<T>("put", request, body, opts);
+  },
   get<T = unknown>(
     request: ReqType,
     body?: any | null | object,
@@ -138,13 +152,20 @@ export const useHttp = {
     return httpRequest<T>("DELETE", request, body, opts);
   },
 
-
-  put<T = unknown>(
+  post_params<T = unknown>(
     request: ReqType,
     body?: any | null | object,
     opts?: FetchOptions,
   ) {
-    return httpRequest<T>("put", request, body, opts);
+    return httpRequest<T>("post", request, body, opts, true);
+  },
+
+  put_params<T = unknown>(
+    request: ReqType,
+    body?: any | null | object,
+    opts?: FetchOptions,
+  ) {
+    return httpRequest<T>("put", request, body, opts, true);
   },
 
 };

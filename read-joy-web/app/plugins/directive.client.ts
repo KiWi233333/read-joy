@@ -1,4 +1,5 @@
 import { useUserStore } from "~/composables/sotre/useUserStore";
+import { useCopyText } from "~/composables/utils/useUtils";
 
 // 引入icon
 export default defineNuxtPlugin(async (nuxtApp) => {
@@ -155,27 +156,4 @@ function useAsyncCopyText(text: string): Promise<boolean> {
         return resolve(false);
     });
   }
-}
-
-/**
- * 复制文字
- * @param text 复制的文本
- */
-export function useCopyText(text: string) {
-  // 动态创建 textarea 标签
-  const textarea: HTMLTextAreaElement = document.createElement("textarea");
-  // 将该 textarea 设为 readonly 防止 iOS 下自动唤起键盘，同时将 textarea 移出可视区域
-  textarea.readOnly = true;
-  textarea.style.position = "absolute";
-  textarea.style.opacity = "0";
-  textarea.style.left = "-500px";
-  // 将要 copy 的值赋给 textarea 标签的 value 属性
-  textarea.value = text;
-  // 将 textarea 插入到 body 中
-  document.body.appendChild(textarea);
-  // 选中值并复制
-  textarea.select();
-  const result = document.execCommand("Copy");
-  document.body.removeChild(textarea);
-  return result;
 }

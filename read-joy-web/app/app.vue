@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useDefaultStore } from "~/composables/sotre/useDefaultStore";
 import { appDescription, appName } from "~/constants";
+import { useUserStore } from "./composables/sotre/useUserStore";
 import { useInit } from "./composables/utils/useInit";
 
 const store = useDefaultStore();
+const user = useUserStore();
 useHead({
   title: appName,
   meta: [
@@ -29,11 +31,11 @@ onMounted(() => {
       :transition="true"
     />
   </NuxtLayout>
+  <BookDetailDrawer v-model:open="store.showBookDetail" :book="store.theBookDetail" />
   <ClientOnly>
+    <LazyFormPwdForm />
     <LazyFormLoginDialog />
-    <BookDetailDrawer v-model:open="store.showBookDetail" :book="store.theBookDetail" />
   </ClientOnly>
-  <!-- 图书详情 -->
 </template>
 
 <style>

@@ -3,6 +3,7 @@ import { getBookDetailApi } from "~/composables/api/book";
 import { ResultStatus } from "~/composables/api/types/result";
 import { useDefaultStore } from "~/composables/sotre/useDefaultStore";
 import { useUserStore } from "~/composables/sotre/useUserStore";
+import { appName } from "~/constants";
 
 const user = useUserStore();
 const store = useDefaultStore();
@@ -26,6 +27,15 @@ async function loadData() {
 
 watch(() => user.isLogin, async (val) => {
   await loadData();
+});
+useHead({
+  title: () => `${store.theBookDetail?.title} - ${appName}`,
+  meta: [
+    {
+      name: "description",
+      content: () => `${store.theBookDetail?.title} - ${appName}`,
+    },
+  ],
 });
 </script>
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SelectBookPageDTO } from "~/composables/api/book";
+import { appName } from "~/constants";
 
 const route = useRoute();
 // 图书
@@ -14,6 +15,15 @@ const pageDTO = ref<SelectBookPageDTO>({
 // 搜索
 const inputRef = ref();
 const tempDto = ref(JSON.parse(JSON.stringify(pageDTO.value)));
+useHead({
+  title: () => `分类 - ${appName}`,
+  meta: [
+    {
+      name: "description",
+      content: () => `分类 - ${appName}`,
+    },
+  ],
+});
 </script>
 
 <template>
