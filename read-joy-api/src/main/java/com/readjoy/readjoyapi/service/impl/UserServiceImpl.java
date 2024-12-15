@@ -107,7 +107,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
         }
         // 更新用户信息
-        User newUser = UserUpdateInfoDTO.toUser(dto, imgUrl);
+        User newUser = UserUpdateInfoDTO.toUser(dto, imgUrl, true);
         newUser.setId(oldUser.getId());
         boolean isSuccess = userRepository.updateById(newUser);
         AssertUtil.isTrue(isSuccess, "用户信息更新失败，请稍后重试！");

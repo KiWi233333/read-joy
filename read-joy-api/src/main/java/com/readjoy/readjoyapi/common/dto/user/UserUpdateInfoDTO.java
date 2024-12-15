@@ -1,6 +1,7 @@
 package com.readjoy.readjoyapi.common.dto.user;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.github.houbb.sensitive.word.core.SensitiveWordHelper;
 import com.readjoy.readjoyapi.common.annotation.Phone;
 import com.readjoy.readjoyapi.common.pojo.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -38,10 +39,15 @@ public class UserUpdateInfoDTO {
     @Phone(message = "手机号码格式不正确！")
     private String telephone;
 
-    public static User toUser(UserUpdateInfoDTO dto, String imgUrl) {
+    public static User toUser(UserUpdateInfoDTO dto, String imgUrl, boolean isFiltered) {
+        // 过滤敏感词
+        String trueName = dto.getTrueName();
+        if (isFiltered && StringUtils.isNotBlank(trueName)) {
+            trueName = SensitiveWordHelper.replace(dto.getTrueName());
+        }
         return new User()
                 .setLoginName(dto.getLoginName())
-                .setTrueName(dto.getTrueName())
+                .setTrueName(trueName)
                 .setTelephone(dto.getTelephone())
                 .setImgUrl(StringUtils.isBlank(imgUrl) ? null : imgUrl)
                 ;

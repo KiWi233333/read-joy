@@ -5,7 +5,7 @@ import com.readjoy.readjoyapi.common.dto.resource.InsertResourceDTO;
 import com.readjoy.readjoyapi.common.dto.resource.SelectResourceDTO;
 import com.readjoy.readjoyapi.common.dto.resource.UpdateResourceDTO;
 import com.readjoy.readjoyapi.common.utils.Result;
-import com.readjoy.readjoyapi.common.vo.resource.ResourceVO;
+import com.readjoy.readjoyapi.common.vo.resource.AdminResourceVO;
 import com.readjoy.readjoyapi.service.ResourceService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Resource;
@@ -35,15 +35,15 @@ public class AdminResourceController {
 
     @Operation(description = "获取资源列表（分页）")
     @GetMapping("/page")
-    Result<IPage<ResourceVO>> getResourceListByPage(
+    Result<IPage<AdminResourceVO>> getResourceListByPage(
             @RequestHeader(name = HEADER_NAME) String token,
-            @Valid SelectResourceDTO dto) {
+            @RequestBody @Valid SelectResourceDTO dto) {
         return Result.ok(resourceService.getPageByDTO(dto));
     }
 
     @Operation(description = "获取资源详情")
     @GetMapping("/{id}")
-    Result<ResourceVO> getResourceDetail(
+    Result<AdminResourceVO> getResourceDetail(
             @RequestHeader(name = HEADER_NAME) String token,
             @PathVariable("id") Integer id) {
         return Result.ok(resourceService.getResourceDetail(id));
@@ -53,7 +53,7 @@ public class AdminResourceController {
     @PostMapping
     Result<Integer> addResource(
             @RequestHeader(name = HEADER_NAME) String token,
-            @Valid @RequestBody InsertResourceDTO dto) {
+            @Valid InsertResourceDTO dto) {
         return Result.ok(resourceService.addResource(dto));
     }
 
@@ -62,7 +62,7 @@ public class AdminResourceController {
     Result<Integer> updateResource(
             @RequestHeader(name = HEADER_NAME) String token,
             @PathVariable("id") Integer id,
-            @Valid @RequestBody UpdateResourceDTO dto) {
+            @Valid UpdateResourceDTO dto) {
         return Result.ok(resourceService.updateResource(id, dto));
     }
 

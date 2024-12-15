@@ -8,7 +8,7 @@ import com.readjoy.readjoyapi.common.dto.resource.SelectResourceDTO;
 import com.readjoy.readjoyapi.common.mapper.ResourceMapper;
 import com.readjoy.readjoyapi.common.pojo.Book;
 import com.readjoy.readjoyapi.common.pojo.Resource;
-import com.readjoy.readjoyapi.common.vo.resource.ResourceVO;
+import com.readjoy.readjoyapi.common.vo.resource.AdminResourceVO;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,10 +20,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ResourceRepository extends JoinCrudRepository<ResourceMapper, Resource> {
 
-    public IPage<ResourceVO> getPageByDTO(SelectResourceDTO dto) {
+    public IPage<AdminResourceVO> getPageByDTO(SelectResourceDTO dto) {
         final MPJLambdaWrapper<Resource> qw = new MPJLambdaWrapper<Resource>()
                 .selectAll(Resource.class)
-                .selectAs(Book::getTitle, ResourceVO::getBookTitle) // 图书名称
+                .selectAs(Book::getTitle, AdminResourceVO::getBookTitle) // 图书名称
                 .and(StringUtils.isNotBlank(dto.getKeyword()), q -> q // 关键字
                         .or().like(Resource::getTitle, dto.getKeyword())
                         .or().like(Resource::getUrl, dto.getKeyword())
@@ -39,23 +39,23 @@ public class ResourceRepository extends JoinCrudRepository<ResourceMapper, Resou
         if (dto.getStartDate() != null && dto.getEndDate() != null) {
             qw.between(Resource::getCreateTime, dto.getStartDate(), dto.getEndDate());
         }
-        return this.selectJoinListPage(dto.toPage(), ResourceVO.class, qw);
+        return this.selectJoinListPage(dto.toPage(), AdminResourceVO.class, qw);
     }
 
-    public ResourceVO getJoinOnVO(Integer id) {
-        return this.selectJoinOne(ResourceVO.class, new MPJLambdaWrapper<Resource>()
-                .selectAs(Book::getTitle, ResourceVO::getBookTitle) // 图书名称
+    public AdminResourceVO getJoinOnVO(Integer id) {
+        return this.selectJoinOne(AdminResourceVO.class, new MPJLambdaWrapper<Resource>()
+                .selectAs(Book::getTitle, AdminResourceVO::getBookTitle) // 图书名称
 
-                .selectAs(Resource::getResourceId, ResourceVO::getResourceId)
-                .selectAs(Resource::getTitle, ResourceVO::getTitle)
-                .selectAs(Resource::getUrl, ResourceVO::getUrl)
-                .selectAs(Resource::getType, ResourceVO::getType)
-                .selectAs(Resource::getSize, ResourceVO::getSize)
-                .selectAs(Resource::getLikeCount, ResourceVO::getLikeCount)
-                .selectAs(Resource::getDownloadCount, ResourceVO::getDownloadCount)
-                .selectAs(Resource::getSubmitter, ResourceVO::getSubmitter)
-                .selectAs(Resource::getIsDeleted, ResourceVO::getIsDeleted)
-                .selectAs(Resource::getCreateTime, ResourceVO::getCreateTime)
+                .selectAs(Resource::getResourceId, AdminResourceVO::getResourceId)
+                .selectAs(Resource::getTitle, AdminResourceVO::getTitle)
+                .selectAs(Resource::getUrl, AdminResourceVO::getUrl)
+                .selectAs(Resource::getType, AdminResourceVO::getType)
+                .selectAs(Resource::getSize, AdminResourceVO::getSize)
+                .selectAs(Resource::getLikeCount, AdminResourceVO::getLikeCount)
+                .selectAs(Resource::getDownloadCount, AdminResourceVO::getDownloadCount)
+                .selectAs(Resource::getSubmitter, AdminResourceVO::getSubmitter)
+                .selectAs(Resource::getIsDeleted, AdminResourceVO::getIsDeleted)
+                .selectAs(Resource::getCreateTime, AdminResourceVO::getCreateTime)
                 .eq(Resource::getResourceId, id) // 主键查询
                 .leftJoin(Book.class, Book::getBookId, Resource::getBookId)
                 .last("LIMIT 1")

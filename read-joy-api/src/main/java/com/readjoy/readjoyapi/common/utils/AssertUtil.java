@@ -181,4 +181,7 @@ public class AssertUtil {
         throw new BusinessException(status.getCode(), msg);
     }
 
+    public static void fail(String s) {
+        throw new BusinessException(ResultStatus.DEFAULT_ERR.getCode(), s);
+    }
 }

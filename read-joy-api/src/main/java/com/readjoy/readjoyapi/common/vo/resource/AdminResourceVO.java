@@ -16,7 +16,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CuResourceVO implements Serializable {
+public class AdminResourceVO implements Serializable {
     @Schema(description = "资源ID")
     private Integer resourceId;
 
@@ -38,14 +38,15 @@ public class CuResourceVO implements Serializable {
     @Schema(description = "资源保存地址")
     private String url;
 
-//    @Schema(description = "资源提交者")
-//    private String submitter;
-
-//    @Schema(description = "是否删除（0 - 否，1 - 是）")
-//    private Integer isDeleted;
+    @Schema(description = "资源提交者")
+    private String submitter;
 
     @Schema(description = "创建时间")
     private Date createTime;
+
+    @Schema(description = "是否删除（0 - 否，1 - 是）")
+    private Integer isDeleted;
+
     @Schema(description = "下载数")
     private Integer downloadCount;
 

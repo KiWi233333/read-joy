@@ -17,12 +17,14 @@ import com.readjoy.readjoyapi.common.pojo.Resource;
 import com.readjoy.readjoyapi.common.utils.AssertUtil;
 import com.readjoy.readjoyapi.common.utils.LocalFileUtil;
 import com.readjoy.readjoyapi.common.utils.RequestHolderUtil;
-import com.readjoy.readjoyapi.common.vo.resource.CuResourceVO;
-import com.readjoy.readjoyapi.common.vo.resource.ResourceVO;
+import com.readjoy.readjoyapi.common.utils.UserTokenUtil;
+import com.readjoy.readjoyapi.common.vo.resource.UserResourceVO;
+import com.readjoy.readjoyapi.common.vo.resource.AdminResourceVO;
 import com.readjoy.readjoyapi.repository.AdminRepository;
 import com.readjoy.readjoyapi.repository.BookRepository;
 import com.readjoy.readjoyapi.repository.ResourceRepository;
 import com.readjoy.readjoyapi.service.ResourceService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +37,7 @@ import java.util.List;
  * @createDate 2024-12-07 17:55:09
  */
 @Service
+@Slf4j
 public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> implements ResourceService {
 
     @jakarta.annotation.Resource
@@ -53,7 +56,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
      * @return 资源分页列表
      */
     @Override
-    public IPage<ResourceVO> getPageByDTO(SelectResourceDTO dto) {
+    public IPage<AdminResourceVO> getPageByDTO(SelectResourceDTO dto) {
         return resourceRepository.getPageByDTO(dto);
     }
 
@@ -64,7 +67,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
      * @return 资源详情
      */
     @Override
-    public ResourceVO getResourceDetail(Integer id) {
+    public AdminResourceVO getResourceDetail(Integer id) {
         return resourceRepository.getJoinOnVO(id);
     }
 
@@ -79,14 +82,27 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         // 查询是否存在图书
         AssertUtil.isNotEmpty(bookRepository.getById(dto.getBookId()), "添加失败，资源图书不存在！");
         // 获取当前用户信息
-        final Admin admin = adminRepository.getById(RequestHolderUtil.get().getId());
+        UserTokenUtil tokenUtil = RequestHolderUtil.get();
+        final Admin admin = adminRepository.getById(tokenUtil.getId());
         AssertUtil.isNotEmpty(admin, "添加资源的用户不存在！");
         // 上传文件
         final String fileUrl = localFileUtil.saveAuthFile(dto.getResourceFile());
+        AssertUtil.isNotEmpty(fileUrl, "上传文件失败，请稍后再试！");
+        log.info("用户uid: {}, 上传图片, 文件路径: {}", tokenUtil.getId(), fileUrl);
         // 获取文件大小
-        final Long fileSize = localFileUtil.getFileSize(fileUrl);
-        // 获取文件类型
-        final String fileType = localFileUtil.getFileType(fileUrl);
+        Long fileSize = null;
+        String fileType = null;
+        try {
+            final LocalFileUtil.LocalFileInfo fileInfo = localFileUtil.getFileInfo(fileUrl);
+            fileSize = fileInfo.getFileSize();
+            // 获取文件类型
+            fileType = fileInfo.getFileType();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 上传文件失败，删除已上传的文件
+            localFileUtil.deleteAuthFile(fileUrl);
+            AssertUtil.fail("上传文件失败，请稍后再试！");
+        }
         AssertUtil.isTrue(fileSize <= LocalFileUtil.MAX_FILE_SIZE, "上传文件大小不能超过" + LocalFileUtil.formatSize(LocalFileUtil.MAX_FILE_SIZE) + "！");
         final Resource resource = InsertResourceDTO.toResource(dto,
                 fileSize,
@@ -99,7 +115,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         } catch (Exception e) {
             e.printStackTrace();
             // 上传文件失败，删除已上传的文件
-            localFileUtil.deleteFile(fileUrl);
+            localFileUtil.deleteAuthFile(fileUrl);
             throw new BusinessException(ResultStatus.INSERT_ERR, "新增资源失败！");
         }
         return 1;
@@ -131,10 +147,12 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
             if (dto.getResourceFile() != null) {
                 // 上传文件
                 fileUrl = localFileUtil.saveAuthFile(dto.getResourceFile());
+                AssertUtil.isNotEmpty(fileUrl, "上传文件失败，请稍后再试！");
                 // 获取文件大小
-                fileSize = localFileUtil.getFileSize(fileUrl);
+                final LocalFileUtil.LocalFileInfo file = localFileUtil.getFileInfo(fileUrl);
+                fileSize = file.getFileSize();
                 // 获取文件类型
-                fileType = localFileUtil.getFileType(fileUrl);
+                fileType = file.getFileType();
                 AssertUtil.isTrue(fileSize <= LocalFileUtil.MAX_FILE_SIZE, "上传文件大小不能超过" + LocalFileUtil.formatSize(LocalFileUtil.MAX_FILE_SIZE) + "！");
             }
             final boolean update = resourceRepository.updateById(UpdateResourceDTO.toResource(
@@ -147,18 +165,18 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
             if (update) {// 更新成功，删除原文件
                 Resource resource = resourceRepository.getById(id);
                 if (resource != null) {
-                    localFileUtil.deleteFile(resource.getUrl());
+                    localFileUtil.deleteAuthFile(resource.getUrl());
                 }
             } else {// 更新失败，删除上传的文件
                 if (fileUrl != null) {
-                    localFileUtil.deleteFile(fileUrl);
+                    localFileUtil.deleteAuthFile(fileUrl);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
             // 上传文件失败，删除已上传的文件
             if (fileUrl != null) {
-                localFileUtil.deleteFile(fileUrl);
+                localFileUtil.deleteAuthFile(fileUrl);
             }
             throw new BusinessException(ResultStatus.UPDATE_ERR, "更新资源失败！");
         }
@@ -193,17 +211,17 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
      * @return 资源列表
      */
     @Override
-    public List<CuResourceVO> getResourceListByBooKId(Integer bookId) {
+    public List<UserResourceVO> getResourceListByBooKId(Integer bookId) {
         // 查询资源列表
-        return resourceRepository.selectJoinList(CuResourceVO.class, new MPJLambdaWrapper<Resource>()
-                .selectAs(Resource::getTitle, CuResourceVO::getTitle)
-                .selectAs(Resource::getResourceId, CuResourceVO::getResourceId)
-                .selectAs(Resource::getUrl, CuResourceVO::getUrl)
-                .selectAs(Resource::getType, CuResourceVO::getType)
-                .selectAs(Resource::getSize, CuResourceVO::getSize)
-                .selectAs(Resource::getLikeCount, CuResourceVO::getLikeCount)
-                .selectAs(Resource::getDownloadCount, CuResourceVO::getDownloadCount)
-                .selectAs(Resource::getCreateTime, CuResourceVO::getCreateTime)
+        return resourceRepository.selectJoinList(UserResourceVO.class, new MPJLambdaWrapper<Resource>()
+                .selectAs(Resource::getTitle, UserResourceVO::getTitle)
+                .selectAs(Resource::getResourceId, UserResourceVO::getResourceId)
+                .selectAs(Resource::getUrl, UserResourceVO::getUrl)
+                .selectAs(Resource::getType, UserResourceVO::getType)
+                .selectAs(Resource::getSize, UserResourceVO::getSize)
+                .selectAs(Resource::getLikeCount, UserResourceVO::getLikeCount)
+                .selectAs(Resource::getDownloadCount, UserResourceVO::getDownloadCount)
+                .selectAs(Resource::getCreateTime, UserResourceVO::getCreateTime)
                 .eq(Resource::getBookId, bookId)
                 .eq(Resource::getIsDeleted, BoolEnum.FALSE.getValue()) // 未删除
                 .leftJoin(Book.class, Book::getBookId, Resource::getBookId));

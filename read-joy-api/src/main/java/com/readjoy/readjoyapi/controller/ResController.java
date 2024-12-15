@@ -1,25 +1,25 @@
 package com.readjoy.readjoyapi.controller;
 
-import com.readjoy.readjoyapi.common.enums.SysUserTypeEnum;
-import com.readjoy.readjoyapi.common.utils.*;
+import com.readjoy.readjoyapi.common.utils.AssertUtil;
+import com.readjoy.readjoyapi.common.utils.LocalFileUtil;
+import com.readjoy.readjoyapi.common.utils.RequestHolderUtil;
+import com.readjoy.readjoyapi.common.utils.Result;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Tag;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.readjoy.readjoyapi.common.utils.UserTokenUtil.HEADER_NAME;
 
 /**
- * 资源模块
+ * 公共模块
  */
-@RequestMapping("")
-@Controller
-@Tag("资源模块")
+@RequestMapping("/res")
+@RestController
+@Tag("公共模块")
 @Slf4j
 public class ResController {
 
@@ -27,26 +27,28 @@ public class ResController {
     @Resource
     private LocalFileUtil localFileUtil;
 
-    @PostMapping("/res/upload")
-    @ResponseBody
+    @PostMapping("/file")
     @Operation(summary = "上传文件")
     public Result<String> upload(
             @RequestHeader(name = HEADER_NAME) String token,
             @RequestParam("file") MultipartFile file
     ) {
-        return Result.ok(localFileUtil.saveFile(file));
+        Integer userId = RequestHolderUtil.get().getId();
+        return Result.ok(localFileUtil.saveFile(file, String.valueOf(userId)));
     }
 
-    @PostMapping("/res/upload/auth")
-    @ResponseBody
-    @Operation(summary = "上传文件(权限文件)")
-    public Result<String> uploadAuth(
+    // 删除文件
+    @DeleteMapping("/file")
+    @Operation(summary = "删除文件")
+    public Result<Boolean> delete(
             @RequestHeader(name = HEADER_NAME) String token,
-            @RequestParam("file") MultipartFile file
+            @Schema(description = "文件路径", example = "files/{uid}/xx/xx.xx") @RequestParam("url") String url
     ) {
-        final UserTokenUtil tokenUtil = RequestHolderUtil.get();
-        AssertUtil.isTrue(tokenUtil != null && SysUserTypeEnum.isAdmin(tokenUtil.getUserType()), "抱歉，您没有权限访问该接口！");
-        return Result.ok(localFileUtil.saveAuthFile(file));
+        AssertUtil.isNotBlank(url, "文件名不能为空！");
+        Integer userId = RequestHolderUtil.get().getId();
+        boolean isSelfFile = url.startsWith("files/" + userId + "/");
+        AssertUtil.isTrue(isSelfFile, "权限错误，不能操作非本人文件！");
+        return Result.ok(localFileUtil.deleteFile(url));
     }
 
 }

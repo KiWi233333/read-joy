@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.util.UrlPathHelper;
 
 
 @Slf4j
@@ -29,10 +30,18 @@ public class WebAndSwaggerConfig implements WebMvcConfigurer { // 覆写addResou
     AuthInterceptor authInterceptor;
 
     @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        UrlPathHelper urlPathHelper = new UrlPathHelper();
+        urlPathHelper.setUrlDecode(false); // 设置不对路径进行解码
+        urlPathHelper.setAlwaysUseFullPath(false); // 设置总使用完整路径
+        configurer.setUrlPathHelper(urlPathHelper);
+    }
+
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String resUrl = "file:" + System.getProperty("user.dir").replace("\\", "/") + "/files/";
+        String resUrl = "file:%s/%s/".formatted(System.getProperty("user.dir").replace("\\", "/"), prefixPath);
         log.info("文件下载路径将在目录: " + resUrl);
-        registry.addResourceHandler("/files/*").addResourceLocations(resUrl);
+        registry.addResourceHandler("/" + prefixPath + "/**").addResourceLocations(resUrl);
         registry.addResourceHandler("/static/**").addResourceLocations(
                 "classpath:/static/");
         WebMvcConfigurer.super.addResourceHandlers(registry);
@@ -78,10 +87,10 @@ public class WebAndSwaggerConfig implements WebMvcConfigurer { // 覆写addResou
                         "/user/login",
                         "/user/register",
                         // 访客
-                        prefixPath + "/*",
-                        "/book/*",
-                        "/book/category/**",
-                        "/book/resource/**"
+                        "/*" + prefixPath + "/*",
+                        // "/book/*",
+                        "/book/category/**"
+//                        "/book/resource/**" // 访客
                 );
     }
 

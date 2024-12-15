@@ -35,7 +35,7 @@ public class BookController {
         return Result.ok(bookService.getPageByDTO(dto));
     }
 
-    @Operation(description = "获取图书详情")
+    @Operation(description = "获取图书详情(访客不返回资源)")
     @GetMapping("/{id}")
     Result<BookDetailVO> getBookDetail(
             @PathVariable("id") Integer id) {

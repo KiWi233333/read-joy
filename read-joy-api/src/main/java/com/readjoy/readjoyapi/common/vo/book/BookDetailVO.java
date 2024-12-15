@@ -1,7 +1,7 @@
 package com.readjoy.readjoyapi.common.vo.book;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.readjoy.readjoyapi.common.vo.resource.ResourceVO;
+import com.readjoy.readjoyapi.common.vo.resource.AdminResourceVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -54,6 +54,6 @@ public class BookDetailVO {
     private Date publishionDate;
 
     @Schema(description = "资源列表")
-    private List<ResourceVO> resourceList;
+    private List<AdminResourceVO> resourceList;
 
 }

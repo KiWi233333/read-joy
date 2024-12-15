@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.readjoy.readjoyapi.common.dto.resource.InsertResourceDTO;
 import com.readjoy.readjoyapi.common.dto.resource.SelectResourceDTO;
 import com.readjoy.readjoyapi.common.dto.resource.UpdateResourceDTO;
-import com.readjoy.readjoyapi.common.vo.resource.CuResourceVO;
-import com.readjoy.readjoyapi.common.vo.resource.ResourceVO;
+import com.readjoy.readjoyapi.common.vo.resource.UserResourceVO;
+import com.readjoy.readjoyapi.common.vo.resource.AdminResourceVO;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public interface ResourceService {
      * @param dto 查询条件DTO
      * @return 资源分页列表
      */
-    IPage<ResourceVO> getPageByDTO(SelectResourceDTO dto);
+    IPage<AdminResourceVO> getPageByDTO(SelectResourceDTO dto);
 
     /**
      * 获取资源详情
@@ -33,7 +33,7 @@ public interface ResourceService {
      * @param id 资源ID
      * @return 资源详情
      */
-    ResourceVO getResourceDetail(Integer id);
+    AdminResourceVO getResourceDetail(Integer id);
 
     /**
      * 新增资源
@@ -68,5 +68,5 @@ public interface ResourceService {
      * @param bookId 书籍ID
      * @return 资源列表
      */
-    List<CuResourceVO> getResourceListByBooKId(Integer bookId);
+    List<UserResourceVO> getResourceListByBooKId(Integer bookId);
 }
