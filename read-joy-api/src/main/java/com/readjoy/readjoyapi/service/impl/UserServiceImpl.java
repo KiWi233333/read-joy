@@ -85,7 +85,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Integer updateUserBaseInfo(UserUpdateInfoDTO dto) {
+    public UserInfoVO updateUserBaseInfo(UserUpdateInfoDTO dto) {
         // 查询用户
         final Integer uid = RequestHolderUtil.get().getId();
         User oldUser = userRepository.getById(uid);
@@ -110,7 +110,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         AssertUtil.isTrue(isSuccess, "用户信息更新失败，请稍后重试！");
         // 返回用户信息
-        return 1;
+        return this.getUserInfo();
     }
 
     @Override

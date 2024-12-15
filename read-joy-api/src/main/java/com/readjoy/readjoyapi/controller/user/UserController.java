@@ -57,7 +57,7 @@ public class UserController {
     @PutMapping("")
     @Operation(summary = "修改用户基本信息")
     @Parameter(name = HEADER_NAME, in = ParameterIn.HEADER, description = "token", required = true)
-    public Result<Integer> updateUser(@Valid UserUpdateInfoDTO dto, @RequestHeader(name = HEADER_NAME) String token) {
+    public Result<UserInfoVO> updateUser(@Valid UserUpdateInfoDTO dto, @RequestHeader(name = HEADER_NAME) String token) {
         return Result.ok(userService.updateUserBaseInfo(dto));
     }
 
