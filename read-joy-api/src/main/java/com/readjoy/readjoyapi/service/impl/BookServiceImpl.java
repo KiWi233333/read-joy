@@ -10,8 +10,6 @@ import com.readjoy.readjoyapi.common.mapper.BookMapper;
 import com.readjoy.readjoyapi.common.pojo.Book;
 import com.readjoy.readjoyapi.common.utils.AssertUtil;
 import com.readjoy.readjoyapi.common.utils.LocalFileUtil;
-import com.readjoy.readjoyapi.common.utils.RequestHolderUtil;
-import com.readjoy.readjoyapi.common.utils.UserTokenUtil;
 import com.readjoy.readjoyapi.common.vo.book.BookDetailVO;
 import com.readjoy.readjoyapi.common.vo.book.BookVO;
 import com.readjoy.readjoyapi.repository.BookRepository;
@@ -45,10 +43,6 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
     public BookDetailVO getBookDetail(Integer id) {
         final BookDetailVO bookDetailVO = bookRepository.selectDetailAndResources(new Book().setBookId(id));
         AssertUtil.isNotEmpty(bookDetailVO, "查询图书不存在！");
-        final UserTokenUtil tokenUtil = RequestHolderUtil.get();
-        if (tokenUtil == null) {
-            bookDetailVO.setResourceList(null);
-        }
         return bookDetailVO;
     }
 

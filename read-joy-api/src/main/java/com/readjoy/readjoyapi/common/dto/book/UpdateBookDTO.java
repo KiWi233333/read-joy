@@ -20,23 +20,23 @@ import java.util.Date;
 public class UpdateBookDTO {
 
     @Schema(description = "国际标准书号", example = "978-3-16-148410-0")
-    @Length(max = 20, message = "ISBN长度必须在1到20之间")
+    @Length(min=1, max = 20, message = "ISBN长度必须在1到20之间！")
     private String isbn;
 
     @Schema(description = "书名", example = "百年孤独")
-    @Length(max = 30, message = "书名长度必须在1到30之间")
+    @Length(min=1, max = 100, message = "书名长度必须在1到100之间！")
     private String title;
 
     @Schema(description = "分类ID", example = "1")
-    @Min(value = 1, message = "分类ID必须大于0")
+    @Min(value = 1, message = "分类ID必须大于0！")
     private Integer categoryId;
 
     @Schema(description = "作者", example = "加西亚·马尔克斯")
-    @Length(max = 30, message = "作者长度必须在1到30之间")
+    @Length(min=1, max = 100, message = "作者长度必须在1到100之间！")
     private String author;
 
     @Schema(description = "书籍介绍", example = "魔幻现实主义文学的代表作")
-    @Length(max = 100, message = "书籍介绍长度不能超过100")
+    @Length(min=1, max = 1000, message = "书籍介绍长度不超过1000字！")
     private String introduction;
 
     @Schema(description = "价格", example = "59.80")
@@ -44,7 +44,7 @@ public class UpdateBookDTO {
     private Double price;
 
     @Schema(description = "出版社", example = "南海出版公司")
-    @Length(max = 20, message = "出版社长度必须在1到20之间")
+    @Length(min=1, max = 50, message = "出版社长度必须在1到50之间！")
     private String publisher;
 
     @Schema(description = "封面图片URL", example = "cover1.jpg")

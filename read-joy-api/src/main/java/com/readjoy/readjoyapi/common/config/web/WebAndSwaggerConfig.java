@@ -1,13 +1,14 @@
 package com.readjoy.readjoyapi.common.config.web;
 
 import com.readjoy.readjoyapi.common.config.interceptor.AuthInterceptor;
+import com.readjoy.readjoyapi.common.config.interceptor.PortFlowInterceptor;
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,12 +23,16 @@ public class WebAndSwaggerConfig implements WebMvcConfigurer { // 覆写addResou
 
     @Value("${file.download.prefix}")
     private String prefixPath;
+    @Value("${file.download.auth.prefix}")
+    private String prefixAuthPath;
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
     // 拦截器
-    @Autowired
+    @Resource
     AuthInterceptor authInterceptor;
+    @Resource
+    private PortFlowInterceptor portFlowInterceptor;
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
@@ -40,8 +45,10 @@ public class WebAndSwaggerConfig implements WebMvcConfigurer { // 覆写addResou
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String resUrl = "file:%s/%s/".formatted(System.getProperty("user.dir").replace("\\", "/"), prefixPath);
+        String resAuthUrl = "file:%s/%s/".formatted(System.getProperty("user.dir").replace("\\", "/"), prefixAuthPath);
         log.info("文件下载路径将在目录: " + resUrl);
         registry.addResourceHandler("/" + prefixPath + "/**").addResourceLocations(resUrl);
+        registry.addResourceHandler("/" + prefixAuthPath + "/**").addResourceLocations(resAuthUrl);
         registry.addResourceHandler("/static/**").addResourceLocations(
                 "classpath:/static/");
         WebMvcConfigurer.super.addResourceHandlers(registry);
@@ -90,8 +97,9 @@ public class WebAndSwaggerConfig implements WebMvcConfigurer { // 覆写addResou
                         "/*" + prefixPath + "/*",
                         // "/book/*",
                         "/book/category/**"
-//                        "/book/resource/**" // 访客
                 );
+        // 2、端口流量拦截器
+        registry.addInterceptor(portFlowInterceptor); // 注册拦截器
     }
 
 }

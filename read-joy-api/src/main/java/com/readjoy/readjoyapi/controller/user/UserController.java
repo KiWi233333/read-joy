@@ -4,10 +4,10 @@ import com.readjoy.readjoyapi.common.dto.user.UserLoginDTO;
 import com.readjoy.readjoyapi.common.dto.user.UserRegisterDTO;
 import com.readjoy.readjoyapi.common.dto.user.UserUpdateInfoDTO;
 import com.readjoy.readjoyapi.common.dto.user.UserUpdatePwdDTO;
-import com.readjoy.readjoyapi.service.UserService;
 import com.readjoy.readjoyapi.common.utils.Result;
 import com.readjoy.readjoyapi.common.vo.user.UserInfoVO;
 import com.readjoy.readjoyapi.common.vo.user.UserLoginVO;
+import com.readjoy.readjoyapi.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -57,7 +57,7 @@ public class UserController {
     @PutMapping("")
     @Operation(summary = "修改用户基本信息")
     @Parameter(name = HEADER_NAME, in = ParameterIn.HEADER, description = "token", required = true)
-    public Result<UserInfoVO> updateUser(@Valid @RequestBody UserUpdateInfoDTO dto, @RequestHeader(name = HEADER_NAME) String token) {
+    public Result<Integer> updateUser(@Valid UserUpdateInfoDTO dto, @RequestHeader(name = HEADER_NAME) String token) {
         return Result.ok(userService.updateUserBaseInfo(dto));
     }
 

@@ -69,4 +69,20 @@ public interface ResourceService {
      * @return 资源列表
      */
     List<UserResourceVO> getResourceListByBooKId(Integer bookId);
+
+    /**
+     * 增加资源下载次数
+     *
+     * @param url 资源URL
+     * @return 是否成功
+     */
+    Integer incrementDownloadCount(String url);
+
+    /**
+     * 增加资源点赞次数
+     *
+     * @param resourceId 资源ID
+     * @return 点赞数量
+     */
+    Integer incrementLikeCount(Integer resourceId);
 }

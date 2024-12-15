@@ -46,7 +46,7 @@ public class ResController {
     ) {
         AssertUtil.isNotBlank(url, "文件名不能为空！");
         Integer userId = RequestHolderUtil.get().getId();
-        boolean isSelfFile = url.startsWith("files/" + userId + "/");
+        boolean isSelfFile = url.startsWith("files/public/" + userId + "_");
         AssertUtil.isTrue(isSelfFile, "权限错误，不能操作非本人文件！");
         return Result.ok(localFileUtil.deleteFile(url));
     }

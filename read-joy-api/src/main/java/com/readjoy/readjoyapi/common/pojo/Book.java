@@ -1,5 +1,6 @@
 package com.readjoy.readjoyapi.common.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -26,7 +27,7 @@ public class Book implements Serializable {
     /**
      * 书籍ID
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer bookId;
 
     /**

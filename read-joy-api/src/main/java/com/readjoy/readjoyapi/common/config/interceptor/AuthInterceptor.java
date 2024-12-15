@@ -7,14 +7,20 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.readjoy.readjoyapi.common.enums.ResultStatus;
 import com.readjoy.readjoyapi.common.enums.SysUserTypeEnum;
 import com.readjoy.readjoyapi.common.utils.*;
+import com.readjoy.readjoyapi.service.ResourceService;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 身份验证拦截器
@@ -32,6 +38,12 @@ public class AuthInterceptor implements HandlerInterceptor {
     public static final String[] IGNORE_URL = {
             "/book/*"
     };
+
+    @Value("${file.download.auth.prefix}")
+    private String fileDownloadAuthPrefix;
+
+    @Resource
+    private ResourceService resourceService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -56,7 +68,6 @@ public class AuthInterceptor implements HandlerInterceptor {
         String url = request.getRequestURI();
         // 正则判断是否是 /book/* 开头的接口，如果是，则放行
         if (token == null && request.getMethod().equals("GET") && url.startsWith("/book/")) {
-            log.info("访客图书详情图书详情，只返回部分信息{}", url);
             return true;
         }
         if (StringUtils.isBlank(token)) { // token 为空
@@ -74,6 +85,8 @@ public class AuthInterceptor implements HandlerInterceptor {
             }
             // 3、头部存放信息
             RequestHolderUtil.set(userTokenDTO);
+            // 4、下载文件权限验证和计数
+            checkAuthFileDownload(url);
             // 判断 用户类型 /admin需要管理员权限 /user需要普通用户权限
             log.info("当前用户 uid:{}, userType:{}, 请求接口：{}", userTokenDTO.getId(), userTokenDTO.getUserType(), request.getRequestURI());
             if (request.getRequestURI().startsWith("/res")) {// 资源接口不需要验证角色
@@ -97,5 +110,18 @@ public class AuthInterceptor implements HandlerInterceptor {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 下载文件权限验证和计数
+     *
+     * @param url 请求url
+     */
+    private void checkAuthFileDownload(String url) {
+        String resultUrl = url.substring(1);
+        if (resultUrl.startsWith(fileDownloadAuthPrefix)) {
+            log.info("当前用户下载文件并自增下载次数：{}", resultUrl);
+            resourceService.incrementDownloadCount(resultUrl); // 文件 自增下载次数
+        }
     }
 }

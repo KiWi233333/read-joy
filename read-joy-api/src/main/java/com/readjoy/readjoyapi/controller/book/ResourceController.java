@@ -1,5 +1,6 @@
 package com.readjoy.readjoyapi.controller.book;
 
+import com.readjoy.readjoyapi.common.annotation.PortFlowControl;
 import com.readjoy.readjoyapi.common.utils.Result;
 import com.readjoy.readjoyapi.common.vo.resource.UserResourceVO;
 import com.readjoy.readjoyapi.service.ResourceService;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.readjoy.readjoyapi.common.utils.UserTokenUtil.HEADER_NAME;
 
@@ -35,8 +37,17 @@ public class ResourceController {
     Result<List<UserResourceVO>> getResourceListByPage(
             @RequestHeader(name = HEADER_NAME) String token,
             @PathVariable("bookId") Integer bookId
-            ) {
+    ) {
         return Result.ok(resourceService.getResourceListByBooKId(bookId));
     }
 
+    @Operation(description = "点赞资源")
+    @PutMapping("/like/{resourceId}")
+    @PortFlowControl(limit = 1, timeUnit = TimeUnit.DAYS, errorMessage = "每天只能点赞一次！")
+    Result<Integer> likeResource(
+            @RequestHeader(name = HEADER_NAME) String token,
+            @PathVariable("resourceId") Integer resourceId
+    ) {
+        return Result.ok(resourceService.incrementLikeCount(resourceId));
+    }
 }

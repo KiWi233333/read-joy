@@ -1,9 +1,6 @@
 package com.readjoy.readjoyapi.common.pojo;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -30,7 +27,7 @@ public class Resource implements Serializable {
     /**
      * 资源ID
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     @Schema(description = "资源ID", example = "1")
     private Integer resourceId;
 

@@ -54,7 +54,7 @@ public class AdminBookController {
     @PostMapping
     Result<Integer> addBook(
             @RequestHeader(name = HEADER_NAME) String token,
-            @Valid @RequestBody InsertBookDTO dto) {
+            @Valid InsertBookDTO dto) {
         return Result.ok(bookService.addBook(dto));
     }
 
@@ -63,7 +63,7 @@ public class AdminBookController {
     Result<Integer> updateBook(
             @RequestHeader(name = HEADER_NAME) String token,
             @PathVariable("id") Integer id,
-            @Valid @RequestBody UpdateBookDTO dto) {
+            @Valid UpdateBookDTO dto) {
         return Result.ok(bookService.updateBook(id, dto));
     }
 

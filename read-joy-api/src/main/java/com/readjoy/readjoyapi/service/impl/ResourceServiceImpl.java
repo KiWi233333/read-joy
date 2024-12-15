@@ -2,6 +2,7 @@ package com.readjoy.readjoyapi.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.readjoy.readjoyapi.common.config.exception.BusinessException;
@@ -140,37 +141,38 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         AssertUtil.isNotEmpty(admin, "更新资源的用户不存在！");
         // 更新资源信息
         String fileUrl = null;
+        String originalFilename = null;
         Long fileSize = null;
         String fileType = LocalFileUtil.DEFAULT_FILE_MIME_TYPE;
         try {
-            // 更新文件
+            // 1、若有文件，则更新文件
             if (dto.getResourceFile() != null) {
                 // 上传文件
                 fileUrl = localFileUtil.saveAuthFile(dto.getResourceFile());
                 AssertUtil.isNotEmpty(fileUrl, "上传文件失败，请稍后再试！");
                 // 获取文件大小
-                final LocalFileUtil.LocalFileInfo file = localFileUtil.getFileInfo(fileUrl);
-                fileSize = file.getFileSize();
+                final LocalFileUtil.LocalFileInfo fileInfo = localFileUtil.getFileInfo(fileUrl);
+                fileSize = fileInfo.getFileSize();
                 // 获取文件类型
-                fileType = file.getFileType();
+                fileType = fileInfo.getFileType() == null ? LocalFileUtil.DEFAULT_FILE_MIME_TYPE : fileInfo.getFileType();
+                originalFilename = dto.getResourceFile().getOriginalFilename();
                 AssertUtil.isTrue(fileSize <= LocalFileUtil.MAX_FILE_SIZE, "上传文件大小不能超过" + LocalFileUtil.formatSize(LocalFileUtil.MAX_FILE_SIZE) + "！");
             }
+            // 2、更新资源信息
+            Resource oldResource = resourceRepository.getById(id);
             final boolean update = resourceRepository.updateById(UpdateResourceDTO.toResource(
-                    dto,
-                    fileUrl,
-                    fileType,
-                    fileSize,
-                    admin.getUsername()));
+                            dto,
+                            fileUrl,
+                            fileType,
+                            fileSize,
+                            admin.getUsername())
+                    .setTitle(StringUtils.isBlank(dto.getTitle()) ? originalFilename : dto.getTitle()) // 标题
+                    .setResourceId(id)); // id
             AssertUtil.isTrue(update, "更新资源失败！");
-            if (update) {// 更新成功，删除原文件
-                Resource resource = resourceRepository.getById(id);
-                if (resource != null) {
-                    localFileUtil.deleteAuthFile(resource.getUrl());
-                }
-            } else {// 更新失败，删除上传的文件
-                if (fileUrl != null) {
-                    localFileUtil.deleteAuthFile(fileUrl);
-                }
+            if (update && oldResource != null) {// 更新成功，删除原文件
+                localFileUtil.deleteAuthFile(oldResource.getUrl());
+            } else if (StringUtils.isNotBlank(fileUrl)) {// 更新失败，删除上传的文件
+                localFileUtil.deleteAuthFile(fileUrl);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -186,20 +188,29 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     /**
      * 批量删除资源 (逻辑删除)
      *
-     * @param integers 资源ID数组
+     * @param ids 资源ID数组
      * @return 删除数量
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer batchDeleteResource(Integer[] integers) {
-        // 获取当前用户信息
-        final Admin admin = adminRepository.getById(RequestHolderUtil.get().getId());
-        AssertUtil.isNotEmpty(admin, "删除资源的用户不存在！");
+    public Integer batchDeleteResource(Integer[] ids) {
+        // 查询资源是否存在
+        final List<Resource> list = resourceRepository.list(new LambdaQueryWrapper<Resource>()
+                .in(Resource::getResourceId, Arrays.asList(ids))
+                .eq(Resource::getIsDeleted, BoolEnum.FALSE.getValue()));
+        AssertUtil.isTrue(!list.isEmpty() && list.size() == ids.length, "部分资源不存在！");
         // 逻辑删除资源 (更新状态为1)
-        final int updateCount = resourceRepository.getBaseMapper().update(new LambdaQueryWrapper<Resource>()
-                .setEntity(new Resource().setIsDeleted(BoolEnum.TRUE.getValue()))
-                .in(Resource::getResourceId, Arrays.asList(integers)));
-        AssertUtil.isTrue(updateCount == integers.length, "部分资源删除失败！");
+        final int updateCount = resourceRepository.getBaseMapper().update(new Resource().setIsDeleted(BoolEnum.TRUE.getValue()), new LambdaQueryWrapper<Resource>()
+                .in(Resource::getResourceId, Arrays.asList(ids)));
+        AssertUtil.isTrue(updateCount == ids.length, "部分资源删除失败！");
+        // 删除文件 TODO: 待优化，使用异步删除
+        //        int count = 0;
+        //        for (Resource resource : list) {
+        //            if (localFileUtil.deleteAuthFile(resource.getUrl())) {
+        //                count++;
+        //            }
+        //        }
+        //        log.info("删除文件文件数量：{}，成功数量：{}", ids, count);
         return updateCount;
     }
 
@@ -225,5 +236,27 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
                 .eq(Resource::getBookId, bookId)
                 .eq(Resource::getIsDeleted, BoolEnum.FALSE.getValue()) // 未删除
                 .leftJoin(Book.class, Book::getBookId, Resource::getBookId));
+    }
+
+    /**
+     * 增加资源下载次数
+     *
+     * @param url 资源URL
+     * @return 是否成功
+     */
+    @Override
+    public Integer incrementDownloadCount(String url) {
+        return resourceRepository.getBaseMapper().incrementDownloadCount(url, 1);
+    }
+
+    /**
+     * 增加资源点赞次数
+     *
+     * @param resourceId 资源ID
+     * @return 点赞数量
+     */
+    @Override
+    public Integer incrementLikeCount(Integer resourceId) {
+        return resourceRepository.getBaseMapper().incrementLikeCount(resourceId, 1);
     }
 }

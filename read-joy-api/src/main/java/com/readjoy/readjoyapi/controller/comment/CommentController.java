@@ -1,6 +1,7 @@
 package com.readjoy.readjoyapi.controller.comment;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.readjoy.readjoyapi.common.annotation.PortFlowControl;
 import com.readjoy.readjoyapi.common.dto.comment.AdminSelectCommentDTO;
 import com.readjoy.readjoyapi.common.dto.comment.InsertCommentDTO;
 import com.readjoy.readjoyapi.common.dto.comment.SelectCommentDTO;
@@ -14,6 +15,8 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Tag;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.readjoy.readjoyapi.common.utils.UserTokenUtil.HEADER_NAME;
 
@@ -54,6 +57,7 @@ public class CommentController {
 
     @Operation(description = "添加评论")
     @PostMapping("")
+    @PortFlowControl(limit = 10, timeUnit = TimeUnit.MINUTES, errorMessage = "请求过于频繁，请稍后再试！")
     Result<CommentVO> addComment(
             @RequestHeader(name = HEADER_NAME) String token,
             @Valid @RequestBody InsertCommentDTO dto) {
@@ -62,6 +66,7 @@ public class CommentController {
 
     @Operation(description = "删除评论")
     @DeleteMapping("/{id}")
+    @PortFlowControl(limit = 10, timeUnit = TimeUnit.MINUTES, errorMessage = "请求过于频繁，请稍后再试！")
     Result<Integer> deleteComment(
             @RequestHeader(name = HEADER_NAME) String token,
             @PathVariable("id") Integer id) {

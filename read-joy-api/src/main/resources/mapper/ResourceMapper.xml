@@ -4,24 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.readjoy.readjoyapi.common.mapper.ResourceMapper">
 
-    <resultMap id="BaseResultMap" type="com.readjoy.readjoyapi.common.pojo.Resource">
-            <id property="resourceid" column="resourceId" jdbcType="INTEGER"/>
-            <result property="type" column="type" jdbcType="VARCHAR"/>
-            <result property="bookid" column="bookId" jdbcType="INTEGER"/>
-            <result property="title" column="title" jdbcType="VARCHAR"/>
-            <result property="size" column="size" jdbcType="INTEGER"/>
-            <result property="url" column="url" jdbcType="VARCHAR"/>
-            <result property="submitter" column="submitter" jdbcType="VARCHAR"/>
-            <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="isdeleted" column="isDeleted" jdbcType="TINYINT"/>
-            <result property="downloadcount" column="downloadCount" jdbcType="INTEGER"/>
-            <result property="likecount" column="likeCount" jdbcType="INTEGER"/>
-    </resultMap>
-
-    <sql id="Base_Column_List">
-        resourceId,type,bookId,
-        title,size,url,
-        submitter,createTime,isDeleted,
-        downloadCount,likeCount
-    </sql>
+    <update id="incrementDownloadCount">
+        UPDATE resource SET downloadCount = downloadCount + ${step} WHERE url = #{url}
+    </update>
+    <update id="incrementLikeCount">
+        UPDATE resource SET resource.likeCount = resource.likeCount + ${step} WHERE resourceId = #{resourceId}
+    </update>
 </mapper>

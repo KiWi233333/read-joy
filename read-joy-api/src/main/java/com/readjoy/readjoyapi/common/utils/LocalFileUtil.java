@@ -1,7 +1,10 @@
 package com.readjoy.readjoyapi.common.utils;
 
 import com.readjoy.readjoyapi.common.config.exception.BusinessException;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -64,11 +67,29 @@ public class LocalFileUtil {
     /**
      * 保存文件到自定义目录
      *
-     * @param file 要保存的文件
+     * @param file       要保存的文件
+     * @param filePreFix 自定义文件前缀 （用于区分不同用户） （如：fileDownloadPrefix + "/" + folder）
      * @return 文件的完整路径
      */
-    public String saveFile(MultipartFile file, String folder) {
-        return this.save(file, "%s/%s".formatted(fileDownloadPrefix, folder));
+    public String saveFile(MultipartFile file, String filePreFix) {
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || originalFilename.isBlank()) {
+            throw new BusinessException("文件名不能为空");
+        }
+        String suffixName = originalFilename.substring(originalFilename.lastIndexOf("."));
+        String fileName = new Date().getTime() + suffixName;
+        // 指定上传到文件夹
+        String saveFullPath = rootPath + "/%s/%s_%s".formatted(fileDownloadPrefix, filePreFix, fileName);
+        // 保存文件
+        try {
+            Path path = Paths.get(saveFullPath);
+            Files.createDirectories(path.getParent());
+            file.transferTo(path);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return "%s/%s_%s".formatted(fileDownloadPrefix, filePreFix, fileName); // files/xx
     }
 
     public String saveAuthFile(MultipartFile file) {
@@ -157,14 +178,17 @@ public class LocalFileUtil {
     public LocalFileInfo getFileInfo(String fileUrl) throws IOException {
         String fullPath = "%s/%s".formatted(rootPath, fileUrl);
         Path filePath = Path.of(fullPath); // 使用 Path 对象表示文件路径
-        LocalFileInfo localFileInfo = new LocalFileInfo();
-        localFileInfo.setFileName(filePath.getFileName().toString());
-        localFileInfo.setFileType(Files.probeContentType(filePath)); // 使用 Files.probeContentType 方法获取文件类型
-        localFileInfo.setFileSize(Files.size(filePath)); // 使用 Files.size 方法获取文件大小
-        return localFileInfo;
+        return new LocalFileInfo()
+                .setFileName(filePath.getFileName().toString())
+                .setFileType(Files.probeContentType(filePath)) // 使用 Files.probeContentType 方法获取文件类型
+                .setFileSize(Files.size(filePath)); // 使用 Files.size 方法获取文件大小;
     }
 
+
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Accessors(chain = true)
     public static class LocalFileInfo {
         private String fileName;
         private String fileType;

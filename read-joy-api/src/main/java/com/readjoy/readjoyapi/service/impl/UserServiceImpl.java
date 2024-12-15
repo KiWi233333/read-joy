@@ -40,7 +40,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = userRepository.selectByLoginNameAndPwd(loginDTO.getLoginName(), loginDTO.getPassword(), null);
         AssertUtil.isNotEmpty(user, "用户不存在或密码错误！");
         // 校验用户状态
-        AssertUtil.isTrue(user.getIsChecked() == 1, ResultStatus.STATUS_OFF_ERR,"账号被封禁，详情联系客服！");
+        AssertUtil.isTrue(user.getIsChecked() == 1, ResultStatus.STATUS_OFF_ERR, "账号被封禁，详情联系客服！");
         // 生成token
         String token = JWTUtil.createToken(new UserTokenUtil()
                 .setUserType(SysUserTypeEnum.CUSTOMER.getType())
@@ -85,9 +85,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public UserInfoVO updateUserBaseInfo(UserUpdateInfoDTO dto) {
+    public Integer updateUserBaseInfo(UserUpdateInfoDTO dto) {
         // 查询用户
-        User oldUser = userRepository.getById(RequestHolderUtil.get().getId());
+        final Integer uid = RequestHolderUtil.get().getId();
+        User oldUser = userRepository.getById(uid);
         AssertUtil.isNotEmpty(oldUser, "用户不存在！");
         // 校验用户名是否存在
         if (StringUtils.isNotBlank(dto.getLoginName()) && !dto.getLoginName().equals(oldUser.getLoginName())) {
@@ -96,23 +97,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 头像
         String imgUrl = null;
         if (dto.getCover() != null) {
-            imgUrl = localFileUtil.saveFile(dto.getCover());
-            // 删除旧头像
-            if (StringUtils.isNotBlank(oldUser.getImgUrl())) {
-                if (localFileUtil.deleteFile(oldUser.getImgUrl())) {
-                    log.info("删除旧头像成功, url={}", oldUser.getImgUrl());
-                } else {
-                    log.error("删除旧头像失败,uid={}, url={}", oldUser.getId(), oldUser.getImgUrl());
-                }
-            }
+            imgUrl = localFileUtil.saveFile(dto.getCover(), String.valueOf(uid));
         }
         // 更新用户信息
         User newUser = UserUpdateInfoDTO.toUser(dto, imgUrl, true);
         newUser.setId(oldUser.getId());
         boolean isSuccess = userRepository.updateById(newUser);
+        if (!isSuccess && imgUrl != null) {
+            localFileUtil.deleteFile(imgUrl);
+        } else if (StringUtils.isNotBlank(imgUrl) && StringUtils.isNotBlank(oldUser.getImgUrl())) { // 更新头像
+            localFileUtil.deleteFile(oldUser.getImgUrl());
+        }
         AssertUtil.isTrue(isSuccess, "用户信息更新失败，请稍后重试！");
         // 返回用户信息
-        return UserInfoVO.toVO(newUser);
+        return 1;
     }
 
     @Override
