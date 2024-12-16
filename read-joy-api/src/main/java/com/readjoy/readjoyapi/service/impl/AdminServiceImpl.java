@@ -5,6 +5,7 @@ import com.readjoy.readjoyapi.common.dto.admin.AdminLoginDTO;
 import com.readjoy.readjoyapi.common.dto.admin.AdminUpdatePwdDTO;
 import com.readjoy.readjoyapi.common.enums.SysUserTypeEnum;
 import com.readjoy.readjoyapi.common.pojo.Admin;
+import com.readjoy.readjoyapi.common.vo.admin.AdminInfoVO;
 import com.readjoy.readjoyapi.repository.AdminRepository;
 import com.readjoy.readjoyapi.service.AdminService;
 import com.readjoy.readjoyapi.common.utils.*;
@@ -54,6 +55,21 @@ public class AdminServiceImpl implements AdminService {
             return data;
         }
         return adminRepository.save(admin) ? admin : null;
+    }
+
+    /**
+     * 获取管理员信息
+     *
+     * @param id 管理员ID
+     * @return 管理员信息的视图对象
+     */
+    @Override
+    public AdminInfoVO getAdminInfo(Integer id) {
+        Admin admin = adminRepository.getById(id);
+        AssertUtil.isNotEmpty(admin, "管理员不存在！");
+        return new AdminInfoVO()
+                .setId(admin.getId())
+                .setUsername(admin.getUsername());
     }
 }
 

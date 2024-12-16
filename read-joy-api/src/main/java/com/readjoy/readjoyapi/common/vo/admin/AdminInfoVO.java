@@ -13,12 +13,12 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class AdminLoginVO {
+public class AdminInfoVO {
 
-    @Schema(type = "string", description = "token")
-    private String token;
+    @Schema(type = "integer", description = "管理员ID")
+    private Integer id;
 
-    @Schema(type = "string", description = "用户名")
+    @Schema(type = "string", description = "管理员")
     private String username;
 
 }

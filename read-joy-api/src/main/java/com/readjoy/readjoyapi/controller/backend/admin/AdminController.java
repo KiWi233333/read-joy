@@ -1,10 +1,13 @@
 package com.readjoy.readjoyapi.controller.backend.admin;
 
+import com.readjoy.readjoyapi.common.annotation.PortFlowControl;
 import com.readjoy.readjoyapi.common.dto.admin.AdminLoginDTO;
 import com.readjoy.readjoyapi.common.dto.admin.AdminUpdatePwdDTO;
-import com.readjoy.readjoyapi.service.AdminService;
+import com.readjoy.readjoyapi.common.utils.RequestHolderUtil;
 import com.readjoy.readjoyapi.common.utils.Result;
+import com.readjoy.readjoyapi.common.vo.admin.AdminInfoVO;
 import com.readjoy.readjoyapi.common.vo.admin.AdminLoginVO;
+import com.readjoy.readjoyapi.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -37,14 +40,25 @@ public class AdminController {
 
     @PostMapping("/login")
     @Operation(summary = "管理员登录")
+    @PortFlowControl
     Result<AdminLoginVO> login(@Valid @RequestBody AdminLoginDTO loginDTO) {
         return Result.ok(adminService.login(loginDTO));
     }
 
     @PutMapping("/pwd")
     @Operation(summary = "修改密码")
+    @PortFlowControl
     @Parameter(name = HEADER_NAME, in = ParameterIn.HEADER, description = "token", required = true)
     public Result<Integer> updatePwd(@Valid @RequestBody AdminUpdatePwdDTO dto, @RequestHeader(name = HEADER_NAME) String token) {
         return Result.ok(adminService.updatePwd(dto));
     }
+
+
+    @GetMapping("/info")
+    @Operation(summary = "获取管理员信息（管理员）")
+    @Parameter(name = HEADER_NAME, in = ParameterIn.HEADER, description = "token", required = true)
+    public Result<AdminInfoVO> getAdminInfo(@RequestHeader(name = HEADER_NAME) String token) {
+        return Result.ok(adminService.getAdminInfo(RequestHolderUtil.get().getId()));
+    }
+
 }

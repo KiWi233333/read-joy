@@ -3,6 +3,7 @@ package com.readjoy.readjoyapi.service;
 import com.readjoy.readjoyapi.common.dto.admin.AdminLoginDTO;
 import com.readjoy.readjoyapi.common.dto.admin.AdminUpdatePwdDTO;
 import com.readjoy.readjoyapi.common.pojo.Admin;
+import com.readjoy.readjoyapi.common.vo.admin.AdminInfoVO;
 import com.readjoy.readjoyapi.common.vo.admin.AdminLoginVO;
 
 /**
@@ -37,4 +38,11 @@ public interface AdminService {
      */
     Admin initSuerAdmin(Admin admin);
 
+    /**
+     * 获取管理员信息
+     *
+     * @param id 管理员ID
+     * @return 管理员信息的视图对象
+     */
+    AdminInfoVO getAdminInfo(Integer id);
 }
