@@ -59,7 +59,7 @@ function showSearch() {
           </template>
           <div flex items-center gap-2 text-sm sm:gap-4>
             <LazyPopperUserInfo v-if="user.isLogin">
-              <CardNuxtImg :default-src="user.userInfo.imgUrl" class="h-32px w-32px rounded-full rounded-full btn-primary-border border-default bg-color-br">
+              <CardNuxtImg :default-src="user.userInfo.imgUrl" class="h-2.2rem w-2.2rem rounded-full rounded-full btn-primary-border border-default bg-color-br">
                 <template #error>
                   <div h-full w-full flex-row-c-c text-lg>
                     {{ user?.userInfo?.loginName?.[0] || "未设置" }}

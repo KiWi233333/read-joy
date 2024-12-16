@@ -92,8 +92,7 @@ $scle-input-width: min(70vw, 32rem);
     height: 2rem;
     font-size: 14px;
     border: 0;
-    background-color: #f3f3f3c2;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 2px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    background-color: #ffffffc2;
     input::placeholder {
       letter-spacing: 0.3em;
       transition: width $transition-delay;
@@ -108,7 +107,8 @@ $scle-input-width: min(70vw, 32rem);
       width: $scle-input-width;
     }
     &.is-focus {
-      box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 10px;
+      border:1px solid var(--el-color-primary-light-5);
     }
     .el-input__suffix {
       position: absolute;
@@ -118,7 +118,6 @@ $scle-input-width: min(70vw, 32rem);
 }
 .dark .search :deep(.el-input__wrapper) {
   background-color: rgb(15, 15, 15);
-  box-shadow: inset 0 0 2px 1px rgb(15, 15, 15), inset 0 0 2px 1px rgb(15, 15, 15);
   input::placeholder {
     color: #ffffffb3;
   }
