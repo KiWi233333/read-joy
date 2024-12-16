@@ -28,7 +28,7 @@ public class SelectUserPageDTO extends PageDTO<UserInfoVO> {
     @Range(min = 1, max = 2, message = "排序方式只能为1或2！")
     private Integer createOrder;
 
-    @Schema(description = "是否已审核 1-未审核 2-已审核")
+    @Schema(description = "是否已审核 0-未审核 1-已审核")
     @Range(min = 0, max = 1, message = "审核状态只能为0或1！")
     private Integer isChecked;
 

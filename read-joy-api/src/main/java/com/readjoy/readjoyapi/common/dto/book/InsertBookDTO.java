@@ -41,7 +41,6 @@ public class InsertBookDTO {
     private String author;
 
     @Schema(description = "书籍介绍", example = "魔幻现实主义文学的代表作")
-    @NotNull(message = "书籍介绍不能为空！")
     @Length(max = 1000, message = "书籍介绍长度不超过1000字！")
     private String introduction;
 

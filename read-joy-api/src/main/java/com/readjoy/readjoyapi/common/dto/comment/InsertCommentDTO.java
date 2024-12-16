@@ -45,7 +45,7 @@ public class InsertCommentDTO implements Serializable {
                 .setBookId(this.getBookId())
                 .setCommentBody(content)
                 .setCommentator(userId)
-                .setCommentStatus(CommentStatusEnum.PENDING.getCode()) // 默认评论状态为审核中
+                .setCommentStatus(isFiltered ? CommentStatusEnum.APPROVED.getCode() : CommentStatusEnum.PENDING.getCode()) // 过滤后直接通过
                 .setIsDeleted(BoolEnum.FALSE.getValue());// 默认不删除
     }
 }
