@@ -22,7 +22,9 @@ export const useDefaultStore = defineStore(
 
     // 设置book
     async function setBook(bookId: number, callback = () => {
-      showBookDetail.value = true;
+      if (useRoute().name !== "index-book-bid") {
+        showBookDetail.value = true;
+      }
     }) {
       theBookDetail.value.bookId = bookId;
       if (!bookId) {

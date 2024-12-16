@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<!-- <script lang="ts" setup>
 import { deleteOssFile, getOssErrorCode, getUploadToken, UploadFileType, uploadOssFile } from "@/api/res";
 import { useColorMode } from "@vueuse/core";
 import { MdEditor, MdPreview } from "md-editor-v3";
@@ -9,7 +9,7 @@ import "md-editor-v3/lib/preview.css";
 
 
 const {
-  modelValue = "",
+  modelValue,
   isUploadImage = false,
   autoSave = false,
   disabled = false,
@@ -219,4 +219,4 @@ defineExpose({
   // --md-modal-shadow: 0px 6px 24px 2px #00000066;
   border-radius: 6px;
 }
-</style>
+</style> -->

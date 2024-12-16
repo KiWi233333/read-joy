@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SelectBookPageDTO } from "~/composables/api/book";
+import { BookSortOrder, BookSortType, type SelectBookPageDTO } from "~/composables/api/book";
 import { appName } from "~/constants";
 
 const route = useRoute();
@@ -24,6 +24,22 @@ useHead({
     },
   ],
 });
+const isNew = computed({
+  get: () => {
+    return pageDTO.value.sortType === BookSortType.PUBLISH_TIME && pageDTO.value.sortOrder === BookSortOrder.DESC;
+  },
+  set: (val) => {
+    if (val) {
+      pageDTO.value.sortType = BookSortType.PUBLISH_TIME;
+      pageDTO.value.sortOrder = BookSortOrder.DESC;
+    }
+    else {
+      pageDTO.value.sortType = undefined;
+      pageDTO.value.sortOrder = undefined;
+    }
+    tempDto.value = JSON.parse(JSON.stringify(pageDTO.value));
+  },
+});
 </script>
 
 <template>
@@ -39,11 +55,14 @@ useHead({
     >
       <template #header="{ pageInfo }">
         <div class="sticky left-0 top-0 z-2 mb-4 flex flex-col items-center justify-between gap-4 pb-2 sm:flex-row bg-color-layout">
-          <h2 class="text-lg font-bold">
-            {{ $route.query?.ct || '' }}
-            <span v-if="!!pageInfo.current" font-500 text-small>
+          <h2 class="flex items-end text-lg font-bold">
+            <strong>{{ $route.query?.ct || '' }}</strong>
+            <span class="ml-2 min-w-6em" py-1 font-500 text-small>
               共{{ pageInfo?.total }}本图书
             </span>
+            <el-checkbox v-model="isNew" size="small" label="asc" class="ml-2">
+              只看最新
+            </el-checkbox>
           </h2>
           <div class="group relative z-9 flex items-center" @click="inputRef?.focus">
             <ElInput

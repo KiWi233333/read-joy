@@ -18,7 +18,7 @@ function showSearch() {
   <div class="fixed top-0 z-999 h-16 w-full">
     <ClientOnly>
       <template #fallback>
-        <div class="top-4 z-4 h-2.1rem w-22rem translate-y-0 cursor-pointer truncate border border-1px border-color-transparent rounded-full transition-300 transition-border transition-ease-in-out absolute-center hover:border-default card-default-br text-small" />
+        <div class="top-4 z-4 hidden h-2.1rem w-22rem translate-y-0 cursor-pointer truncate border border-1px border-color-transparent rounded-full transition-300 transition-border transition-ease-in-out absolute-center sm:block hover:border-default card-default-br text-small" />
       </template>
       <!-- 搜索框 -->
       <div
@@ -31,8 +31,8 @@ function showSearch() {
           class="scale-10 text-center text-lg text-light font-500 transition-300 absolute-center -translate-y-5em"
           :class="{ '-translate-y-5em scale-100 drop-shadow-2xl': isShowSearch }"
         >
-          <NuxtImg preload src="/logo-text-light.png" class="block h-30px select-none dark:hidden" />
-          <NuxtImg src="/logo-text-dark.png" class="hidden h-30px select-none dark:block" />
+          <img src="/logo-text-light.png" alt="logo" class="block h-30px select-none object-cover dark:hidden">
+          <img src="/logo-text-dark.png" alt="logo" class="hidden h-30px select-none object-cover dark:block">
         </h2>
       </div>
       <transition name="fade" :duration="200">
@@ -58,7 +58,6 @@ function showSearch() {
             </div>
           </template>
           <div flex items-center gap-2 text-sm sm:gap-4>
-            <BtnTool @show-search="showSearch" />
             <LazyPopperUserInfo v-if="user.isLogin">
               <CardNuxtImg :default-src="user.userInfo.imgUrl" class="h-32px w-32px rounded-full rounded-full btn-primary-border border-default bg-color-br">
                 <template #error>
@@ -80,7 +79,11 @@ function showSearch() {
               <button btn-primary-text title="登录" @click="user.showLoginForm = true">
                 登录
               </button>
+              <BtnToggleTheme />
             </template>
+            <div class="block sm:hidden">
+              <el-button :icon="ElIconSearch" circle @click="showSearch" />
+            </div>
           </div>
         </ClientOnly>
       </div>

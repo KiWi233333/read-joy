@@ -41,7 +41,7 @@ function onSubmit() {
 <template>
   <div class="relative">
     <el-form
-      ref="formRef" v-auth :model="form" class="w-full flex items-start gap-4 pb-4"
+      ref="formRef" v-auth :model="form" class="relative w-full flex items-start gap-4 pb-4"
       @submit.prevent="onSubmit"
     >
       <CardNuxtImg :default-src="user.userInfo.imgUrl" class="h-8 w-8 shrink-0 rounded-full border-default bg-color">
@@ -70,18 +70,21 @@ function onSubmit() {
           :maxlength="200"
           :autosize="false"
           :minlength="1"
-          :disabled="isSending"
+          :disabled="isSending || !user.isLogin"
           placeholder="说点什么吧" @keydown.enter.prevent="onSubmit"
         />
       </el-form-item>
       <BtnElButton
-        class="group"
-        icon-class="i-solar:map-arrow-right-bold mr-1"
+        class="group absolute bottom-6 right-2 z-1"
+        icon-class="i-solar:chat-dots-bold mr-1"
+        style="padding: 0 1.8rem;"
+        transition-icon
         type="info"
         :loading="isSending"
+        :disabled="!user.isLogin"
         @click="onSubmit()"
       >
-        评论&nbsp;
+        评论
       </BtnElButton>
     </el-form>
     <ListCommentList

@@ -88,7 +88,13 @@ await loadCategoryData();
       </div>
     </el-scrollbar>
     <el-scrollbar height="86vh" class="relative">
-      <NuxtPage :key="pageDTO.categoryId" :category-text="categoryText" />
+      <NuxtPage
+        :key="pageDTO.categoryId" :category-text="categoryText"
+        :transition="{
+          name: 'page',
+          duration: 200,
+        }"
+      />
     </el-scrollbar>
   </div>
 </template>

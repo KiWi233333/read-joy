@@ -15,7 +15,6 @@ const {
   bookDetial?: Partial<BookDetailVO>
 }>();
 const user = useUserStore();
-const store = useDefaultStore();
 const likeAllCount = computed(() => bookDetial?.resourceList?.reduce((pre, cur) => pre + cur.likeCount, 0) || 0);
 const downAllCount = computed(() => bookDetial?.resourceList?.reduce((pre, cur) => pre + cur.downloadCount, 0) || 0);
 // tabs栏
@@ -101,6 +100,7 @@ async function likeResource(item: ResourceVO) {
       <div flex-row-c-c flex-col gap-2 text-center>
         <div truncate text-1.6rem font-500>
           {{ bookDetial?.title }}
+          <small ml-1 text-small>{{ bookDetial?.categoryName }}</small>
         </div>
         <div mt-4 max-w-full truncate text-small-color>
           作者：{{ bookDetial?.author || "-" }}
@@ -118,10 +118,10 @@ async function likeResource(item: ResourceVO) {
           价格：<small>￥</small>{{ bookDetial?.price }}
         </div>
         <div class="mt-4 pt-4 border-default-t">
-          <BtnElButton icon-class="i-solar:eye-outline mr-2" transition-icon @click="activeName = 'resorce'">
+          <BtnElButton icon-class="i-solar:download-outline mr-2" transition-icon @click="activeName = 'resorce'">
             下载资源
           </BtnElButton>
-          <BtnElButton icon-class="i-solar:command-bold mr-2" transition-icon type="primary" class="border-default" @click="activeName = 'read'">
+          <BtnElButton icon-class="i-solar:eye-outline mr-2" transition-icon type="primary" class="border-default" @click="activeName = 'read'">
             查看摘要
           </BtnElButton>
         </div>
@@ -148,7 +148,7 @@ async function likeResource(item: ResourceVO) {
             class="flex cursor-pointer items-center card-rounded-df p-2 border-hover-primary card-default sm:p-3"
             @click="downloadResource(item)"
           >
-            <CardNuxtImg
+            <CardElImage
               class="mr-2 h-8 w-8"
               :src="FILE_TYPE_ICON_MAP[item.type] || FILE_TYPE_ICON_DEFAULT"
             >
@@ -157,7 +157,7 @@ async function likeResource(item: ResourceVO) {
                   无图片
                 </small>
               </template>
-            </CardNuxtImg>
+            </CardElImage>
             <div class="w-full truncate text-sm">
               {{ item.title?.replace(/(.{16}).*(.{5})/, '$1...$2') }}
               <div mt-1 truncate text-mini>
@@ -167,7 +167,9 @@ async function likeResource(item: ResourceVO) {
               </div>
             </div>
             <!-- 点赞 -->
-            <i :title="actionResorceMap[`${item.resourceId}`] ? '已点赞' : '点赞'" :class="actionResorceMap[`${item.resourceId}`] ? 'i-solar:like-bold text-danger' : 'i-solar:like-broken'" class="block h-6 w-6 btn-danger" @click.stop.prevent.capture="likeResource(item)" />
+            <ClientOnly>
+              <i :title="actionResorceMap[`${item.resourceId}`] ? '已点赞' : '点赞'" :class="actionResorceMap[`${item.resourceId}`] ? 'i-solar:like-bold text-danger' : 'i-solar:like-broken'" class="block h-6 w-6 btn-danger" @click.stop.prevent.capture="likeResource(item)" />
+            </ClientOnly>
           </li>
           <li
             v-if="bookDetial?.resourceList === null || bookDetial?.resourceList === undefined"
@@ -188,6 +190,7 @@ async function likeResource(item: ResourceVO) {
         <BookCommentView
           :book-id="bookDetial?.bookId"
           data-fade style="--anima: latter-slice-blur-top;"
+          class="max-w-full"
         />
       </el-tab-pane>
     </el-tabs>

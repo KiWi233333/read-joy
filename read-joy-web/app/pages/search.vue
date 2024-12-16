@@ -20,8 +20,8 @@ const dto = ref<SelectBookPageDTO>({
   size: 10,
   keyword: String(route.query.keyword || "") as string,
   categoryId: (Number(route.query.categoryId || 0) || undefined) as number,
-  sortType: undefined,
-  sortOrder: undefined,
+  sortType: (Number(route.query.sortType || 0) || undefined) as number,
+  sortOrder: (Number(route.query.sortOrder || 0) || undefined) as number,
   startDate: undefined,
   endDate: undefined,
 });
@@ -141,8 +141,8 @@ onMounted(() => {
   <main class="py-0 layout-default">
     <header class="flex-row-c-c flex-col pb-4 pt-10 sm:(pb-4 pt-12)">
       <NuxtLink to="/" class="hidden sm:block">
-        <NuxtImg src="logo-text-light.png" class="block h-10 select-none dark:hidden" />
-        <NuxtImg src="logo-text-dark.png" class="hidden h-10 select-none dark:block" />
+        <img alt="logo" src="/logo-text-light.png" class="block h-10 select-none object-cover dark:hidden">
+        <img alt="logo" src="/logo-text-dark.png" class="hidden h-10 select-none object-cover dark:block">
       </NuxtLink>
       <div class="relative my-8 flex-row-c-c">
         <el-input
@@ -312,7 +312,7 @@ onMounted(() => {
     </template>
     <div v-else class="h-40vh flex-row-c-c text-small">
       <!-- 空白搜索模块 -->
-      <h3 data-fade text-lg font-500 style="--delay: 1s;--anima: latter-slice-blur-top;">
+      <h3 data-fade text-1rem font-500 style="--delay: 1s;--anima: latter-slice-blur-top;">
         快开始搜寻图书吧 🎉
       </h3>
     </div>

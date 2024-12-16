@@ -16,5 +16,7 @@ const ignoreRoute: Record<string, boolean> = {
         <i i-solar:alt-arrow-up-linear />
       </el-backtop>
     </ClientOnly>
+    <!-- 页脚 -->
+    <MenuFooter />
   </el-scrollbar>
 </template>

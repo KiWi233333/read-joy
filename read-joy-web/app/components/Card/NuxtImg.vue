@@ -22,12 +22,13 @@ const url = computed(() => defaultSrc ? `${BaseUrlImg}${defaultSrc}` : (src || "
   <NuxtImg
     v-if="url"
     fit="cover"
-    v-bind="$attrs"
     :src="url"
+    alt="图片"
     :quality="quality"
     loading="lazy"
     class="object-cover"
     :placeholder="img(url, { f: 'png', blur: 2, q: 40 })"
+    v-bind="$attrs"
   />
   <div
     v-else class="icon"
@@ -40,13 +41,4 @@ const url = computed(() => defaultSrc ? `${BaseUrlImg}${defaultSrc}` : (src || "
 </template>
 
 <style lang="scss">
-.icon {
-  --at-apply: "bg-dark "
-  &::after {
-    content: "xxx";
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-}
 </style>

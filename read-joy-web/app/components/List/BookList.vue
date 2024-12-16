@@ -13,14 +13,16 @@ const {
   limit = undefined,
   ssr = true,
   dto,
+  listProps,
+  immediate = true,
   debounce = 300,
-  bookNode = CardBookInfo,
   booksClass = "relative grid cols-2 w-full items-start gap-4 md:cols-5 sm:cols-4 md:gap-10 cols-[repeat(auto-fill,_minmax(min(30vw,_10rem),_1fr))] ",
   bookClass,
 } = defineProps<{
   dto?: Partial<SelectBookPageDTO>
   autoStop?: boolean
   showLoad?: boolean
+  immediate?: boolean
   showMoreText?: boolean
   ssr?: boolean
   animated?: "auto" | boolean
@@ -28,6 +30,7 @@ const {
   booksClass?: string
   bookClass?: string
   debounce?: number
+  listProps?: Record<string, any>
   bookNode?: VNode | DefineComponent | any
 }>();
 
@@ -132,7 +135,9 @@ defineExpose({
 });
 
 // 初始化
-await reload();
+if (immediate) {
+  await reload();
+}
 </script>
 
 <template>
@@ -150,11 +155,10 @@ await reload();
     <div
       ref="autoAnimateRef"
       :class="booksClass"
-      v-bind="$attrs"
+      v-bind="listProps || $attrs"
     >
       <slot v-for="book in pageInfo.records" name="book" :book="book">
-        <component
-          :is="bookNode"
+        <CardBookInfo
           :key="book.bookId" :book="book"
           :class="bookClass"
         />
@@ -168,10 +172,10 @@ await reload();
         暂无更多
       </div>
     </template>
-    <div v-if="pageInfo.total === 0">
+    <div v-if="showMoreText && pageInfo.total === 0">
       <slot name="empty">
         <div data-fade class="flex flex-col items-center justify-center gap-2">
-          <span class="text-color-secondary text-small">没有找到相关书籍</span>
+          <span class="text-color-secondary text-small">没有相关书籍</span>
         </div>
       </slot>
     </div>

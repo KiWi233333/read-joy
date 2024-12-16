@@ -28,7 +28,10 @@ onMounted(() => {
   <NuxtLayout vaul-drawer-wrapper class="min-h-100vh w-full bg-color-layout">
     <NuxtPage
       keep-alive
-      :transition="true"
+      :transition="{
+        name: 'page',
+        duration: 200,
+      }"
     />
   </NuxtLayout>
   <BookDetailDrawer v-model:open="store.showBookDetail" :book="store.theBookDetail" />
@@ -39,22 +42,39 @@ onMounted(() => {
 </template>
 
 <style>
-/* .layout-enter-active,
+.layout-enter-active,
 .layout-leave-active {
-  transition: opacity,filter 0.1s;
+  transition: opacity 0.3s;
 }
 .layout-enter-from,
 .layout-leave-to {
   opacity: 0;
-  filter: blur(1rem);
-} */
+}
 .page-enter-active,
 .page-leave-active {
-  transition: opacity,filter 0.1s;
+    transition: opacity 0.3s;
 }
 .page-enter-from,
 .page-leave-to {
   opacity: 0;
-  filter: blur(1rem);
+}
+
+
+[data-nuxt-img] {
+  transform: scale(1);
+  transition: transform 0.3s;
+}
+/* 图书详情 */
+.book-detail-page-enter-active,
+.book-detail-page-leave-active {
+    transition: opacity 0.3s;
+}
+.book-detail-page-enter-from,
+.book-detail-page-leave-to {
+  opacity: 0;
+  /* filter: blur(10px); */
+  [data-nuxt-img] {
+    transform: scale(2)
+  }
 }
 </style>

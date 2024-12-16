@@ -32,7 +32,7 @@ function onNewTaget(book: Partial<BookDetailVO>) {
 
 <template>
   <Drawer v-model:open="show">
-    <DrawerContent class="bg-color-layout">
+    <DrawerContent class="bg-color-layout" @pointer-down-outside.stop="() => {}">
       <section class="relative w-full">
         <menu class="bg-linear flex-row-bt-c py-4 layout-default">
           <div class="group ml-a">
@@ -40,7 +40,7 @@ function onNewTaget(book: Partial<BookDetailVO>) {
             <i i-solar:close-circle-outline p-3 op-60 transition-opacity btn-danger group-hover:op-100 title="关闭" @click="show = false" />
           </div>
         </menu>
-        <el-scrollbar height="84vh" view-class="layout-default">
+        <el-scrollbar height="80vh" view-class="layout-default">
           <BookDetailView :book-detial="book" />
         </el-scrollbar>
       </section>

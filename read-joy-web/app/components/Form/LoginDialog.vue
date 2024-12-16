@@ -39,9 +39,10 @@ const showDialog = computed({
   >
     <div class="forms">
       <div key="login-bg" class="mt-4 flex-row-c-c gap-3 px-3 sm:(relative left-a top-a px-4)">
-        <ElImage
-          src="/logo.png" class="h-8 w-8"
-        />
+        <img
+          alt="logo"
+          src="/logo.png" class="h-8 w-8 object-cover"
+        >
         <h3 class="text-lg font-bold tracking-0.2em">
           {{ appName }}
         </h3>

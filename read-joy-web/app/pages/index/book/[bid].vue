@@ -2,17 +2,17 @@
 import { getBookDetailApi } from "~/composables/api/book";
 import { ResultStatus } from "~/composables/api/types/result";
 import { useDefaultStore } from "~/composables/sotre/useDefaultStore";
+import { useSettingStore } from "~/composables/sotre/useSettingStore";
 import { useUserStore } from "~/composables/sotre/useUserStore";
 import { appName } from "~/constants";
 
 const user = useUserStore();
 const store = useDefaultStore();
+const setting = useSettingStore();
 const route = useRoute();
 // @ts-expect-error
 const bookId = (route.params?.bid || undefined) as number;
 
-// 请求
-await loadData();
 
 async function loadData() {
   const res = await getBookDetailApi(bookId, user.token);
@@ -28,6 +28,11 @@ async function loadData() {
 watch(() => user.isLogin, async (val) => {
   await loadData();
 });
+definePageMeta({
+  // transition: {
+  // name: "book-detail-page",
+  // },
+});
 useHead({
   title: () => `${store.theBookDetail?.title} - ${appName}`,
   meta: [
@@ -37,14 +42,30 @@ useHead({
     },
   ],
 });
+const recommendListRef = ref<any>();
+// 请求
+await loadData();
 </script>
 
 <template>
-  <div relative>
-    <BookDetailView class="data-fades mt-10 sm:mt-10vh" :book-detial="store.theBookDetail" />
+  <div relative pb-10vh>
+    <BookDetailView class="data-fades mt-10 sm:mt-6vh" :book-detial="store.theBookDetail" />
+    <h2 class="py-4 text-xl font-bold">
+      相关推荐
+    </h2>
+    <ListBookList
+      v-if="store.theBookDetail?.categoryId"
+      ref="recommendListRef"
+      :show-load="false"
+      immediate
+      :ssr="true"
+      :dto="{
+        categoryId: store.theBookDetail?.categoryId,
+      }"
+      :animated="false"
+    />
   </div>
 </template>
 
 <style lang="scss" scoped>
-
 </style>

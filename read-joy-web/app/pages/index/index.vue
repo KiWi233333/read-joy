@@ -6,6 +6,7 @@ const setting = useSettingStore();
 // 大家都在看
 const recommendListRef = ref();
 const isLodaing = ref(false);
+const recommendListPage = ref<number>(0);
 async function reloadRecommon() {
   if (!recommendListRef.value?.reload) {
     return;
@@ -16,9 +17,11 @@ async function reloadRecommon() {
   isLodaing.value = true;
   const pageInfo = recommendListRef.value.pageInfo;
   if (pageInfo) {
+    const page = pageInfo.pages > pageInfo.current ? pageInfo.current + 1 : 1;
     await recommendListRef.value?.reload({
-      page: pageInfo.pages > pageInfo.current ? pageInfo.current + 1 : 1,
+      page,
     });
+    recommendListPage.value = page;
     await nextTick();
     isLodaing.value = false;
   }
@@ -115,6 +118,10 @@ const bookListCards: BookListParams[] = [
         :show-load="false"
         :show-more-text="false"
         :ssr="true"
+        :list-props="{
+          'data-fades': !!recommendListPage,
+        }"
+        :animated="false"
         :limit="setting.isMobileSize ? 4 : 5"
       />
     </div>
@@ -132,7 +139,7 @@ const bookListCards: BookListParams[] = [
           :limit="item.limit"
         >
           <template #header>
-            <NuxtImg :src="item.imgSrc" class="mb-4 h-8" />
+            <img :alt="item.headerTitle" :src="item.imgSrc" class="mb-4 h-8 object-cover">
           </template>
           <template #footer>
             <NuxtLink
@@ -163,6 +170,6 @@ const bookListCards: BookListParams[] = [
 
 <style lang="scss" scoped>
 .title {
-  --at-apply: "mb-4 mt-6 text-size-lg font-600";
+  --at-apply: "mb-4 mt-8 text-size-lg font-600";
 }
 </style>

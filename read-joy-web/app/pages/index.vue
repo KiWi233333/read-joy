@@ -9,8 +9,8 @@ definePageMeta({
     <NuxtPage
       keeplive
       :transition="{
-        name: 'fade',
-        mode: 'out-in',
+        name: 'page',
+        duration: 200,
       }"
     />
   </div>
