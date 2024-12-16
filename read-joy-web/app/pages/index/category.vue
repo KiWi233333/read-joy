@@ -58,44 +58,45 @@ await loadCategoryData();
 
 <template>
   <div
-    pt-4 sm:pt-10
-    class="relative grid cols-[1fr_4fr] min-h-86vh w-full gap-4 grid-items-start sm:(cols-[1fr_5fr] gap-6)"
+    class="grid cols-[1fr_4fr] min-h-86vh w-full gap-4 grid-items-start sm:(cols-[1fr_5fr] gap-6)"
+    pt-6 sm:pb-20vh
   >
-    <el-scrollbar ref="categoryRef" height="86vh" style="height: fit-content;" class="sticky left-0 top-0">
-      <ul class="categoryList pb-20">
-        <NuxtLink
-          v-for="p in categoryList" :key="p.categoryId"
-          class="item"
-          prefetch
-          :title="p.categoryName"
-          :class="String(pageDTO.categoryId) === String(p.categoryId) ? 'is-selected' : ''"
-          :to="{
-            path: `/category/${p.categoryId || 'all'}`,
-            query: {
-              ...pageDTO,
-              ct: p.categoryName || '全部',
-              page: undefined,
-              size: undefined,
-            },
-          }"
-          @click.prevent="pageDTO.categoryId = p.categoryId"
-        >
-          {{ p.categoryName }}{{ p.bookCount ? `(${p.bookCount})` : undefined }}
-        </NuxtLink>
-      </ul>
-      <div class="scroll-btm absolute bottom-0 left-0 z-2 h-8 w-full text-center leading-8 btn-primary-text" @click="scrollBottom">
-        <i class="i-solar:double-alt-arrow-down-line-duotone p-3" />
-      </div>
-    </el-scrollbar>
-    <el-scrollbar height="86vh" class="relative">
-      <NuxtPage
-        :key="pageDTO.categoryId" :category-text="categoryText"
-        :transition="{
-          name: 'page',
-          duration: 200,
-        }"
-      />
-    </el-scrollbar>
+    <div class="sticky left-0 top-4rem z-2 pt-4">
+      <el-scrollbar ref="categoryRef" height="86vh" style="height: fit-content;">
+        <ul class="categoryList pb-20">
+          <NuxtLink
+            v-for="p in categoryList" :key="p.categoryId"
+            class="item"
+            prefetch
+            :title="p.categoryName"
+            :class="String(pageDTO.categoryId) === String(p.categoryId) ? 'is-selected' : ''"
+            :to="{
+              path: `/category/${p.categoryId || 'all'}`,
+              query: {
+                ...pageDTO,
+                ct: p.categoryName || '全部',
+                categoryId: undefined,
+                page: undefined,
+                size: undefined,
+              },
+            }"
+            @click.prevent="pageDTO.categoryId = p.categoryId"
+          >
+            {{ p.categoryName }}{{ p.bookCount ? `(${p.bookCount})` : undefined }}
+          </NuxtLink>
+        </ul>
+        <div class="scroll-btm absolute bottom-0 left-0 z-2 h-8 w-full text-center leading-8 btn-primary-text" @click="scrollBottom">
+          <i class="i-solar:double-alt-arrow-down-line-duotone p-3" />
+        </div>
+      </el-scrollbar>
+    </div>
+    <NuxtPage
+      :key="pageDTO.categoryId" :category-text="categoryText"
+      :transition="{
+        name: 'page',
+        duration: 200,
+      }"
+    />
   </div>
 </template>
 

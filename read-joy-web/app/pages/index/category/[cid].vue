@@ -52,9 +52,10 @@ const isNew = computed({
       :ssr="true"
       animated="auto"
       :dto="tempDto"
+      books-class="relative grid cols-2 w-full items-start gap-4 md:cols-5 sm:cols-4 md:gap-10 cols-[repeat(auto-fill,_minmax(min(30vw,_10rem),_1fr))] pr-1px"
     >
       <template #header="{ pageInfo }">
-        <div class="sticky left-0 top-0 z-2 mb-4 flex flex-col items-center justify-between gap-4 pb-2 sm:flex-row bg-color-layout">
+        <div class="sticky left-0 top-4rem z-2 mb-4 flex flex-col items-center justify-between gap-4 py-4 sm:flex-row bg-color-layout">
           <h2 class="flex items-end text-lg font-bold">
             <strong>{{ $route.query?.ct || '' }}</strong>
             <span class="ml-2 min-w-6em" py-1 font-500 text-small>

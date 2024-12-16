@@ -1,5 +1,5 @@
 import { pwa } from "./app/config/pwa";
-import { appDescription } from "./app/constants/index";
+import { appDescription, appName } from "./app/constants/index";
 
 // 配置
 export default defineNuxtConfig({
@@ -14,11 +14,11 @@ export default defineNuxtConfig({
     "pinia-plugin-persistedstate/nuxt",
     "shadcn-nuxt",
     "@nuxtjs/tailwindcss",
-    "@nuxt/image",
     "@element-plus/nuxt",
+    "@nuxt/image",
     "@formkit/auto-animate",
   ],
-  ssr: true,
+  ssr: false,
   devtools: {
     enabled: false,
   },
@@ -27,6 +27,7 @@ export default defineNuxtConfig({
     pageTransition: { name: "page", mode: "out-in" },
     layoutTransition: { name: "layout", mode: "out-in" },
     head: {
+      title: appName,
       viewport: "width=device-width,initial-scale=1",
       link: [
         { rel: "icon", href: "/favicon.ico", sizes: "any" },
@@ -54,7 +55,14 @@ export default defineNuxtConfig({
     classSuffix: "",
   },
   routeRules: {
-    "/": { prerender: true },
+    "/": {
+      prerender: true,
+    },
+    "/admin/**": {
+      ssr: false,
+      appMiddleware: [
+      ],
+    },
   },
   future: {
     compatibilityVersion: 4,
@@ -84,8 +92,7 @@ export default defineNuxtConfig({
     },
   },
   vite: {
-    envPrefix: ["VITE_", "TAURI_"],
-
+    envPrefix: ["VITE_"],
     css: {
       preprocessorOptions: {
         scss: {
@@ -113,28 +120,28 @@ export default defineNuxtConfig({
       },
     },
   },
-  image: {
-    domains: [
-      "kiwi2333.top",
-      "kiwi233.top",
-      "netlify.app",
-    ],
-    format: [
-      "webp",
-      "avif",
-      "jpeg",
-      "png",
-    ],
-    screens: {
-      "xs": 320,
-      "sm": 640,
-      "md": 768,
-      "lg": 1024,
-      "xl": 1280,
-      "xxl": 1536,
-      "2xl": 1536,
-    },
-  },
+  // image: {
+  //   domains: [
+  //     "kiwi2333.top",
+  //     "kiwi233.top",
+  //     "netlify.app",
+  //   ],
+  //   format: [
+  //     "webp",
+  //     "avif",
+  //     "jpeg",
+  //     "png",
+  //   ],
+  //   screens: {
+  //     "xs": 320,
+  //     "sm": 640,
+  //     "md": 768,
+  //     "lg": 1024,
+  //     "xl": 1280,
+  //     "xxl": 1536,
+  //     "2xl": 1536,
+  //   },
+  // },
   pwa,
   shadcn: {
     componentDir: "./app/components/ui",
