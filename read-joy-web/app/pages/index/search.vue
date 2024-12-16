@@ -123,13 +123,13 @@ const dateGroupModel = computed({
 });
 function toggleSort() {
   showFilter.value = !showFilter.value;
-  if (!showFilter.value) { // 清空
-    dto.value = {
-      page: 1,
-      size: 10,
-    };
-    onSearch();
-  }
+}
+function clearSearch() {
+  dto.value = {
+    page: 1,
+    size: 10,
+  };
+  onSearch();
 }
 const showSearchResource = computed(() => Object.values({ ...tempDto.value, page: undefined, size: undefined }).some(Boolean));
 onMounted(() => {
@@ -213,7 +213,7 @@ onMounted(() => {
             </h2>
             <div class="w-fit flex flex-wrap items-center op-80 transition-opacity group-hover:op-100">
               <ClientOnly>
-                <div v-show="showFilter" data-fade hidden items-center sm:flex style="--anima: latter-slice-left;">
+                <div v-if="showFilter" data-fade hidden items-center sm:flex style="--anima: latter-slice-left;">
                   <!-- 分类select -->
                   <el-segmented
                     :model-value="sortGroupModel"
@@ -251,9 +251,12 @@ onMounted(() => {
                       <span>{{ item.categoryName }}</span>
                     </el-option>
                   </el-select>
+                  <el-button v-if="showSearchResource" plain class="ml-2" type="danger" :size="setting.isMobileSize ? 'small' : 'default'" @click="clearSearch">
+                    清空
+                  </el-button>
                 </div>
-                <el-button class="ml-2" :type="showFilter ? 'danger' : 'default'" :size="setting.isMobileSize ? 'small' : 'default'" @click="toggleSort">
-                  {{ showFilter ? '清空' : '筛选' }}
+                <el-button class="ml-2" type="default" :size="setting.isMobileSize ? 'small' : 'default'" @click="toggleSort">
+                  {{ showFilter ? '收起' : '筛选' }}
                 </el-button>
               </ClientOnly>
             </div>

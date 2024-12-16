@@ -101,6 +101,7 @@ async function toUpdate() {
     width="fit-content"
     :append-to-body="true"
     :show-close="false"
+    destroy-on-close
     :overflow="false"
   >
     <template #header>
@@ -115,7 +116,7 @@ async function toUpdate() {
       hide-required-asterisk
       :rules="rules"
       :model="userForm"
-      class="w-18rem"
+      class="w-18rem p-2"
     >
       <!-- 新旧密码 -->
       <el-form-item type="password" label="旧密码" prop="oldPassword" class="animated">
@@ -146,8 +147,9 @@ async function toUpdate() {
       </el-form-item>
       <el-button
         type="danger"
+        size="large"
         class="w-full"
-        style="padding: 1em 0"
+        style="font-size: 1rem;"
         @keyup.enter="onUpdatePwd(userFormRef)"
         @click="onUpdatePwd(userFormRef)"
       >

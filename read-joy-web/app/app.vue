@@ -25,15 +25,17 @@ onMounted(() => {
 
 <template>
   <VitePwaManifest />
-  <NuxtLayout vaul-drawer-wrapper class="min-h-100vh w-full bg-color-layout">
-    <NuxtPage
-      keep-alive
-      :transition="{
-        name: 'page',
-        duration: 200,
-      }"
-    />
-  </NuxtLayout>
+  <main vaul-drawer-wrapper class="min-h-100vh w-full bg-color-layout">
+    <NuxtLayout>
+      <NuxtPage
+        keep-alive
+        :transition="{
+          name: 'page',
+          duration: 200,
+        }"
+      />
+    </NuxtLayout>
+  </main>
   <BookDetailDrawer v-model:open="store.showBookDetail" :book="store.theBookDetail" />
   <ClientOnly>
     <LazyFormPwdForm />
@@ -59,11 +61,10 @@ onMounted(() => {
   opacity: 0;
 }
 
-
-[data-nuxt-img] {
+/* [data-nuxt-img] {
   transform: scale(1);
   transition: transform 0.3s;
-}
+} */
 /* 图书详情 */
 .book-detail-page-enter-active,
 .book-detail-page-leave-active {
@@ -73,8 +74,8 @@ onMounted(() => {
 .book-detail-page-leave-to {
   opacity: 0;
   /* filter: blur(10px); */
-  [data-nuxt-img] {
+  /* [data-nuxt-img] {
     transform: scale(2)
-  }
+  } */
 }
 </style>
