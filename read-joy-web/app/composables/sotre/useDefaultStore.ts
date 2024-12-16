@@ -22,10 +22,14 @@ export const useDefaultStore = defineStore(
 
     // 设置book
     async function setBook(bookId: number, callback = () => {
-      if (useRoute().name !== "index-book-bid") {
-        showBookDetail.value = true;
-      }
+      showBookDetail.value = useRoute().name !== "index-book-bid";
     }) {
+      const setting = useSettingStore();
+      if (bookId === undefined)
+        return;
+      if (setting.isNewTabOpenBook || useRoute().name === "index-book-bid") {
+        return await navigateTo(`/book/${bookId}`);
+      }
       theBookDetail.value.bookId = bookId;
       if (!bookId) {
         theBookDetail.value = {};

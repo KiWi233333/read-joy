@@ -3,6 +3,7 @@ import { type Result, ResultStatus } from "~/composables/api/types/result";
 import { useLoginApi, type UserLoginVO } from "~/composables/api/user";
 import { useUserStore } from "~/composables/sotre/useUserStore";
 import { BaseUrlImg } from "~/composables/utils/useBaseUrl";
+import { appName } from "~/constants";
 
 enum LoginType {
   USER = "user",
@@ -150,8 +151,7 @@ async function onLogin(formEl: any | undefined) {
   >
     <template v-if="!user.isLogin">
       <h4 mb-4 font-500 tracking-0.2em>
-        <!-- 写一个关于“悦读时光”的登录欢迎语 -->
-        欢迎来到悦读时光 ✨
+        欢迎来到{{ appName }} ✨
       </h4>
       <p
         mb-4 text-0.8em tracking-0.1em op-70

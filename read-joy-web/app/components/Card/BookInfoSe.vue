@@ -1,58 +1,62 @@
 <script lang="ts" setup>
 import type { BookVO } from "~/composables/api/book";
+import { NuxtLink } from "#components";
 import { useDefaultStore } from "~/composables/sotre/useDefaultStore";
-import { useSettingStore } from "~/composables/sotre/useSettingStore";
 
 const {
   book,
+  targetSelf = false,
 } = defineProps<{
   book: BookVO
+  targetSelf?: boolean
 }>();
-
-// 路由跳转
-function resolveRouteDetail(bookId?: number) {
-  const setting = useSettingStore();
-  const store = useDefaultStore();
-
-  if (bookId === undefined)
-    return;
-  if (setting.isNewTabOpenBook) {
-    navigateTo(`/book/${bookId}`);
-  }
-  else {
-    store.setBook(bookId);
-  }
-}
+const store = useDefaultStore();
 </script>
 
 <template>
-  <a
+  <component
+    :is="targetSelf ? 'div' : NuxtLink"
     :key="book.bookId"
-    class="flex flex-col items-center justify-center leading-loose sm:w-36"
+    class="group h-fit flex flex-col"
     :href="`/book/${book.bookId}`"
-    @click.prevent.stop="resolveRouteDetail(book?.bookId)"
+    @click.prevent.stop="store.setBook(book.bookId)"
   >
-    <CardNuxtImg
-      class="book"
-      :default-src="book.coverImageUrl"
-    >
-      <template #error>
-        <small class="h-full w-full flex flex-row items-center justify-center">
-          无图片
-        </small>
-      </template>
-    </CardNuxtImg>
-    <label>
+    <div class="book relative">
+      <CardNuxtImg
+        class="img"
+        :default-src="book.coverImageUrl"
+      >
+        <template #error>
+          <small class="h-full w-full flex flex-row items-center justify-center">
+            无图片
+          </small>
+        </template>
+      </CardNuxtImg>
+      <div class="absolute bottom-0 left-0 w-full truncate rounded-b-2 bg-(light op-50) p-1 text-right text-xs font-500 op-0 backdrop-blur transition-opacity dark:bg-(dark op-20) group-hover:(op-100)">
+        {{ book?.publisher || "暂无出版社" }}
+        <div v-if="book?.publishionDate">
+          {{ book?.publishionDate }}
+        </div>
+      </div>
+    </div>
+    <label class="text-overflow-3 my-1">
       {{ book.title }}
     </label>
-    <small class="text-mini">
+    <span class="max-w-full truncate text-mini">
       {{ book.author }}
-    </small>
-  </a>
+    </span>
+    <div class="inline max-w-full truncate !text-danger text-small">
+      <small>售价:</small><span>￥{{ book?.price === 0 ? '免费' : book?.price || '-' }}</span>
+    </div>
+  </component>
 </template>
 
 <style lang="scss" scoped>
 .book {
-  --at-apply: "h-50 w-36 card-default card-rounded-df border-default";
+  --at-apply: "border-default card-rounded-df";
+  .img {
+    aspect-ratio: 1/1.4;
+    --at-apply: "max-h-44 h-full w-full  card-default card-rounded-df";
+  }
 }
 </style>

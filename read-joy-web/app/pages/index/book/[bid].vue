@@ -42,7 +42,6 @@ useHead({
     },
   ],
 });
-const recommendListRef = ref<any>();
 // 请求
 await loadData();
 </script>
@@ -50,20 +49,6 @@ await loadData();
 <template>
   <div relative pb-10vh>
     <BookDetailView class="data-fades mt-10 sm:mt-6vh" :book-detial="store.theBookDetail" />
-    <h2 class="py-4 text-xl font-bold">
-      相关推荐
-    </h2>
-    <ListBookList
-      v-if="store.theBookDetail?.categoryId"
-      ref="recommendListRef"
-      :show-load="false"
-      immediate
-      :ssr="true"
-      :dto="{
-        categoryId: store.theBookDetail?.categoryId,
-      }"
-      :animated="false"
-    />
   </div>
 </template>
 

@@ -97,7 +97,6 @@ export interface SelectCommentPageDTO {
    * 开始时间
    */
   startDateTime?: string;
-  [property: string]: any;
 }
 
 export enum CommentSortOrder {

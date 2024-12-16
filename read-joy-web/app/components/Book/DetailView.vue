@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { BookDetailVO, ResourceVO } from "~/composables/api/book";
+import { CardBookInfoSe } from "#components";
 import { useAddResourceLikeApi } from "~/composables/api/resorce";
 import { ResultStatus } from "~/composables/api/types/result";
 import { useDefaultStore } from "~/composables/sotre/useDefaultStore";
 import { useUserStore } from "~/composables/sotre/useUserStore";
-import { BaseUrlFile } from "~/composables/utils/useBaseUrl";
+import { BaseUrlFile, BaseUrlImg } from "~/composables/utils/useBaseUrl";
 import { downloadFile } from "~/composables/utils/useFile";
 import { FILE_TYPE_ICON_DEFAULT, FILE_TYPE_ICON_MAP, formatFileSize, useCopyText } from "~/composables/utils/useUtils";
 import Progress from "../ui/progress/Progress.vue";
@@ -15,6 +16,7 @@ const {
   bookDetial?: Partial<BookDetailVO>
 }>();
 const user = useUserStore();
+const store = useDefaultStore();
 const likeAllCount = computed(() => bookDetial?.resourceList?.reduce((pre, cur) => pre + cur.likeCount, 0) || 0);
 const downAllCount = computed(() => bookDetial?.resourceList?.reduce((pre, cur) => pre + cur.downloadCount, 0) || 0);
 // tabs栏
@@ -25,10 +27,11 @@ function downloadResource(resource: ResourceVO) {
     user.toLogin(); // 登录后再下载
     return;
   }
+  ElMessage.success("正在下载中，请稍后查看");
   downloadFile(BaseUrlFile + resource.url, resource.title, {
     Authorization: user.getToken,
   }, () => {
-    ElMessage.success("正在下载中，请稍后查看");
+    ElMessage.success("下载完成！");
   });
 }
 
@@ -37,10 +40,6 @@ const actionResorceMap = useSessionStorage(`${user.userId}_actionResorceMap`, {
 
 }) as any;
 async function likeResource(item: ResourceVO) {
-  // if (actionResorceMap.value[item.resourceId]) {
-  //   ElMessage.warning("一天只能点赞一次哟！");
-  //   return;
-  // }
   const res = await useAddResourceLikeApi(item.resourceId, user.token);
   if (res.code !== ResultStatus.SUCCESS) {
     return;
@@ -53,11 +52,14 @@ async function likeResource(item: ResourceVO) {
 
 <template>
   <div class="relative py-4">
-    <section class="grid cols-1 gap-4 py-4 sm:cols-[3fr_4fr] sm:gap-10">
+    <section class="main-content">
       <!-- 左侧 -->
       <div w-full flex-row-c-c flex-col truncate>
-        <CardNuxtImg
-          class="h-64 w-45 shadow-sm border-default card-default-br"
+        <CardElImage
+          :preview-src-list="[BaseUrlImg + bookDetial?.coverImageUrl]"
+          preview-teleported
+          infinite
+          class="h-64 w-45 shadow-md border-default card-default-br"
           :default-src="bookDetial?.coverImageUrl"
         >
           <template #error>
@@ -65,7 +67,7 @@ async function likeResource(item: ResourceVO) {
               无图片
             </small>
           </template>
-        </CardNuxtImg>
+        </CardElImage>
         <h1 mb-1 mt-2 max-w-full truncate text-center text-lg font-500>
           {{ bookDetial?.title }}
         </h1>
@@ -73,7 +75,7 @@ async function likeResource(item: ResourceVO) {
           {{ bookDetial?.author }}
         </div>
         <!-- 指数卡片 -->
-        <div class="mt-4 w-full overflow-hidden p-4 border-default dark:(border-default-t rounded-0 bg-transparent) card-default">
+        <div class="mt-4 w-4/5 overflow-hidden rounded-0 bg-transparent p-4 sm:w-2/3 border-default-t">
           <div text-small>
             推荐指数：{{ (likeAllCount + downAllCount) || "暂无" }}
           </div>
@@ -97,7 +99,7 @@ async function likeResource(item: ResourceVO) {
         </div>
       </div>
       <!-- 描述 -->
-      <div flex-row-c-c flex-col gap-2 text-center>
+      <div class="h-fit w-full gap-2 p-4 card-default sm:p-8">
         <div truncate text-1.6rem font-500>
           {{ bookDetial?.title }}
           <small ml-1 text-small>{{ bookDetial?.categoryName }}</small>
@@ -127,77 +129,102 @@ async function likeResource(item: ResourceVO) {
         </div>
       </div>
     </section>
-    <el-tabs
-      v-model="activeName"
-      class="mt-4 pb-10vh pb-12"
-    >
-      <el-tab-pane label="内容摘要" name="read" class="tab-pane">
-        <div
-          data-fade style="--anima: latter-slice-blur-top;"
-          class="card-rounded-df p-4 border-default"
-        >
-          {{ bookDetial?.introduction }}
-        </div>
-      </el-tab-pane>
-      <el-tab-pane lazy label="课程资源" name="resorce" class="tab-pane">
-        <ul class="grid cols-2 gap-2 sm:cols-3 sm:gap-4" data-fade style="--anima: latter-slice-blur-top;">
-          <li
-            v-for="item in bookDetial?.resourceList"
-            :key="item.resourceId"
-            :title="`${item.title}- 点击下载`"
-            class="flex cursor-pointer items-center card-rounded-df p-2 border-hover-primary card-default sm:p-3"
-            @click="downloadResource(item)"
+    <div class="main-content">
+      <el-tabs
+        v-model="activeName"
+        class="mt-4 pb-10vh pb-12"
+      >
+        <el-tab-pane label="内容摘要" name="read" class="tab-pane">
+          <div
+            data-fade style="--anima: latter-slice-blur-top;"
+            class="card-rounded-df p-4 border-default"
           >
-            <CardElImage
-              class="mr-2 h-8 w-8"
-              :src="FILE_TYPE_ICON_MAP[item.type] || FILE_TYPE_ICON_DEFAULT"
+            {{ bookDetial?.introduction }}
+          </div>
+        </el-tab-pane>
+        <el-tab-pane lazy label="课程资源" name="resorce" class="tab-pane">
+          <ul class="grid cols-2 gap-2 sm:cols-3 sm:gap-4" data-fade style="--anima: latter-slice-blur-top;">
+            <li
+              v-for="item in bookDetial?.resourceList"
+              :key="item.resourceId"
+              :title="`${item.title}- 点击下载`"
+              class="flex cursor-pointer items-center card-rounded-df p-2 border-hover-primary card-default sm:p-3"
+              @click="downloadResource(item)"
             >
-              <template #error>
-                <small class="h-full w-full flex flex-row items-center justify-center">
-                  无图片
-                </small>
-              </template>
-            </CardElImage>
-            <div class="w-full truncate text-sm">
-              {{ item.title?.replace(/(.{16}).*(.{5})/, '$1...$2') }}
-              <div mt-1 truncate text-mini>
-                大小：{{ formatFileSize(item.size) }}
-                下载：{{ item.downloadCount }}
-                点赞：{{ item.likeCount }}
+              <CardElImage
+                class="mr-2 h-8 w-8"
+                :src="FILE_TYPE_ICON_MAP[item.type] || FILE_TYPE_ICON_DEFAULT"
+              >
+                <template #error>
+                  <small class="h-full w-full flex flex-row items-center justify-center">
+                    无图片
+                  </small>
+                </template>
+              </CardElImage>
+              <div class="w-full truncate text-sm">
+                {{ item.title?.replace(/(.{16}).*(.{5})/, '$1...$2') }}
+                <div mt-1 truncate text-mini>
+                  大小：{{ formatFileSize(item.size) }}
+                  下载：{{ item.downloadCount }}
+                  点赞：{{ item.likeCount }}
+                </div>
               </div>
-            </div>
-            <!-- 点赞 -->
-            <ClientOnly>
-              <i :title="actionResorceMap[`${item.resourceId}`] ? '已点赞' : '点赞'" :class="actionResorceMap[`${item.resourceId}`] ? 'i-solar:like-bold text-danger' : 'i-solar:like-broken'" class="block h-6 w-6 btn-danger" @click.stop.prevent.capture="likeResource(item)" />
-            </ClientOnly>
-          </li>
+              <!-- 点赞 -->
+              <ClientOnly>
+                <i :title="actionResorceMap[`${item.resourceId}`] ? '已点赞' : '点赞'" :class="actionResorceMap[`${item.resourceId}`] ? 'i-solar:like-bold text-danger' : 'i-solar:like-broken'" class="block h-6 w-6 btn-danger" @click.stop.prevent.capture="likeResource(item)" />
+              </ClientOnly>
+            </li>
+            <li
+              v-if="bookDetial?.resourceList === null || bookDetial?.resourceList === undefined"
+              class="flex items-center p-4 border-default card-default text-small"
+            >
+              暂无权限，去<span text-info btn-info @click="user.toLogin()">登录</span>
+            </li>
+          </ul>
           <li
-            v-if="bookDetial?.resourceList === null || bookDetial?.resourceList === undefined"
-            class="flex items-center p-4 border-default card-default text-small"
+            v-if="bookDetial?.resourceList?.length === 0"
+            data-fade style="--anima: latter-slice-blur-top;"
+            class="flex items-center card-rounded-df p-4 border-default text-small"
           >
-            暂无权限，去<span text-info btn-info @click="user.toLogin()">登录</span>
+            暂无资源
           </li>
-        </ul>
-        <li
-          v-if="bookDetial?.resourceList?.length === 0"
-          data-fade style="--anima: latter-slice-blur-top;"
-          class="flex items-center card-rounded-df p-4 border-default text-small"
-        >
-          暂无资源
-        </li>
-      </el-tab-pane>
-      <el-tab-pane label="评论区" lazy name="comment" class="tab-pane">
-        <BookCommentView
-          :book-id="bookDetial?.bookId"
-          data-fade style="--anima: latter-slice-blur-top;"
-          class="max-w-full"
+        </el-tab-pane>
+        <el-tab-pane label="评论区" lazy name="comment" class="tab-pane">
+          <BookCommentView
+            :book-id="bookDetial?.bookId"
+            data-fade
+            style="--anima: latter-slice-blur-top;"
+            class="max-w-full"
+          />
+        </el-tab-pane>
+      </el-tabs>
+      <div>
+        <h2 class="py-4">
+          相关推荐
+        </h2>
+        <ListBookList
+          v-if="store.theBookDetail?.categoryId"
+          :show-load="false"
+          books-class="relative grid cols-3 sm:gap-8"
+          :book-node="CardBookInfoSe"
+          immediate
+          auto-stop
+          :ssr="true"
+          :dto="{
+            categoryId: store.theBookDetail.categoryId,
+          }"
+          :animated="false"
+          :ignore-ids="bookDetial?.bookId ? [bookDetial.bookId] : undefined"
         />
-      </el-tab-pane>
-    </el-tabs>
+      </div>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.main-content {
+  --at-apply: "grid cols-1 gap-4 py-4 md:cols-[3fr_2fr] sm:gap-10";
+}
 :deep(.el-tabs) {
   .el-tabs__nav-wrap::after,
   .el-tabs__active-bar {

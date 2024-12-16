@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@formkit/auto-animate",
   ],
-  ssr: false,
+  ssr: true,
   devtools: {
     enabled: false,
   },
@@ -37,8 +37,8 @@ export default defineNuxtConfig({
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         { name: "description", content: appDescription },
         { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-        { name: "theme-color", media: "(prefers-color-scheme: light)", content: "white" },
-        { name: "theme-color", media: "(prefers-color-scheme: dark)", content: "#222222" },
+        { name: "theme-color", media: "(prefers-color-scheme: light)", content: "#f4f5f7" },
+        { name: "theme-color", media: "(prefers-color-scheme: dark)", content: "#141414" },
       ],
       script: [
         { src: "/js/streamsaver.js", async: true },

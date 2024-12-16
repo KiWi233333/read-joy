@@ -12,9 +12,9 @@ const ignoreRoute: Record<string, boolean> = {
       <slot />
     </div>
     <ClientOnly>
-      <el-backtop target=".main-scrollbar-warp" :bottom="90" class="shadow-lg border-default card-default">
+      <!-- <el-backtop target=".main-scrollbar-warp" :bottom="90" class="shadow-lg border-default card-default">
         <i i-solar:alt-arrow-up-linear />
-      </el-backtop>
+      </el-backtop> -->
       <el-backtop target=".main-scrollbar-warp" :bottom="40" class="shadow-lg border-default card-default">
         <i i-solar:alt-arrow-up-linear />
       </el-backtop>

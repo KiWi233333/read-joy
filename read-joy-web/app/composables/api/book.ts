@@ -79,15 +79,15 @@ export interface BookVO {
   /**
    * 书籍ID
    */
-  bookId?: number;
+  bookId: number;
   /**
    * 分类ID
    */
-  categoryId?: number;
+  categoryId: number;
   /**
    * 分类名称
    */
-  categoryName?: string;
+  categoryName: string;
   /**
    * 封面图片URL
    */
@@ -99,11 +99,11 @@ export interface BookVO {
   /**
    * 国际标准书号
    */
-  isbn?: string;
+  isbn: string;
   /**
    * 价格
    */
-  price?: number;
+  price: number;
   /**
    * 出版社
    */

@@ -16,7 +16,7 @@ export function httpRequest<T = unknown>(
   let msg = "";
   const user = useUserStore();
   const defaultOpts = {
-    method,
+    method: method.toUpperCase(),
     baseURL: BaseUrl,
     headers: {} as { Authoriztion?: string },
     // 请求拦截器
@@ -149,9 +149,70 @@ export const useHttp = {
     body?: any | null | object,
     opts?: FetchOptions,
   ) {
-    return httpRequest<T>("DELETE", request, body, opts);
+    return httpRequest<T>("delete", request, body, opts);
   },
 
+  // 发送formdata的post
+  post_formdata<T = unknown>(
+    request: ReqType,
+    body?: FormData | null | object,
+    opts?: FetchOptions,
+  ) {
+    return httpRequest<T>("post", request, body, {
+      ...opts,
+      headers: {
+        ...opts?.headers,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
+  // 发送formdata的put
+  put_formdata<T = unknown>(
+    request: ReqType,
+    body?: FormData | null | object,
+    opts?: FetchOptions,
+  ) {
+    return httpRequest<T>("put", request, body, {
+      ...opts,
+      headers: {
+        ...opts?.headers,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
+  // 发送formdata的get
+  get_formdata<T = unknown>(
+    request: ReqType,
+    body?: FormData | null | object,
+    opts?: FetchOptions,
+  ) {
+    return httpRequest<T>("get", request, body, {
+      ...opts,
+      headers: {
+        ...opts?.headers,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
+  // 发送formdata的delete
+  deleted_formdata<T = unknown>(
+    request: ReqType,
+    body?: FormData | null | object,
+    opts?: FetchOptions,
+  ) {
+    return httpRequest<T>("delete", request, body, {
+      ...opts,
+      headers: {
+        ...opts?.headers,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
+  // 发送params的post
   post_params<T = unknown>(
     request: ReqType,
     body?: any | null | object,
@@ -160,6 +221,7 @@ export const useHttp = {
     return httpRequest<T>("post", request, body, opts, true);
   },
 
+  // 发送params的put
   put_params<T = unknown>(
     request: ReqType,
     body?: any | null | object,

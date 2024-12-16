@@ -72,7 +72,7 @@ export const useUserStore = defineStore(
     };
 
     // 退出登录
-    function exitLogin() {
+    function exitLogin(toast: boolean = false) {
       ElMessageBox.confirm("是否确认退出登录？", "提示", {
         confirmButtonText: "确认退出",
         confirmButtonClass: "el-button--danger",
@@ -81,8 +81,11 @@ export const useUserStore = defineStore(
         cancelButtonText: "取消",
         type: "warning",
       })
-        .then(() => {
-          callbackUserExit(token.value);
+        .then(async () => {
+          await callbackUserExit(token.value);
+          if (toast) {
+            ElMessage.success("退出成功 🎈");
+          }
         })
         .catch(() => { });
     }

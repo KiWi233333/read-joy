@@ -57,3 +57,8 @@ export enum BoolEnum {
   TRUE = 1,
   FALSE = 0,
 }
+
+export enum DefaultOrderSort {
+  DESC = 1, // 降序
+  ASC = 2, // 升序
+}

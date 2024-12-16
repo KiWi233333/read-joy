@@ -28,7 +28,6 @@ onMounted(() => {
   <main vaul-drawer-wrapper class="min-h-100vh w-full bg-color-layout">
     <NuxtLayout>
       <NuxtPage
-        keep-alive
         :transition="{
           name: 'page',
           duration: 200,

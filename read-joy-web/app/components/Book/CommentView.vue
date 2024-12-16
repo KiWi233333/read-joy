@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { InsertCommentDTO } from "~/composables/api/comment";
+import type { InsertCommentDTO, SelectCommentPageDTO } from "~/composables/api/comment";
 import { addCommentApi, CommentSortOrder } from "~/composables/api/comment";
 import { ResultStatus } from "~/composables/api/types/result";
 import { useUserStore } from "~/composables/sotre/useUserStore";
+import { DATE_FORMAT, DATE_TIME_FORMAT } from "~/composables/utils/useUtils";
 
 const {
   bookId,
@@ -36,12 +37,39 @@ function onSubmit() {
     }
   });
 }
+
+const commentDTO = reactive<Partial<SelectCommentPageDTO>>({
+  sortOrder: CommentSortOrder.DESC,
+  size: 10,
+  onlyMine: undefined,
+  startDateTime: undefined,
+  endDateTime: undefined,
+});
+
+const commentTimeRange = computed({
+  get: () => {
+    if (commentDTO.startDateTime && commentDTO.endDateTime) {
+      return [commentDTO.startDateTime, commentDTO.endDateTime];
+    }
+    return [];
+  },
+  set: (val: string[] = []) => {
+    if (val.length === 2) {
+      commentDTO.startDateTime = val?.[0];
+      commentDTO.endDateTime = val?.[1];
+    }
+    else if (val.length === 0 || !val) {
+      commentDTO.startDateTime = undefined;
+      commentDTO.endDateTime = undefined;
+    }
+  },
+});
 </script>
 
 <template>
   <div class="relative">
     <el-form
-      ref="formRef" v-auth :model="form" class="relative w-full flex items-start gap-4 pb-4"
+      ref="formRef" v-auth :model="form" class="relative mb-2 w-full flex items-start gap-4 pb-4"
       @submit.prevent="onSubmit"
     >
       <CardNuxtImg :default-src="user.userInfo.imgUrl" class="h-8 w-8 shrink-0 rounded-full border-default bg-color">
@@ -91,13 +119,29 @@ function onSubmit() {
       v-if="user.isLogin"
       ref="listCommentListRef"
       :book-id="bookId"
-      :dto="{
-        sortOrder: CommentSortOrder.DESC,
-      }"
+      :dto="commentDTO"
       :show-load="false"
       :show-more-text="false"
       :ssr="true"
-    />
+    >
+      <template #header="{ pageInfo }">
+        <div class="mb-4 flex-row-bt-c text-sm">
+          <span>评论（{{ pageInfo?.total || 0 }}）</span>
+          <FormDatePicker
+            v-model="commentTimeRange"
+            size="sm"
+            :format="DATE_TIME_FORMAT"
+            :format-preview="DATE_FORMAT"
+            :disabled="isSending"
+            :btn-props="{
+              class: 'text-left flex bg-color w-14rem hover:bg-color',
+            }"
+            placeholder="选择时间范围"
+            :clearable="true"
+          />
+        </div>
+      </template>
+    </ListCommentList>
     <li
       v-else
       data-fade style="--anima: latter-slice-blur-top;"

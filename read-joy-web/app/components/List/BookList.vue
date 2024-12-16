@@ -15,7 +15,10 @@ const {
   dto,
   listProps,
   immediate = true,
+  bookProps,
   debounce = 300,
+  bookNode = CardBookInfo,
+  ignoreIds,
   booksClass = "relative grid cols-2 w-full items-start gap-4 md:cols-5 sm:cols-4 md:gap-10 cols-[repeat(auto-fill,_minmax(min(30vw,_10rem),_1fr))] ",
   bookClass,
 } = defineProps<{
@@ -27,10 +30,12 @@ const {
   ssr?: boolean
   animated?: "auto" | boolean
   limit?: number
+  ignoreIds?: number[]
   booksClass?: string
   bookClass?: string
   debounce?: number
   listProps?: Record<string, any>
+  bookProps?: Record<string, any>
   bookNode?: VNode | DefineComponent | any
 }>();
 
@@ -69,6 +74,9 @@ async function loadData(appendDTO?: Partial<SelectBookPageDTO>) {
     ...(appendDTO || {}),
   });
   if (res.code === ResultStatus.SUCCESS) {
+    if (ignoreIds && ignoreIds?.length) {
+      res.data.records = res.data.records.filter(item => !ignoreIds.includes(item.bookId));
+    }
     pageInfo.value = {
       page: res.data.current,
       current: res.data.current,
@@ -158,9 +166,11 @@ if (immediate) {
       v-bind="listProps || $attrs"
     >
       <slot v-for="book in pageInfo.records" name="book" :book="book">
-        <CardBookInfo
+        <component
+          :is="bookNode"
           :key="book.bookId" :book="book"
           :class="bookClass"
+          v-bind="bookProps"
         />
       </slot>
     </div>

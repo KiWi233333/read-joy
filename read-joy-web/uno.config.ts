@@ -60,6 +60,8 @@ export default defineConfig({
     ["btn-danger", "transition-200 cursor-pointer rounded-4px hover:text-[var(--el-color-danger)]"],
     ["btn-warning", "transition-200 cursor-pointer rounded-4px hover:text-[var(--el-color-warning)]"],
 
+    ["btn-primary-circle", "transition-200 cursor-pointer hover:(text-white bg-[var(--el-color-primary)]) h-2.1rem w-2.1rem rounded-full text-center leading-2.1rem border-default"],
+
     ["btn-info-text", "transition-200 cursor-pointer rounded-4px hover:text-[var(--el-color-info)]"],
     ["btn-success-text", "transition-200 cursor-pointer rounded-4px hover:text-[var(--el-color-success)]"],
     ["btn-primary-text", "transition-200 cursor-pointer rounded-4px hover:text-[var(--el-color-primary)]"],

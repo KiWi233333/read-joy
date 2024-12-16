@@ -59,7 +59,7 @@ function showSearch() {
           </template>
           <div flex items-center gap-2 text-sm sm:gap-4>
             <LazyPopperUserInfo v-if="user.isLogin">
-              <CardNuxtImg :default-src="user.userInfo.imgUrl" class="h-2.2rem w-2.2rem rounded-full rounded-full btn-primary-border border-default bg-color-br">
+              <CardNuxtImg :default-src="user.userInfo.imgUrl" class="order-0 h-2.2rem w-2.2rem rounded-full rounded-full btn-primary-border border-default bg-color-br">
                 <template #error>
                   <div h-full w-full flex-row-c-c text-lg>
                     {{ user?.userInfo?.loginName?.[0] || "未设置" }}
@@ -68,19 +68,24 @@ function showSearch() {
               </CardNuxtImg>
             </LazyPopperUserInfo>
             <template v-else>
-              <button
-                btn-primary-text
-                title="注册"
-                class="border-r-2px pr-4 border-default-r"
-                @click="user.showRegisterForm = true"
-              >
-                注册
-              </button>
-              <button btn-primary-text title="登录" @click="user.showLoginForm = true">
-                登录
-              </button>
-              <BtnToggleTheme />
+              <div hidden sm:block>
+                <button
+                  btn-primary-text
+                  title="注册"
+                  class="mr-2 border-r-2px pr-2 sm:(mr-4 pr-4) border-default-r"
+                  @click="user.showRegisterForm = true"
+                >
+                  注册
+                </button>
+                <button btn-primary-text title="登录" @click="user.showLoginForm = true">
+                  登录
+                </button>
+              </div>
+              <div class="btn-primary-circle block sm:hidden" @click="user.showLoginForm = true">
+                <i class="i-solar:user-bold p-2" />
+              </div>
             </template>
+            <BtnToggleTheme />
             <div class="block sm:hidden">
               <el-button :icon="ElIconSearch" circle @click="showSearch" />
             </div>

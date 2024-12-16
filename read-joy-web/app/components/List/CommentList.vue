@@ -14,6 +14,7 @@ const {
   ssr = true,
   bookId = undefined,
   dto,
+  animated = "auto",
   debounce = 300,
   itemsClass = "relative grid gap-4 cols-1",
   itemClass,
@@ -31,11 +32,11 @@ const {
   debounce?: number
 }>();
 
-const setting = useSettingStore();
+const [autoAnimateRef, enable] = useAutoAnimate({});
+
 interface PageType extends Partial<IPage<CommentVO>> {
   page: number
 }
-// const [autoAnimateRef, enable] = useAutoAnimate();
 const isLoading = ref<boolean>(false);
 const pageInfo = ref <PageType> ({
   page: 0,
@@ -47,6 +48,7 @@ const pageInfo = ref <PageType> ({
 });
 const noMore = computed(() => !!(pageInfo.value.current !== undefined && pageInfo.value.pages !== undefined && pageInfo.value.current >= pageInfo.value.pages));
 const user = useUserStore();
+const setting = useSettingStore();
 /**
  * 加载图书列表
  */
@@ -108,10 +110,6 @@ const unWatch = watchDebounced(
   },
 );
 
-onDeactivated(() => {
-  unWatch();
-});
-
 const BadgeTypeMap: Record<CommentStatusEnum, any> = {
   [CommentStatusEnum.PENDING]: "warning",
   [CommentStatusEnum.APPROVED]: "info",
@@ -125,9 +123,34 @@ function addComment(vo: CommentVO) {
       return;
     }
     pageInfo.value.records.unshift(vo);
+    if (pageInfo.value.total !== undefined) {
+      pageInfo.value.total++;
+    }
+    else {
+      pageInfo.value.total = 1;
+    }
   }
 }
 
+
+watch(() => animated, (val) => {
+  if (val === "auto" || val) {
+    enable(!setting.isCloseAllTransition);
+  }
+  else {
+    enable(false);
+  }
+});
+onMounted(() => {
+  enable(animated === false ? false : !setting.isCloseAllTransition);
+});
+onActivated(() => {
+  enable(animated === false ? false : !setting.isCloseAllTransition);
+});
+onDeactivated(() => {
+  unWatch();
+  unWatch();
+});
 
 defineExpose({
   pageInfo,
@@ -153,11 +176,12 @@ await reload();
     @load="loadData()"
   >
     <div
+      ref="autoAnimateRef"
       :class="itemsClass"
       v-bind="$attrs"
     >
       <slot v-for="item in pageInfo.records" name="item" :item="item">
-        <div :key="item.id" class="flex gap-4 card-rounded-df p-2 sm:p-4 border-default-hover" :class="itemClass">
+        <div :key="item.id" class="flex gap-4 py-4 border-default-b" :class="itemClass">
           <CardNuxtImg :default-src="item.commentatorAvatar" class="h-12 w-12 flex-shrink-0 rounded-full border-default card-default">
             <template #error>
               <div h-full w-full flex-row-c-c text-lg>
@@ -165,18 +189,22 @@ await reload();
               </div>
             </template>
           </CardNuxtImg>
+
           <div flex-1>
             <div font-500>
-              {{ item.commentatorName }}
+              <div>
+                {{ item.commentatorName }}
+                <span v-if="item.commentator === user.userId" class="rounded px-1 py-1px !text-info card-default text-small border-default-hover">自己</span>
+                <span v-if="item.createTime" class="float-right ml-a text-small">{{ formatDate(new Date(item.createTime.replace(/-/g, '/'))) }}</span>
+              </div>
               <span v-if="item.createTime" float-right flex-row-c-c text-right text-mini>
-                <span>{{ formatDate(new Date(item.createTime.replace(/-/g, '/'))) }}</span>
-                <el-badge v-if="item.commentator === user.userId" class="ml-2" :type="item.commentStatus ? BadgeTypeMap[item.commentStatus] : 'info'" is-dot>
+                <el-badge v-if="item.commentator === user.userId && item.commentStatus !== CommentStatusEnum.APPROVED" class="ml-2" :type="item.commentStatus ? BadgeTypeMap[item.commentStatus] : 'info'" is-dot>
                   {{ item.commentStatusText }}
                   {{ item.commentStatus === CommentStatusEnum.PENDING ? `（自己可见）` : '' }}
                 </el-badge>
               </span>
             </div>
-            <p text-small>
+            <p class="msg-popper">
               {{ item.commentBody }}
             </p>
           </div>
@@ -202,4 +230,11 @@ await reload();
 </template>
 
 <style lang="scss" scoped>
+.msg-popper {
+  --at-apply: "w-fit mt-2 max-w-20em md:max-w-full p-2 px-3 leading-1.2em bg-color rounded-1.5";
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  border-radius: 4px 1rem 1rem 1rem;
+}
 </style>

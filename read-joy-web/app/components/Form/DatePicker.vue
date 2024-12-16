@@ -17,6 +17,7 @@ const {
   calendarProps,
   popoverProps,
   placeholder = "选择日期范围",
+  clearable = true,
   btnProps = {
     class: "w-[280px]  flex justify-start text-left font-normal",
   },
@@ -26,12 +27,15 @@ const {
   maxCalendarMonths = 1,
   preloadDates,
   format = "YYYY-MM-DD",
+  formatPreview = "YYYY-MM-DD",
 } = defineProps<{
   modelValue?: string[]
+  clearable?: boolean
   preloadDates?: DatePreloadItem[]
   placeholder?: string
   maxCalendarMonths?: number
-  format?: string
+  format?: string | "YYYY-MM-DD" | "YYYY-MM-DD HH:mm:ss"
+  formatPreview?: string | "YYYY-MM-DD" | "YYYY-MM-DD HH:mm:ss"
   rangeSeparator?: string
   size?: "default" | "sm" | "lg" | "icon" | null | undefined
   local?: string
@@ -49,8 +53,8 @@ const value = computed <DateRange | undefined> ({
       const end = dayjs(modelValue[1]);
       return {
         // 传入年月日
-        start: new CalendarDate(start.year(), start.month(), start.date()),
-        end: new CalendarDate(end.year(), end.month(), end.date()),
+        start: new CalendarDate(start.year(), start.month() + 1, start.date()),
+        end: new CalendarDate(end.year(), end.month() + 1, end.date()),
       };
     }
     else {
@@ -82,9 +86,10 @@ const btnSizeMap: Record<string, "" | "default" | "small" | "large"> = {
       <el-button
         :size="size ? btnSizeMap[size] : ''"
         :class="{
-          'text-muted-foreground flex': !value,
+          'flex justify-start': !value,
           [`${btnProps?.class}`]: btnProps?.class,
         }"
+        style="justify-content: initial;"
         type="default"
         v-bind="btnProps"
       >
@@ -93,11 +98,15 @@ const btnSizeMap: Record<string, "" | "default" | "small" | "large"> = {
         </slot>
         <template v-if="value?.start">
           <template v-if="value?.end">
-            {{ dayjs(value?.start.toDate(getLocalTimeZone())).format(format) }}{{ rangeSeparator || ' - ' }}{{ dayjs(value?.end.toDate(getLocalTimeZone())).format(format) }}
+            {{ dayjs(value?.start.toDate(getLocalTimeZone())).format(formatPreview || format) }}{{ rangeSeparator || ' - ' }}{{ dayjs(value?.end.toDate(getLocalTimeZone())).format(formatPreview || format) }}
           </template>
           <template v-else>
-            {{ dayjs(value?.start.toDate(getLocalTimeZone())).format(format) }}
+            {{ dayjs(value?.start.toDate(getLocalTimeZone())).format(formatPreview || format) }}
           </template>
+          <i
+            v-if="clearable && value?.start && value?.end "
+            class="i-solar:close-circle-outline ml-2 block h-1.5em w-1.5em btn-danger" @click.stop.capture="$emit('update:modelValue', [])"
+          />
         </template>
         <template v-else>
           {{ placeholder }}
@@ -116,7 +125,7 @@ const btnSizeMap: Record<string, "" | "default" | "small" | "large"> = {
       />
       <slot name="popper-footer" :preload-dates="preloadDates">
         <template v-if="preloadDates?.length">
-          <div class="pt- grid cols-3 gap-2 p-4">
+          <div class="grid cols-3 gap-2 p-4">
             <el-button
               v-for="(item, index) in preloadDates" :key="index"
               style="margin-left: 0;"

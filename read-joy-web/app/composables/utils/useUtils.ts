@@ -1,4 +1,5 @@
 export const DATE_FORMAT = "YYYY-MM-DD";
+export const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm:ss";
 export const DATE_SELECTOR_OPTIONS: DatePreloadItem[] = [{
   text: "一周之内",
   value: () => {

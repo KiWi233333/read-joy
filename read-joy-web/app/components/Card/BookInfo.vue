@@ -8,19 +8,7 @@ const {
 } = defineProps<{
   book: BookVO
 }>();
-const setting = useSettingStore();
-// 路由跳转
-function resolveRouteDetail(bookId?: number) {
-  const store = useDefaultStore();
-  if (bookId === undefined)
-    return;
-  if (setting.isNewTabOpenBook) {
-    navigateTo(`/book/${bookId}`);
-  }
-  else {
-    store.setBook(bookId);
-  }
-}
+const store = useDefaultStore();
 </script>
 
 <template>
@@ -28,7 +16,7 @@ function resolveRouteDetail(bookId?: number) {
     :key="book.bookId"
     class="group flex flex-col items-center justify-center sm:w-36"
     :href="`/book/${book.bookId}`"
-    @click.prevent.stop="resolveRouteDetail(book?.bookId)"
+    @click.prevent.stop="store.setBook(book.bookId)"
   >
     <div class="book relative h-fit">
       <CardNuxtImg
