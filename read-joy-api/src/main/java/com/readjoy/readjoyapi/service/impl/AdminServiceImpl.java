@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.readjoy.readjoyapi.common.dto.admin.AdminDataDTO;
 import com.readjoy.readjoyapi.common.dto.admin.AdminLoginDTO;
 import com.readjoy.readjoyapi.common.dto.admin.AdminUpdatePwdDTO;
+import com.readjoy.readjoyapi.common.enums.CommentStatusEnum;
 import com.readjoy.readjoyapi.common.enums.SysUserTypeEnum;
 import com.readjoy.readjoyapi.common.pojo.Admin;
+import com.readjoy.readjoyapi.common.pojo.Comment;
 import com.readjoy.readjoyapi.common.vo.admin.AdminInfoVO;
 import com.readjoy.readjoyapi.common.vo.other.AdminHomeStatisticsVO;
 import com.readjoy.readjoyapi.common.vo.other.BookCategoryTotal;
@@ -19,6 +21,7 @@ import jakarta.annotation.Resource;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -103,7 +106,7 @@ public class AdminServiceImpl implements AdminService {
         // 1、查询用户总数
         Long userCount = userRepository.count();
         // 2、查询图书总数
-        Long bookCount = resourceRepository.count();
+        Long bookCount = bookRepository.count();
         // 3、查询资源总数
         Long resourceCount = resourceRepository.count();
         // 4、查询总下载量
@@ -116,6 +119,12 @@ public class AdminServiceImpl implements AdminService {
         List<BookPublishTotalByDay> bookPublishTotalByDayList = bookRepository.bookPublishTotalByDay();
         // 8、查询图书发布统计 - 按月
         List<BookPublishTotalByMonth> bookPublishTotalByMounthList = bookRepository.bookPublishTotalByMonth();
+        // 9、计算图书分类总数
+        Long bookCategoryCount = categoryRepository.count();
+        // 10、待审核评论数
+        Long pendingCommentCount = commentRepository.count(new LambdaQueryWrapper<Comment>().eq(Comment::getCommentStatus, CommentStatusEnum.PENDING.getCode()));
+        // 11、已驳回评论数
+        Long rejectedCommentCount = commentRepository.count(new LambdaQueryWrapper<Comment>().eq(Comment::getCommentStatus, CommentStatusEnum.REJECTED.getCode()));
         return new AdminHomeStatisticsVO()
                 .setUserCount(userCount)
                 .setBookCount(bookCount)
@@ -124,7 +133,12 @@ public class AdminServiceImpl implements AdminService {
                 .setTotalCommentCount(totalCommentCount)
                 .setBookCategoryTotalList(bookCategoryTotalList)
                 .setBookPublishTotalByDayList(bookPublishTotalByDayList)
-                .setBookPublishTotalByMonthList(bookPublishTotalByMounthList);
+                .setBookPublishTotalByMonthList(bookPublishTotalByMounthList)
+                .setRequestTime(new Date())
+                .setBookCategoryCount(bookCategoryCount)
+                .setPendingCommentCount(pendingCommentCount)
+                .setRejectionCommentCount(rejectedCommentCount)
+                ;
     }
 }
 
