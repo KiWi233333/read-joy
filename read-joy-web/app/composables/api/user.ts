@@ -12,30 +12,6 @@ export function useRegisterApi(dto: UserRegisterDTO) {
   });
 }
 
-export interface UserRegisterVO extends UserLoginVO {
-
-}
-/**
- * UserRegisterDTO
- */
-export interface UserRegisterDTO {
-  /**
-   * 头像URL
-   */
-  cover?: string;
-  loginName: string;
-  loginPassword: string;
-  /**
-   * 电话号码
-   */
-  telephone?: string;
-  /**
-   * 真实姓名
-   */
-  trueName?: string;
-}
-
-
 /**
  * 用户登录 (返回用户信息)
  * @param dto 参数
@@ -60,6 +36,65 @@ export function useGetUserInfoApi(token: string) {
       Authorization: token,
     },
   });
+}
+
+/**
+ * 修改密码
+ * @param dto 参数
+ * @param token token
+ * @returns 是否成功
+ */
+export function useUpdateUserPwdApi(dto: UserUpdatePwdDTO, token: string) {
+  return useHttp.put<Result<BoolEnum>>("/user/pwd", {
+    ...dto,
+  }, { headers: { Authorization: token } });
+}
+
+/**
+ * 修改用户信息
+ * @param dto 参数
+ * @returns 是否成功
+ */
+export function updateUserInfoApi(dto: UserUpdateInfoDTO, token: string) {
+  return useHttp.post_params<Result<UserInfoVO>>("/user", {
+    ...dto,
+  }, {
+    headers: {
+      Authorization: token,
+    },
+  });
+}
+
+
+/**
+ * UserUpdatePwdDTO
+ */
+export interface UserUpdatePwdDTO {
+  newPassword: string;
+  oldPassword: string;
+}
+
+export interface UserRegisterVO extends UserLoginVO {
+
+}
+/**
+ * UserRegisterDTO
+ */
+export interface UserRegisterDTO {
+  /**
+   * 头像URL
+   */
+  cover?: string;
+  loginName: string;
+  loginPassword: string;
+  /**
+   * 电话号码
+   */
+  telephone?: string;
+  /**
+   * 真实姓名
+   */
+  trueName?: string;
 }
 
 /**
@@ -134,41 +169,6 @@ export enum CustomerUserType {
 }
 
 
-/**
- * 修改密码
- * @param dto 参数
- * @returns 是否成功
- */
-export function updateUserPwdApi(dto: UserUpdatePwdDTO) {
-  return useHttp.put<Result<BoolEnum>>("/user/pwd", {
-    ...dto,
-  });
-}
-/**
- * UserUpdatePwdDTO
- */
-export interface UserUpdatePwdDTO {
-  newPassword: string;
-  oldPassword: string;
-}
-
-/**
- * 修改用户信息
- * @param dto 参数
- * @returns 是否成功
- */
-export function updateUserInfoApi(dto: UserUpdateInfoDTO, token: string) {
-  return useHttp.post_params<Result<UserInfoVO>>("/user", {
-    ...dto,
-  }, {
-    params: {
-      ...dto,
-    },
-    headers: {
-      Authorization: token,
-    },
-  });
-}
 /**
  * UserUpdateInfoDTO
  */

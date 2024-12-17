@@ -16,6 +16,10 @@ export const useSettingStore = defineStore(
     // 是否是移动尺寸
     const isMobileSize = ref(false);
 
+    // 管理员相关
+    const isMenuFold = ref(false);
+    const isMenuCollapse = ref(false);
+
 
     function onDownloadFile(url: string, name: string, token: string, callback?: () => void) {
       downloadFile(url, name, {
@@ -29,6 +33,10 @@ export const useSettingStore = defineStore(
       isNewTabOpenBook,
       isThemeChangeLoad,
       theme,
+
+      // 管理员
+      isMenuFold,
+      isMenuCollapse,
 
       onDownloadFile,
     };

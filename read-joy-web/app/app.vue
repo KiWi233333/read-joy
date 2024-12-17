@@ -37,7 +37,7 @@ onMounted(() => {
   </main>
   <BookDetailDrawer v-model:open="store.showBookDetail" :book="store.theBookDetail" />
   <ClientOnly>
-    <LazyFormPwdForm />
+    <LazyFormPwdForm v-model="user.showEditForm" @submit="user.onTogglePwd" />
     <LazyFormLoginDialog />
   </ClientOnly>
 </template>

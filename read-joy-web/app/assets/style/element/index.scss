@@ -2,7 +2,6 @@
   //  node_modules/element-plus/theme-chalk/src/common/var.scss"
   $border-radius: ("base": 6px, "small": 12px, "round": 20px, "circle": 100%),
   $loading: ("spinner-size": 2.4rem, "fullscreen-spinner-size": 2.6rem),
-
   $colors: (
     "white": #ffffffe1,
     "black": #131313,
@@ -39,16 +38,16 @@
     "disabled": #c0c4cc
   ),
 
-  // $popover: (
-  //   // 'bg-color': getCssVar('bg-color', 'overlay'),
-  //   // 'font-size': getCssVar('font-size-base'),
-  //   // 'border-color': getCssVar('border-color-lighter'),
-  //   // 'padding': 12px,
-  //   // 'padding-large': 18px 20px,
-  //   // 'title-font-size': 16px,
-  //   // 'title-text-color': getCssVar('text-color-primary'),
-  //   'border-radius': 12px,
-  // ),
+  $popper: (
+    // 'bg-color': getCssVar('bg-color', 'overlay'),
+    // 'font-size': getCssVar('font-size-base'),
+    // 'border-color': getCssVar('border-color-lighter'),
+    // 'padding': 12px,
+    // 'padding-large': 18px 20px,
+    // 'title-font-size': 16px,
+    // 'title-text-color': getCssVar('text-color-primary'),
+    "border-radius": 0.5em,
+  ),
   // $drawer
   $drawer: ("padding-primary": 0px),
   //
@@ -96,19 +95,19 @@
   $checkbox: ("font-size": 1em, "input-height": 1em, "input-width": 1em, "border-radius": 4px),
   $radio: ("font-size": 1em, "input-height": 1em, "input-width": 1em, "input-border-radius": 4px),
   $menu: (
-    // 'active-color': getCssVar('color-primary'),
-    // 'text-color': getCssVar('text-color-primary'),
-    // 'hover-text-color': getCssVar('color-primary'),
-    // 'bg-color': getCssVar('fill-color', 'blank'),
-    // 'hover-bg-color': getCssVar('color-primary-light-9'),
-    // 'item-height': 56px,
-    // 'sub-item-height': calc(#{getCssVar('menu-item-height')} - 6px),
-    // 'horizontal-sub-item-height': 36px,
-    // 'item-font-size': getCssVar('font-size-base'),
-    // 'item-hover-fill': getCssVar('color-primary-light-9'),
-    // 'border-color': getCssVar('border-color'),
-    // 'base-level-padding': 20px,
-    // 'level-padding': 20px,
-    // 'icon-width': 24px,
+    "active-color": getCssVar("color-primary"),
+    "text-color": getCssVar("text-color-primary"),
+    "hover-text-color": getCssVar("color-primary"),
+    "bg-color": getCssVar("fill-color", "blank"),
+    "hover-bg-color": getCssVar("color-primary-light-9"),
+    "item-height": 2.6rem,
+    "sub-item-height": calc(#{getCssVar("menu-item-height")} - 0.5rem),
+    "horizontal-sub-item-height": 2.6rem,
+    "item-font-size": 0.875rem,
+    "item-hover-fill": getCssVar("color-primary-light-9"),
+    "border-color": getCssVar("border-color"),
+    "base-level-padding": 0.875rem,
+    "level-padding": 0.875rem,
+    "icon-width": 1.2rem
   )
 );

@@ -7,6 +7,7 @@ definePageMeta({
 <template>
   <div>
     <NuxtPage
+      keepalive
       :transition="{
         name: 'page',
         duration: 200,

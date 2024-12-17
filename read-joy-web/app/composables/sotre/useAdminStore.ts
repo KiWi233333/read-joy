@@ -1,39 +1,30 @@
 import { acceptHMRUpdate, defineStore } from "pinia";
+
+import { type AdminInfoVO, type AdminUpdatePwdDTO, useGetAdminInfoApi, useUpdateAdminPwdApi } from "../api/admin/admin";
 import { ResultStatus } from "../api/types/result";
-import { useGetUserInfoApi, type UserInfoVO, type UserUpdatePwdDTO, useUpdateUserPwdApi } from "../api/user";
 import { useDefaultStore } from "./useDefaultStore";
 // @unocss-include
 // https://pinia.web3doc.top/ssr/nuxt.html#%E5%AE%89%E8%A3%85
-export const useUserStore = defineStore(
-  "user",
+export const useAdminStore = defineStore(
+  "admin",
   () => {
     // token
     const token = ref<string>("");
     // 是否登录
     const isLogin = ref<boolean>(false);
-    // 是否打开登录
-    const showLoginForm = ref<boolean>(false);
-    const showEditForm = ref<boolean>(false); // 是否打开修改个人信息
-    const showRegisterForm = ref<boolean>(false);
-    const showUpdatePwd = ref<boolean>(false);
+    const showEditForm = ref<boolean>(false);
     const isOnLogining = ref<boolean>(false);
-    // 用户个人信息
-    const userInfo = ref<UserInfoVO>({
+    // 个人信息
+    const adminInfo = ref<Partial<AdminInfoVO>>({
       id: undefined,
-      loginName: undefined,
-      trueName: undefined,
-      telephone: undefined,
-      imgUrl: undefined,
-      isChecked: undefined,
-      createTime: undefined,
-      userType: undefined,
+      username: undefined,
     });
     // 用户id
-    const userId = computed(() => userInfo.value.id);
+    const userId = computed(() => adminInfo.value.id);
     const getToken = computed({
       get() {
         if (!isLogin.value || !token.value) {
-          showLoginForm.value = true;
+          navigateTo("/admin/login");
           return "";
         }
         else {
@@ -44,8 +35,6 @@ export const useUserStore = defineStore(
         token.value = value;
       },
     });
-    // 搜索记录
-    const searchHistory = ref<string[]>([]);
 
     function getTokenFn() {
       return token.value?.trim();
@@ -55,11 +44,10 @@ export const useUserStore = defineStore(
      * 用户登录
      * @param t token
      */
-    const onUserLogin = async (t: string, saveLocal?: boolean, redirectTo?: string, callback?: (data: UserInfoVO) => void) => {
-      // 用户信息
-      const res = await useGetUserInfoApi(t);
+    const onUserLogin = async (t: string, saveLocal?: boolean, redirectTo?: string, callback?: (data: AdminInfoVO) => void) => {
+      const res = await useGetAdminInfoApi(t);
       if (res.code && res.code === ResultStatus.SUCCESS) {
-        userInfo.value = res.data as UserInfoVO;
+        adminInfo.value = res.data;
         isLogin.value = true;
         token.value = t;
         callback && callback(res.data);
@@ -84,7 +72,8 @@ export const useUserStore = defineStore(
         .then(async () => {
           await callbackUserExit(token.value);
           if (toast) {
-            ElMessage.success("退出成功 🎈");
+            await navigateTo("/admin/login");
+            ElMessage.success("退出成功");
           }
         })
         .catch(() => { });
@@ -105,7 +94,7 @@ export const useUserStore = defineStore(
      */
     async function callbackUserExit(t?: string) {
       // 退出登录
-      clearUserStore();
+      clearStore();
       await nextTick();
     }
 
@@ -113,12 +102,16 @@ export const useUserStore = defineStore(
       if (closebookdetail) {
         useDefaultStore().showBookDetail = false;
       }
-      showLoginForm.value = true;
+      navigateTo("/admin/login");
     }
 
 
-    async function onTogglePwd(dto: UserUpdatePwdDTO) {
-      const res = await useUpdateUserPwdApi(dto, getToken.value);
+    /**
+     * 修改密码
+     * @param dto 修改密码dto
+     */
+    async function onTogglePwd(dto: AdminUpdatePwdDTO) {
+      const res = await useUpdateAdminPwdApi(dto, getToken.value);
 
       if (res && res.code === ResultStatus.SUCCESS) {
         // 修改成功
@@ -130,45 +123,35 @@ export const useUserStore = defineStore(
         showEditForm.value = false;
       }
     }
+
     /**
      * 清空store缓存
      */
-    function clearUserStore() {
+    function clearStore() {
       token.value = "";
       isLogin.value = false;
-      userInfo.value = {
+      adminInfo.value = {
         id: undefined,
-        loginName: undefined,
-        trueName: undefined,
-        telephone: undefined,
-        imgUrl: undefined,
-        isChecked: undefined,
-        createTime: undefined,
-        userType: undefined,
+        username: undefined,
       };
-      showLoginForm.value = false;
-      showRegisterForm.value = false;
     }
+
     return {
       // state
       userId,
-      userInfo,
+      adminInfo,
       token,
       isLogin,
       isOnLogining,
-      showUpdatePwd,
-      showLoginForm,
       showEditForm,
-      showRegisterForm,
-      searchHistory,
       // actions
       onUserLogin,
       toLogin,
       onCheckLogin,
+      onTogglePwd,
       callbackUserExit,
       exitLogin,
-      clearUserStore,
-      onTogglePwd,
+      clearStore,
       // getter
       getToken,
       getTokenFn,
@@ -182,4 +165,4 @@ export const useUserStore = defineStore(
   },
 );
 if (import.meta.hot)
-  import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot));
+  import.meta.hot.accept(acceptHMRUpdate(useAdminStore, import.meta.hot));

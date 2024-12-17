@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BookDetailVO, ResourceVO } from "~/composables/api/book";
 import { CardBookInfoSe } from "#components";
-import { useAddResourceLikeApi } from "~/composables/api/resorce";
+import { useAddResourceLikeApi } from "~/composables/api/resource";
 import { ResultStatus } from "~/composables/api/types/result";
 import { useDefaultStore } from "~/composables/sotre/useDefaultStore";
 import { useUserStore } from "~/composables/sotre/useUserStore";

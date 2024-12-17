@@ -6,10 +6,29 @@ import { useHttp } from "../../utils/useHttp";
  * @param dto 参数
  * @returns 管理员登录信息
  */
-export function useLoginApi(dto: AdminLoginDTO) {
+export function useAdminLoginApi(dto: AdminLoginDTO) {
   return useHttp.post<Result<AdminLoginVO>>("/admin/login", {
     ...dto,
   });
+}
+
+/**
+ * 获取管理员信息
+ * @param token 参数
+ * @returns 管理员信息
+ */
+export function useGetAdminInfoApi(token: string) {
+  return useHttp.get<Result<AdminInfoVO>>("/admin/info", {
+  }, {
+    headers: {
+      Authorization: token,
+    },
+  });
+}
+
+export interface AdminInfoVO {
+  id: number;
+  username: string;
 }
 
 /**
@@ -41,7 +60,7 @@ export interface AdminLoginVO {
  * @param dto 参数
  * @returns 是否成功
  */
-export function useUpdatePwdApi(dto: AdminUpdatePwdDTO, token: string) {
+export function useUpdateAdminPwdApi(dto: AdminUpdatePwdDTO, token: string) {
   return useHttp.put<Result<BoolEnum>>("/user/pwd", {
     ...dto,
   }, {

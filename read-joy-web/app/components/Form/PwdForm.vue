@@ -1,15 +1,20 @@
 <script lang="ts" setup>
 import type { FormInstance } from "element-plus/es/components/form";
-import { useUpdatePwdApi } from "~/composables/api/admin/admin";
-import { ResultStatus } from "~/composables/api/types/result";
-import { useUserStore } from "~/composables/sotre/useUserStore";
 
-const user = useUserStore();
+const {
+  modelValue,
+} = defineProps<{
+  modelValue: boolean
+}>();
+const emit = defineEmits<{
+  (e: "update:modelValue", value: boolean): void;
+  (e: "submit", value: { oldPassword: string; newPassword: string }): void;
+}>();
 enum CheckTypeEnum {
-  OLD_PASSWORD = 2,
+  PASSWORD = 1,
 }
 const isLoading = ref<boolean>(false);
-const chooseType = ref<CheckTypeEnum | undefined>(CheckTypeEnum.OLD_PASSWORD);
+const chooseType = ref<CheckTypeEnum | undefined>(CheckTypeEnum.PASSWORD);
 
 // 表单
 const userForm = reactive({
@@ -74,35 +79,28 @@ async function onUpdatePwd(formEl: FormInstance | undefined) {
   });
 }
 
+// 去更新
 async function toUpdate() {
   if (chooseType.value === undefined)
     return;
-  const res = await useUpdatePwdApi(
-    { oldPassword: userForm.oldPassword, newPassword: userForm.newPassword },
-    user.getToken,
-  );
 
-  if (res && res.code === ResultStatus.SUCCESS) {
-    // 修改成功
-    ElMessage.success({
-      message: "修改成功，下次登录请用新密码！",
-      duration: 2000,
-    });
-    // 修改成功后关闭弹窗
-    user.showEditForm = false;
-  }
-  return true;
+  emit("submit", {
+    oldPassword: userForm.oldPassword,
+    newPassword: userForm.newPassword,
+  });
 }
 </script>
 
 <template>
   <el-dialog
-    v-model="user.showEditForm"
     width="fit-content"
     :append-to-body="true"
     :show-close="false"
     destroy-on-close
     :overflow="false"
+    v-bind="$attrs"
+    :model-value="modelValue"
+    @update:model-value="(val: boolean) => emit('update:modelValue', val)"
   >
     <template #header>
       <h3 text-center text-lg>
