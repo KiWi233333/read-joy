@@ -10,6 +10,7 @@ import com.readjoy.readjoyapi.common.mapper.CategoryMapper;
 import com.readjoy.readjoyapi.common.pojo.Book;
 import com.readjoy.readjoyapi.common.pojo.Category;
 import com.readjoy.readjoyapi.common.vo.category.CategoryVO;
+import com.readjoy.readjoyapi.common.vo.other.BookCategoryTotal;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -37,5 +38,18 @@ public class CategoryRepository extends JoinCrudRepository<CategoryMapper, Categ
                 .leftJoin(Book.class, Book::getCategoryId, Category::getCategoryId)
                 .groupBy(Category::getCategoryId)
                 .selectCount(Book::getBookId, CategoryVO::getBookCount));
+    }
+
+
+    public List<BookCategoryTotal> bookCategoryTotal() {
+        final MPJLambdaWrapper<Category> qw = new MPJLambdaWrapper<Category>()
+                .select(Category::getCategoryId, Category::getCategoryName)
+                .select(Book::getBookId, Book::getCategoryId)
+
+                .selectAs(Category::getCategoryName, BookCategoryTotal::getCategoryName)
+                .selectCount(Book::getCategoryId, BookCategoryTotal::getBookCount) // 统计每个分类下的书籍数量
+                .groupBy(Category::getCategoryId)
+                .leftJoin(Book.class, Book::getCategoryId, Category::getCategoryId);
+        return this.selectJoinList(BookCategoryTotal.class, qw);
     }
 }

@@ -1,8 +1,11 @@
 package com.readjoy.readjoyapi.controller.backend;
 
+import com.readjoy.readjoyapi.common.dto.admin.AdminDataDTO;
 import com.readjoy.readjoyapi.common.utils.AssertUtil;
 import com.readjoy.readjoyapi.common.utils.LocalFileUtil;
 import com.readjoy.readjoyapi.common.utils.Result;
+import com.readjoy.readjoyapi.common.vo.other.AdminHomeStatisticsVO;
+import com.readjoy.readjoyapi.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,8 @@ public class AdminResController {
 
     @Resource
     private LocalFileUtil localFileUtil;
+    @Resource
+    private AdminService adminService;
 
     @PostMapping("/file/auth")
     @Operation(summary = "上传文件(权限文件)")
@@ -44,4 +49,11 @@ public class AdminResController {
         return Result.ok(localFileUtil.deleteAuthFile(url));
     }
 
+    @GetMapping("/statistics/home")
+    @Operation(summary = "获取首页数据统计")
+    public Result<AdminHomeStatisticsVO> getHomeStatistics(
+            @RequestHeader(name = HEADER_NAME) String token,
+            AdminDataDTO adminDataDTO) {
+        return Result.ok(adminService.getHomeStatistics(adminDataDTO));
+    }
 }

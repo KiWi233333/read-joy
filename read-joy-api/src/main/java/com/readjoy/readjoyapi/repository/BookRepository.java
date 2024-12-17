@@ -11,8 +11,14 @@ import com.readjoy.readjoyapi.common.pojo.Category;
 import com.readjoy.readjoyapi.common.pojo.Resource;
 import com.readjoy.readjoyapi.common.vo.book.BookDetailVO;
 import com.readjoy.readjoyapi.common.vo.book.BookVO;
+import com.readjoy.readjoyapi.common.vo.other.AdminHomeStatisticsVO;
+import com.readjoy.readjoyapi.common.vo.other.BookCategoryTotal;
+import com.readjoy.readjoyapi.common.vo.other.BookPublishTotalByDay;
+import com.readjoy.readjoyapi.common.vo.other.BookPublishTotalByMonth;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * @className: BookRepository
@@ -71,4 +77,14 @@ public class BookRepository extends JoinCrudRepository<BookMapper, Book> {
         return this.getBaseMapper().deleteByIds(CollectionUtils.arrayToList(longs));
     }
 
+
+    // 图书发布统计 yyyy-MM-dd
+    public List<BookPublishTotalByDay> bookPublishTotalByDay() {
+         return this.getBaseMapper().bookPublishTotalByDay();
+    }
+
+    // 图书发布统计 yyyy-MM-dd
+    public List<BookPublishTotalByMonth> bookPublishTotalByMonth() {
+        return this.getBaseMapper().bookPublishTotalByMonth();
+    }
 }

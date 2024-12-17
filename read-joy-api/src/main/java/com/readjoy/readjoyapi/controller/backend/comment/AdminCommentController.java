@@ -42,11 +42,18 @@ public class AdminCommentController {
 
     @Operation(description = "删除评论")
     @DeleteMapping("/{id}")
-    Result<Integer> deleteComment(
+    Result<Long> deleteComment(
             @RequestHeader(name = HEADER_NAME) String token,
             @PathVariable("id") Integer id) {
-        Integer userId = RequestHolderUtil.get().getId();
-        return Result.ok(commentService.deleteComment(userId, id));
+        return Result.ok(commentService.batchDeleteComment(new Integer[]{id}));
+    }
+
+    @Operation(description = "批量删除评论")
+    @DeleteMapping("/batch")
+    Result<Long> deleteCommentBatch(
+            @RequestHeader(name = HEADER_NAME) String token,
+            @RequestParam("ids") Integer[] ids) {
+        return Result.ok(commentService.batchDeleteComment(ids));
     }
 
     @Operation(description = "修改评论审核状态")

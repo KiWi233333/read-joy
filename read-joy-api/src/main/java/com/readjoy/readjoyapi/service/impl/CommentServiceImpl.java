@@ -15,6 +15,10 @@ import com.readjoy.readjoyapi.repository.CommentRepository;
 import com.readjoy.readjoyapi.service.CommentService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * CommentService 实现类
@@ -85,6 +89,23 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 .setCommentStatus(status));
         AssertUtil.isTrue(success, "更新评论状态失败，请稍后再试！");
         return 1;
+    }
+
+    /**
+     * 批量删除评论
+     *
+     * @param ids 评论id数组
+     * @return 删除数量
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Long batchDeleteComment(Integer[] ids) {
+        final long length = commentRepository.getBaseMapper().update(
+                new Comment().setIsDeleted(BoolEnum.TRUE.getValue()),
+                new LambdaQueryWrapper<Comment>().in(Comment::getId, List.of(ids))
+                        .eq(Comment::getIsDeleted, BoolEnum.FALSE.getValue())); // 未删除的评论才可以删除
+        AssertUtil.isTrue(length == ids.length, "批量删除评论失败，请稍后再试！");
+        return length;
     }
 }
 

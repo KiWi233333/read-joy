@@ -48,4 +48,11 @@ public interface CommentService {
      * @return 更新结果
      */
     Integer updateCommentStatus(Integer id, Integer status);
+
+    /**
+     * 批量删除评论
+     * @param ids 评论id数组
+     * @return 删除数量
+     */
+    Long batchDeleteComment(Integer[] ids);
 }

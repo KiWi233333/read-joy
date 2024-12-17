@@ -1,5 +1,6 @@
 package com.readjoy.readjoyapi.repository;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.github.yulichang.repository.JoinCrudRepository;
@@ -8,8 +9,11 @@ import com.readjoy.readjoyapi.common.dto.resource.SelectResourceDTO;
 import com.readjoy.readjoyapi.common.mapper.ResourceMapper;
 import com.readjoy.readjoyapi.common.pojo.Book;
 import com.readjoy.readjoyapi.common.pojo.Resource;
+import com.readjoy.readjoyapi.common.vo.other.AdminHomeStatisticsVO;
 import com.readjoy.readjoyapi.common.vo.resource.AdminResourceVO;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @className: ResourceRepository
@@ -61,4 +65,10 @@ public class ResourceRepository extends JoinCrudRepository<ResourceMapper, Resou
                 .last("LIMIT 1")
         );
     }
+
+    public Long sumDownloadCount() {
+        return this.list(new LambdaQueryWrapper<Resource>()
+                .select(Resource::getResourceId, Resource::getDownloadCount)).stream().mapToLong(Resource::getDownloadCount).sum();
+    }
+
 }
