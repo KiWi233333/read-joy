@@ -98,32 +98,32 @@ async function likeResource(item: ResourceVO) {
         </div>
       </div>
       <!-- 描述 -->
-      <div class="h-full w-full flex-row-c-c gap-2 card-rounded-df p-4 sm:p-8 border-default-hover">
+      <div class="h-full w-full flex-row-c-c py-6 sm:(block p-0)">
         <div>
-          <div truncate text-1.6rem font-500>
+          <div truncate text-1.6rem font-600>
             {{ bookDetial?.title }}
             <small ml-1 text-small>{{ bookDetial?.categoryName }}</small>
           </div>
-          <div mt-4 max-w-full truncate text-small-color>
+          <div mt-6 max-w-full truncate text-small-color>
             作者：{{ bookDetial?.author || "-" }}
           </div>
-          <div mt-2 max-w-full truncate text-small-color>
+          <div mt-3 max-w-full truncate text-sm text-small-color>
             出版社：{{ bookDetial?.publisher || "-" }}
           </div>
-          <div mt-2 max-w-full truncate text-small-color>
+          <div mt-3 max-w-full truncate text-sm text-small-color>
             ISBN：<span btn-primary @click="useCopyText(bookDetial?.isbn || '', true)">{{ bookDetial?.isbn || "-" }}</span>
           </div>
-          <div mt-2 max-w-full truncate text-small>
+          <div mt-3 max-w-full truncate text-sm text-small>
             发表时间：{{ bookDetial?.publishionDate || "-" }}
           </div>
-          <div mt-4 max-w-full truncate text-lg text-warning font-600>
+          <div mt-6 max-w-full truncate text-xl text-warning font-500>
             价格：<small>￥</small>{{ bookDetial?.price }}
           </div>
-          <div class="mt-4 pt-4 border-default-t">
-            <BtnElButton icon-class="i-solar:download-outline mr-2" transition-icon @click="activeName = 'resource'">
+          <div class="mt-6 pt-6 border-default-t">
+            <BtnElButton icon-class="i-solar:download-outline mr-2" @click="activeName = 'resource'">
               下载资源
             </BtnElButton>
-            <BtnElButton icon-class="i-solar:eye-outline mr-2" transition-icon type="primary" class="border-default" @click="activeName = 'read'">
+            <BtnElButton icon-class="i-solar:eye-outline mr-2" type="primary" class="border-default" @click="activeName = 'read'">
               查看摘要
             </BtnElButton>
           </div>
@@ -217,7 +217,7 @@ async function likeResource(item: ResourceVO) {
           :book-node="CardBookInfoSe"
           immediate
           auto-stop
-          :limit="12"
+          :limit="9"
           :ssr="true"
           :dto="{
             categoryId: store.theBookDetail.categoryId,

@@ -70,9 +70,10 @@ const commentTimeRange = computed({
   <div class="relative">
     <el-form
       ref="formRef" :model="form" class="mb-2 w-full flex items-start gap-4 pb-4 !relative"
+      :disabled="false"
       @submit.prevent="onSubmit"
     >
-      <CardNuxtImg :default-src="user.userInfo.imgUrl" class="h-8 w-8 shrink-0 rounded-full border-default bg-color">
+      <CardNuxtImg :default-src="user.userInfo.imgUrl" class="h-10 w-10 shrink-0 rounded-full border-default bg-color">
         <template #error>
           <div h-full w-full flex-row-c-c text-lg>
             {{ user?.userInfo?.loginName?.[0] || " " }}
@@ -103,12 +104,12 @@ const commentTimeRange = computed({
         />
       </el-form-item>
       <BtnElButton
-        class="group bottom-6 right-2 z-1 !absolute"
+        class="group bottom-20px right-1 z-1 !absolute"
         icon-class="i-solar:chat-dots-bold mr-1"
-        style="padding: 0 1.8rem;"
+        style="padding: 0 1.2rem;"
         transition-icon
-        type="info"
-        :loading="isSending"
+        size="small"
+        type="primary"
         :disabled="!user.isLogin"
         @click="onSubmit()"
       >
