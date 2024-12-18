@@ -1,5 +1,5 @@
 import type { IPage } from "../types";
-import type { Result } from "../types/result";
+import type { DefaultOrderSort, Result } from "../types/result";
 import { useHttp } from "../../utils/useHttp";
 
 /**
@@ -62,6 +62,7 @@ export function useAdminUpdateCategoryApi(categoryId: number, dto: UpdateCategor
 export function useAdminDeleteCategoryApi(categoryId: number, token: string) {
   return useHttp.deleted<Result<number>>(
     `/admin/book/category/${categoryId}`,
+    {},
     {
       headers: { Authorization: token },
     },
@@ -118,7 +119,7 @@ export interface UpdateCategoryDTO {
   categoryName?: string;
 }
 
-export interface AdminSelectCategoryListDTO {
+export interface AdminSelectCategoryPageDTO {
   /**
    * 页码
    */
@@ -131,6 +132,8 @@ export interface AdminSelectCategoryListDTO {
    * 关键字
    */
   keyword?: string;
+
+  idSort?: DefaultOrderSort
 }
 
 

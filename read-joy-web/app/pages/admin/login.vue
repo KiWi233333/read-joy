@@ -1,6 +1,9 @@
 <script lang="ts" setup>
+import { appName } from "~/constants";
+
 definePageMeta({
   layout: "empty",
+  title: `管理员登录 - ${appName}`,
 });
 </script>
 

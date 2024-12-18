@@ -202,3 +202,34 @@ export function deepCompareObj<T extends object>(oldObj: T, newObj: T): Partial<
 
   return updatedObj;
 }
+
+
+/**
+ * 生成随机 ISBN 号
+ * @returns 随机 ISBN 号
+ */
+export function randomISBN() {
+  // ISBN 前缀
+  const prefix = "978";
+  // 地区码，这里随机选择 1 到 99 之间的数字
+  const region = Math.floor(Math.random() * 99) + 1;
+  // 出版社码，随机生成 1 到 999 之间的数字
+  const publisher = Math.floor(Math.random() * 999) + 1;
+  // 标题码，随机生成 1 到 9999 之间的数字
+  const title = Math.floor(Math.random() * 9999) + 1;
+  // 校验码计算
+  const checkDigit = calculateCheckDigit(prefix + region + publisher + title);
+
+  // 组合成完整的 ISBN 并添加连接符
+  return `${prefix}-${region}-${publisher}-${title}-${checkDigit}`;
+}
+
+// 校验码计算函数
+function calculateCheckDigit(isbn: string) {
+  let sum = 0;
+  for (let i = 0; i < 12; i++) {
+    sum += (10 - i) * Number.parseInt(isbn.charAt(i), 10);
+  }
+  const checkDigit = (10 - (sum % 10)) % 10;
+  return checkDigit ? checkDigit.toString() : "X";
+}

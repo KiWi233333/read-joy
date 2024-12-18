@@ -1,4 +1,5 @@
 import { ResultStatus, ResultStatusText } from "../api/types/result";
+import { useAdminStore } from "../sotre/useAdminStore";
 import { useUserStore } from "../sotre/useUserStore";
 import { BaseUrl } from "./useBaseUrl";
 
@@ -38,9 +39,9 @@ export function httpRequest<T = unknown>(
       if (data.code === ResultStatus.TOKEN_ERR || data.code === ResultStatus.TOKEN_EXPIRED_ERR || data.code === ResultStatus.TOKEN_DEVICE_ERR) {
         ElMessage.closeAll();
         // 登录失效，清除用户信息，跳转登录页
-        console.log(useRoute().path);
-
         if (/^\/admin\//.test(useRoute().path)) { // 管理员
+          const admin = useAdminStore();
+          admin.clearStore();
           navigateTo("/admin/login");
           return;
         }
@@ -113,7 +114,7 @@ export function httpRequest<T = unknown>(
   if (defaultOpts) {
     if (method === "post" || method === "put") {
       if (defaultOpts.params || isParams) // 兼容自定义参数
-        defaultOpts.body = bodyOrParams;
+        defaultOpts.params = bodyOrParams;
       else
         defaultOpts.body = bodyOrParams;
     }
@@ -170,7 +171,7 @@ export const useHttp = {
       ...opts,
       headers: {
         ...opts?.headers,
-        "Content-Type": "multipart/form-data",
+        // "Content-Type": "multipart/form-data",
       },
     });
   },
@@ -185,7 +186,7 @@ export const useHttp = {
       ...opts,
       headers: {
         ...opts?.headers,
-        "Content-Type": "multipart/form-data",
+        // "Content-Type": "multipart/form-data",
       },
     });
   },
@@ -200,7 +201,7 @@ export const useHttp = {
       ...opts,
       headers: {
         ...opts?.headers,
-        "Content-Type": "multipart/form-data",
+        // "Content-Type": "multipart/form-data",
       },
     });
   },
@@ -215,7 +216,7 @@ export const useHttp = {
       ...opts,
       headers: {
         ...opts?.headers,
-        "Content-Type": "multipart/form-data",
+        // "Content-Type": "multipart/form-data",
       },
     });
   },

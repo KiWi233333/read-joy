@@ -50,7 +50,6 @@ const form = ref<Partial<AdminUserVO>>({
   userType: undefined,
   isChecked: undefined,
 });
-const avatatRef = ref(); // 头像
 const formRules = reactive({
   trueName: [
     { required: true, message: "用户名不能为空！", trigger: "blur" },
@@ -369,6 +368,8 @@ function resetSearchOption() {
           <!-- 按钮 -->
           <AdminTableDefaultTableBtns
             :menu="[
+              { show: true, title: '刷新', methods: loadData, icon: 'i-solar:refresh-outline' },
+              { show: true, title: isShowSearch ? '取消' : '筛选', methods: () => isShowSearch = !isShowSearch, icon: 'i-solar:sort-from-top-to-bottom-line-duotone ', type: 'default' },
               {
                 show: true,
                 title: '批量',
@@ -382,8 +383,6 @@ function resetSearchOption() {
                   disabled: selectList.length === 0,
                 },
               },
-              { show: true, title: isShowSearch ? '取消' : '筛选', methods: () => isShowSearch = !isShowSearch, icon: 'i-solar:sort-from-top-to-bottom-line-duotone ', type: 'default' },
-              { show: true, title: '刷新', methods: loadData, icon: 'i-solar:refresh-outline', type: 'info' },
             ]"
           />
         </div>
@@ -402,7 +401,7 @@ function resetSearchOption() {
               padding: '1rem 0',
               fontSize: '1em',
             }"
-            row-class-name="group h-5.5rem"
+            row-class-name="group h-4.2rem items-center"
             row-key="id"
             height="75vh"
             @row-click="(row: AdminUserVO) => {
@@ -420,6 +419,7 @@ function resetSearchOption() {
             <el-table-column
               label="用户ID"
               property="id"
+              width="80%"
               column-key="id"
             >
               <template #default="{ row }">
@@ -430,6 +430,7 @@ function resetSearchOption() {
             <el-table-column
               column-key="name"
               prop="name"
+              align="center"
               label="用户头像"
             >
               <template
@@ -438,7 +439,7 @@ function resetSearchOption() {
                 <el-image
                   :preview-src-list="[BaseUrlImg + row.imgUrl]"
                   :preview-teleported="true"
-                  class="mr-2 h-14 w-14 flex-shrink-0 card-default border-default-hover"
+                  class="mt-2 h-12 w-12 flex-shrink-0 card-default border-default-hover"
                   fit="cover"
                   loading="lazy"
                   :src="`${BaseUrlImg + row.imgUrl}`"
@@ -540,7 +541,7 @@ function resetSearchOption() {
             >
               <template #default="{ row }">
                 <div class="flex opacity-0 transition-200 group-hover:opacity-100">
-                  <!-- 预览 -->
+                  <!-- 详情 -->
                   <BtnElButton
                     :plain="false"
                     style="padding: 0rem 0.6rem"
@@ -555,7 +556,7 @@ function resetSearchOption() {
                       i-solar:eye-bold-duotone
                       p-2
                     />
-                    <span w-0 overflow-hidden transition-200 transition-all class="btns-hover">&nbsp;预览</span>
+                    <span w-0 overflow-hidden transition-200 transition-all class="btns-hover">&nbsp;详情</span>
                   </BtnElButton>
                   <!-- 注销用户 -->
                   <BtnElButton

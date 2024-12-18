@@ -265,7 +265,6 @@ export interface AdminBookDetailVO {
    * 书名
    */
   title?: string;
-  [property: string]: any;
 }
 
 /**

@@ -37,7 +37,6 @@ function downloadResource(resource: ResourceVO) {
 
 // 点赞
 const actionResourceMap = useSessionStorage(`${user.userId}_actionResourceMap`, {
-
 }) as any;
 async function likeResource(item: ResourceVO) {
   const res = await useAddResourceLikeApi(item.resourceId, user.token);
@@ -64,7 +63,7 @@ async function likeResource(item: ResourceVO) {
         >
           <template #error>
             <small class="h-full w-full flex flex-row items-center justify-center">
-              无图片
+              暂无图片
             </small>
           </template>
         </CardElImage>
@@ -75,12 +74,12 @@ async function likeResource(item: ResourceVO) {
           {{ bookDetial?.author }}
         </div>
         <!-- 指数卡片 -->
-        <div class="mt-4 w-4/5 overflow-hidden rounded-0 bg-transparent p-4 sm:w-2/3 border-default-t">
+        <div class="mt-4 w-4/5 overflow-hidden rounded-0 bg-transparent py-4 sm:w-2/3 border-default-t">
           <div text-small>
             推荐指数：{{ (likeAllCount + downAllCount) || "暂无" }}
           </div>
           <div mt-2 flex>
-            <el-progress :width="60" type="dashboard" class="mr-2" :percentage="(likeAllCount + downAllCount) || 0">
+            <el-progress style="--el-fill-color-light: var(--el-color-primary-light-9);" :width="60" type="circle" class="mr-4" :percentage="(likeAllCount + downAllCount) || 0">
               <template #default="{ percentage }">
                 <span class="text-sm">{{ percentage }}</span>
               </template>
@@ -99,45 +98,57 @@ async function likeResource(item: ResourceVO) {
         </div>
       </div>
       <!-- 描述 -->
-      <div class="h-fit w-full gap-2 p-4 card-default sm:p-8">
-        <div truncate text-1.6rem font-500>
-          {{ bookDetial?.title }}
-          <small ml-1 text-small>{{ bookDetial?.categoryName }}</small>
-        </div>
-        <div mt-4 max-w-full truncate text-small-color>
-          作者：{{ bookDetial?.author || "-" }}
-        </div>
-        <div mt-2 max-w-full truncate text-small-color>
-          出版社：{{ bookDetial?.publisher || "-" }}
-        </div>
-        <div mt-2 max-w-full truncate text-small-color>
-          ISBN：<span btn-primary @click="useCopyText(bookDetial?.isbn || '', true)">{{ bookDetial?.isbn || "-" }}</span>
-        </div>
-        <div mt-2 max-w-full truncate text-small>
-          发表时间：{{ bookDetial?.publishionDate || "-" }}
-        </div>
-        <div mt-4 max-w-full truncate text-lg text-warning font-600>
-          价格：<small>￥</small>{{ bookDetial?.price }}
-        </div>
-        <div class="mt-4 pt-4 border-default-t">
-          <BtnElButton icon-class="i-solar:download-outline mr-2" transition-icon @click="activeName = 'resource'">
-            下载资源
-          </BtnElButton>
-          <BtnElButton icon-class="i-solar:eye-outline mr-2" transition-icon type="primary" class="border-default" @click="activeName = 'read'">
-            查看摘要
-          </BtnElButton>
+      <div class="h-full w-full flex-row-c-c gap-2 card-rounded-df p-4 sm:p-8 border-default-hover">
+        <div>
+          <div truncate text-1.6rem font-500>
+            {{ bookDetial?.title }}
+            <small ml-1 text-small>{{ bookDetial?.categoryName }}</small>
+          </div>
+          <div mt-4 max-w-full truncate text-small-color>
+            作者：{{ bookDetial?.author || "-" }}
+          </div>
+          <div mt-2 max-w-full truncate text-small-color>
+            出版社：{{ bookDetial?.publisher || "-" }}
+          </div>
+          <div mt-2 max-w-full truncate text-small-color>
+            ISBN：<span btn-primary @click="useCopyText(bookDetial?.isbn || '', true)">{{ bookDetial?.isbn || "-" }}</span>
+          </div>
+          <div mt-2 max-w-full truncate text-small>
+            发表时间：{{ bookDetial?.publishionDate || "-" }}
+          </div>
+          <div mt-4 max-w-full truncate text-lg text-warning font-600>
+            价格：<small>￥</small>{{ bookDetial?.price }}
+          </div>
+          <div class="mt-4 pt-4 border-default-t">
+            <BtnElButton icon-class="i-solar:download-outline mr-2" transition-icon @click="activeName = 'resource'">
+              下载资源
+            </BtnElButton>
+            <BtnElButton icon-class="i-solar:eye-outline mr-2" transition-icon type="primary" class="border-default" @click="activeName = 'read'">
+              查看摘要
+            </BtnElButton>
+          </div>
         </div>
       </div>
     </section>
-    <div class="main-content">
+    <div class="main-content relative">
+      <!-- <ClientOnly>
+        <template #fallback>
+          <div class="w-full">
+            <div class="mt-4 h-4rem w-full rounded-2 border-default-hover" />
+            <div class="mt-4 h-20rem w-full rounded-2 border-default-hover" />
+          </div>
+          <div class="w-full">
+            <div class="mt-4 h-40rem w-full rounded-2 border-default-hover" />
+          </div>
+        </template> -->
       <el-tabs
         v-model="activeName"
-        class="mt-4 pb-10vh pb-12"
+        class="mt-4"
       >
         <el-tab-pane label="内容摘要" name="read" class="tab-pane">
           <div
             data-fade style="--anima: latter-slice-blur-top;"
-            class="card-rounded-df p-4 border-default"
+            class="card-rounded-df p-4 text-sm border-default"
           >
             {{ bookDetial?.introduction }}
           </div>
@@ -157,7 +168,7 @@ async function likeResource(item: ResourceVO) {
               >
                 <template #error>
                   <small class="h-full w-full flex flex-row items-center justify-center">
-                    无图片
+                    暂无图片
                   </small>
                 </template>
               </CardElImage>
@@ -189,7 +200,7 @@ async function likeResource(item: ResourceVO) {
             暂无资源
           </li>
         </el-tab-pane>
-        <el-tab-pane label="评论区" lazy name="comment" class="tab-pane">
+        <el-tab-pane lazy label="评论区" name="comment" class="tab-pane">
           <BookCommentView
             :book-id="bookDetial?.bookId"
             data-fade
@@ -199,23 +210,27 @@ async function likeResource(item: ResourceVO) {
         </el-tab-pane>
       </el-tabs>
       <div>
-        <h2 class="py-4">
-          相关推荐
-        </h2>
         <ListBookList
           v-if="store.theBookDetail?.categoryId"
-          :show-load="false"
-          books-class="relative grid cols-3 sm:gap-8"
+          :show-load="true"
+          books-class="relative grid cols-3 gap-6 sm:gap-8"
           :book-node="CardBookInfoSe"
           immediate
           auto-stop
+          :limit="12"
           :ssr="true"
           :dto="{
             categoryId: store.theBookDetail.categoryId,
           }"
           :animated="false"
           :ignore-ids="bookDetial?.bookId ? [bookDetial.bookId] : undefined"
-        />
+        >
+          <template #header>
+            <h2 class="py-4">
+              相关推荐
+            </h2>
+          </template>
+        </ListBookList>
       </div>
     </div>
   </div>

@@ -121,6 +121,13 @@ html.stop-transition-all {
 
 /**  ------------------------------element-plus---------------------------------------  **/
 // 文本折叠
+.text-overflow-1 {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
 .text-overflow-2 {
   display: -webkit-box;
   overflow: hidden;
@@ -245,6 +252,9 @@ body .el-message {
 }
 .el-message-box__header.show-close {
   padding-right: 0 !important;
+}
+.el-message {
+  z-index: 3100 !important;
 }
 
 // // el-menu

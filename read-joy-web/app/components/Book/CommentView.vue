@@ -69,7 +69,7 @@ const commentTimeRange = computed({
 <template>
   <div class="relative">
     <el-form
-      ref="formRef" v-auth :model="form" class="relative mb-2 w-full flex items-start gap-4 pb-4"
+      ref="formRef" :model="form" class="mb-2 w-full flex items-start gap-4 pb-4 !relative"
       @submit.prevent="onSubmit"
     >
       <CardNuxtImg :default-src="user.userInfo.imgUrl" class="h-8 w-8 shrink-0 rounded-full border-default bg-color">
@@ -103,7 +103,7 @@ const commentTimeRange = computed({
         />
       </el-form-item>
       <BtnElButton
-        class="group absolute bottom-6 right-2 z-1"
+        class="group bottom-6 right-2 z-1 !absolute"
         icon-class="i-solar:chat-dots-bold mr-1"
         style="padding: 0 1.8rem;"
         transition-icon

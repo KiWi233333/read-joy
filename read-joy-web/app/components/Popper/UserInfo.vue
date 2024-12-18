@@ -115,13 +115,13 @@ watch(editFiled, (val) => {
       <el-upload
         ref="avatatRef"
         class="avatar-uploader -mt-2.5rem"
-        drag
         :action="`${BaseUrl}/user`"
         :headers="{ Authorization: user.token }"
         method="PUT"
         name="cover"
         :limit="1"
         accept="image/*"
+        drag
         :multiple="false"
         :auto-upload="true"
         :show-file-list="false"

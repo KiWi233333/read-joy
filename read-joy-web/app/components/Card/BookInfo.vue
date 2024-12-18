@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { BookVO } from "~/composables/api/book";
 import { useDefaultStore } from "~/composables/sotre/useDefaultStore";
-import { useSettingStore } from "~/composables/sotre/useSettingStore";
 
 const {
   book,
@@ -25,7 +24,7 @@ const store = useDefaultStore();
       >
         <template #error>
           <small class="h-full w-full flex flex-row items-center justify-center">
-            无图片
+            暂无图片
           </small>
         </template>
       </CardNuxtImg>
@@ -34,7 +33,7 @@ const store = useDefaultStore();
         <div v-if="book?.publishionDate">{{ book?.publishionDate }}</div>
       </div>
     </div>
-    <label class="text-overflow-3 my-1 text-center leading-1.5em">
+    <label :title="book.title" class="text-overflow-1 my-1 text-center leading-1.5em">
       {{ book.title }}
     </label>
     <span class="max-w-full truncate text-mini">

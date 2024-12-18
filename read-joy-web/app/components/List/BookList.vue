@@ -5,6 +5,7 @@ import { CardBookInfo } from "#components";
 import { type BookDetailVO, getBookPageByDTOApi, type SelectBookPageDTO } from "~/composables/api/book";
 import { ResultStatus } from "~/composables/api/types/result";
 import { useSettingStore } from "~/composables/sotre/useSettingStore";
+import { compareObjects } from "~/composables/utils/useUtils";
 
 const {
   showLoad = true,
@@ -106,7 +107,10 @@ async function reload(appendDTO?: Partial<SelectBookPageDTO>) {
 
 const unWatch = watchDebounced(
   () => dto,
-  () => {
+  (newVal, oldVal) => {
+    if (newVal && oldVal && !Object.keys(compareObjects(newVal, oldVal))?.length) {
+      return;
+    }
     reload();
   },
   {

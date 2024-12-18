@@ -4,7 +4,12 @@ import { type AdminHomeStatisticsVO, selectHomeStatistics } from "~/composables/
 import { CommentSortOrder } from "~/composables/api/comment";
 import { ResultStatus } from "~/composables/api/types/result";
 import { useAdminStore } from "~/composables/sotre/useAdminStore";
+import { appName } from "~/constants";
 
+
+useSeoMeta({
+  title: `管理后台 - ${appName}`,
+});
 const homeStatistics = ref<Partial<AdminHomeStatisticsVO>>({
 
 });

@@ -25,7 +25,7 @@ const store = useDefaultStore();
       >
         <template #error>
           <small class="h-full w-full flex flex-row items-center justify-center">
-            无图片
+            暂无图片
           </small>
         </template>
       </CardNuxtImg>

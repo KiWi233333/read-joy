@@ -92,7 +92,7 @@ const btnSizeMap: Record<string, "" | "default" | "small" | "large"> = {
           'flex justify-start': !value,
           [`${btnProps?.class}`]: btnProps?.class,
         }"
-        style="justify-content: initial;"
+        style="justify-content: initial;padding-top:0;padding-bottom:0;"
         type="default"
         v-bind="btnProps"
       >
@@ -108,7 +108,7 @@ const btnSizeMap: Record<string, "" | "default" | "small" | "large"> = {
           </template>
           <i
             v-if="clearable && value?.start && value?.end "
-            class="i-solar:close-circle-outline ml-2 block h-1.5em w-1.5em btn-danger" @click.stop.capture="$emit('update:modelValue', [])"
+            class="i-solar:close-circle-outline ml-2 block h-1.3em w-1.3em btn-danger" @click.stop.capture="$emit('update:modelValue', [])"
           />
         </template>
         <template v-else>
