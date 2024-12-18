@@ -1,6 +1,8 @@
 package com.readjoy.readjoyapi.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.readjoy.readjoyapi.common.dto.book.InsertBookDTO;
@@ -18,6 +20,9 @@ import com.readjoy.readjoyapi.service.BookService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author 13296
@@ -85,8 +90,16 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
     public Integer batchDeleteBook(Integer[] longs) {
         AssertUtil.isTrue(longs.length > 0, "删除图书不能为空！");
         AssertUtil.isTrue(longs.length < 500, "一次最多只能删除500本图书！");
+        // 1. 查询图书封面
+        final List<Book> list = bookRepository.list(new LambdaQueryWrapper<Book>().in(Book::getBookId, Arrays.asList(longs))
+                .select(Book::getCoverImageUrl, Book::getBookId));
+
         final Integer integer = bookRepository.batchDelete(longs);
         AssertUtil.isTrue(integer > 0 && integer == longs.length, "删除图书失败，请稍后重试！");
+        // 2. 删除图书封面
+        for (Book book : list)
+            if (StringUtils.isNotBlank(book.getCoverImageUrl()))
+                localFileUtil.deleteFile(book.getCoverImageUrl());
         return integer;
     }
 
