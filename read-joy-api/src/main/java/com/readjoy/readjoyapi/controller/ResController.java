@@ -1,5 +1,6 @@
 package com.readjoy.readjoyapi.controller;
 
+import com.readjoy.readjoyapi.common.annotation.PortFlowControl;
 import com.readjoy.readjoyapi.common.utils.AssertUtil;
 import com.readjoy.readjoyapi.common.utils.LocalFileUtil;
 import com.readjoy.readjoyapi.common.utils.RequestHolderUtil;
@@ -11,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Tag;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.readjoy.readjoyapi.common.utils.UserTokenUtil.HEADER_NAME;
 
@@ -29,6 +32,7 @@ public class ResController {
 
     @PostMapping("/file")
     @Operation(summary = "上传文件")
+    @PortFlowControl(limit = 10, time = 1, timeUnit = TimeUnit.MINUTES, errorMessage = "上传文件频率过高，请稍后再试！")
     public Result<String> upload(
             @RequestHeader(name = HEADER_NAME) String token,
             @RequestParam("file") MultipartFile file
@@ -40,6 +44,7 @@ public class ResController {
     // 删除文件
     @DeleteMapping("/file")
     @Operation(summary = "删除文件")
+    @PortFlowControl(limit = 20, time = 2, timeUnit = TimeUnit.MINUTES, errorMessage = "上传文件频率过高，请稍后再试！")
     public Result<Boolean> delete(
             @RequestHeader(name = HEADER_NAME) String token,
             @Schema(description = "文件路径", example = "files/{uid}/xx/xx.xx") @RequestParam("url") String url

@@ -41,6 +41,8 @@ public class AdminHomeStatisticsVO {
     private List<BookPublishTotalByDay> bookPublishTotalByDayList;
     @Schema(description = "按月统计发表图书统计")
     private List<BookPublishTotalByMonth> bookPublishTotalByMonthList;
+    @Schema(description = "按年统计发表图书统计")
+    private List<BookPublishTotalByYear> bookPublishTotalByYearList;
 
     @Schema(description = "按类别图书总量统计")
     private List<BookCategoryTotal> bookCategoryTotalList;

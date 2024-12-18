@@ -9,10 +9,7 @@ import com.readjoy.readjoyapi.common.enums.SysUserTypeEnum;
 import com.readjoy.readjoyapi.common.pojo.Admin;
 import com.readjoy.readjoyapi.common.pojo.Comment;
 import com.readjoy.readjoyapi.common.vo.admin.AdminInfoVO;
-import com.readjoy.readjoyapi.common.vo.other.AdminHomeStatisticsVO;
-import com.readjoy.readjoyapi.common.vo.other.BookCategoryTotal;
-import com.readjoy.readjoyapi.common.vo.other.BookPublishTotalByDay;
-import com.readjoy.readjoyapi.common.vo.other.BookPublishTotalByMonth;
+import com.readjoy.readjoyapi.common.vo.other.*;
 import com.readjoy.readjoyapi.repository.*;
 import com.readjoy.readjoyapi.service.AdminService;
 import com.readjoy.readjoyapi.common.utils.*;
@@ -119,6 +116,8 @@ public class AdminServiceImpl implements AdminService {
         List<BookPublishTotalByDay> bookPublishTotalByDayList = bookRepository.bookPublishTotalByDay();
         // 8、查询图书发布统计 - 按月
         List<BookPublishTotalByMonth> bookPublishTotalByMounthList = bookRepository.bookPublishTotalByMonth();
+        // 9、查询图书发布统计 - 按年
+        List<BookPublishTotalByYear> bookPublishTotalByYearList = bookRepository.bookPublishTotalByYear();
         // 9、计算图书分类总数
         Long bookCategoryCount = categoryRepository.count();
         // 10、待审核评论数
@@ -134,6 +133,7 @@ public class AdminServiceImpl implements AdminService {
                 .setBookCategoryTotalList(bookCategoryTotalList)
                 .setBookPublishTotalByDayList(bookPublishTotalByDayList)
                 .setBookPublishTotalByMonthList(bookPublishTotalByMounthList)
+                .setBookPublishTotalByYearList(bookPublishTotalByYearList)
                 .setRequestTime(new Date())
                 .setBookCategoryCount(bookCategoryCount)
                 .setPendingCommentCount(pendingCommentCount)

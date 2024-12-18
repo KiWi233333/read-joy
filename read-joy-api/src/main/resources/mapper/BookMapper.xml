@@ -16,4 +16,10 @@
         FROM book
         GROUP BY DATE_FORMAT(publishionDate, '%Y-%m')
     </select>
+    <select id="bookPublishTotalByYear"
+            resultType="com.readjoy.readjoyapi.common.vo.other.BookPublishTotalByYear">
+        SELECT DATE_FORMAT(publishionDate, '%Y') AS date, COUNT(*) AS total
+        FROM book
+        GROUP BY DATE_FORMAT(publishionDate, '%Y')
+    </select>
 </mapper>

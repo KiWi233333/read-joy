@@ -5,6 +5,7 @@ import com.readjoy.readjoyapi.common.pojo.Book;
 import com.readjoy.readjoyapi.common.vo.other.AdminHomeStatisticsVO;
 import com.readjoy.readjoyapi.common.vo.other.BookPublishTotalByDay;
 import com.readjoy.readjoyapi.common.vo.other.BookPublishTotalByMonth;
+import com.readjoy.readjoyapi.common.vo.other.BookPublishTotalByYear;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public interface BookMapper extends MPJBaseMapper<Book> {
     List<BookPublishTotalByDay> bookPublishTotalByDay();
 
     List<BookPublishTotalByMonth> bookPublishTotalByMonth();
+
+    List<BookPublishTotalByYear> bookPublishTotalByYear();
 }
 
 

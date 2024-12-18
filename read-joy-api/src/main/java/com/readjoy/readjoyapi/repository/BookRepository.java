@@ -11,10 +11,7 @@ import com.readjoy.readjoyapi.common.pojo.Category;
 import com.readjoy.readjoyapi.common.pojo.Resource;
 import com.readjoy.readjoyapi.common.vo.book.BookDetailVO;
 import com.readjoy.readjoyapi.common.vo.book.BookVO;
-import com.readjoy.readjoyapi.common.vo.other.AdminHomeStatisticsVO;
-import com.readjoy.readjoyapi.common.vo.other.BookCategoryTotal;
-import com.readjoy.readjoyapi.common.vo.other.BookPublishTotalByDay;
-import com.readjoy.readjoyapi.common.vo.other.BookPublishTotalByMonth;
+import com.readjoy.readjoyapi.common.vo.other.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -86,5 +83,9 @@ public class BookRepository extends JoinCrudRepository<BookMapper, Book> {
     // 图书发布统计 yyyy-MM-dd
     public List<BookPublishTotalByMonth> bookPublishTotalByMonth() {
         return this.getBaseMapper().bookPublishTotalByMonth();
+    }
+
+    public List<BookPublishTotalByYear> bookPublishTotalByYear() {
+        return this.getBaseMapper().bookPublishTotalByYear();
     }
 }
