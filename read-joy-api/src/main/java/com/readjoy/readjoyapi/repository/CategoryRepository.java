@@ -29,13 +29,11 @@ public class CategoryRepository extends JoinCrudRepository<CategoryMapper, Categ
     }
 
     public IPage<CategoryVO> getPageByDTO(SelectAdminCategoryDTO dto) {
-//        return this.page(new Page<>(dto.getPage(), dto.getSize()), new LambdaQueryWrapper<Category>()
-//                .like(StringUtils.isNotBlank(dto.getKeyword()), Category::getCategoryName, dto.getKeyword()))
-//                .convert(CategoryVO::toVO);
         return this.selectJoinListPage(dto.toPage(), CategoryVO.class, new MPJLambdaWrapper<Category>()
                 .select(Category::getCategoryId, Category::getCategoryName)
                 .like(StringUtils.isNotBlank(dto.getKeyword()), Category::getCategoryName, dto.getKeyword())
                 .leftJoin(Book.class, Book::getCategoryId, Category::getCategoryId)
+                        .orderBy(dto.getIdSort() != null, dto.checkAsc(), Category::getCategoryId) // id 排序
                 .groupBy(Category::getCategoryId)
                 .selectCount(Book::getBookId, CategoryVO::getBookCount));
     }

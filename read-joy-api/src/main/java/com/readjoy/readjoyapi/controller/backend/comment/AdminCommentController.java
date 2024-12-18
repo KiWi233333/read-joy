@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.readjoy.readjoyapi.common.dto.comment.AdminSelectCommentDTO;
 import com.readjoy.readjoyapi.common.enums.CommentStatusEnum;
 import com.readjoy.readjoyapi.common.utils.AssertUtil;
-import com.readjoy.readjoyapi.common.utils.RequestHolderUtil;
 import com.readjoy.readjoyapi.common.utils.Result;
 import com.readjoy.readjoyapi.common.vo.comment.CommentVO;
 import com.readjoy.readjoyapi.service.CommentService;
