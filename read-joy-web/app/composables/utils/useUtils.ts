@@ -143,3 +143,62 @@ export function useCopyText(text: string, showToast?: boolean) {
   return result;
 }
 
+
+/**
+ * 比对对象生成(表层级)
+ * @param oldObj
+ * @param newObj
+ * @returns 差异de
+ */
+export function compareObjects<T extends object>(oldObj: T, newObj: T) {
+  const updatedObj = {};
+  // 遍历newObj的属性
+  for (const key in newObj) {
+    // 检查newObj是否有该属性，并且其值与oldObj中的值不相等
+    if (Object.prototype.hasOwnProperty.call(newObj, key) && newObj[key] !== oldObj[key])
+      // @ts-expect-error
+      updatedObj[key] = newObj[key]; // 将更改的参数添加到updatedObj中
+  }
+  return updatedObj as T;
+}
+
+/**
+ * 格式化手机号码
+ * @param phone
+ * @returns 格式化后的手机号码
+ * @example
+ * markPhone("13812345678") // "138****5678"
+ */
+export function markPhone(phone: string) {
+  return phone.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2");
+}
+
+/**
+ * 深度比较对象
+ * @param oldObj
+ * @param newObj
+ * @returns 差异de
+ */
+export function deepCompareObj<T extends object>(oldObj: T, newObj: T): Partial<T> {
+  const updatedObj: Partial<T> = {};
+
+  for (const key in newObj) {
+    if (Object.prototype.hasOwnProperty.call(newObj, key)) {
+      const oldValue = oldObj[key];
+      const newValue = newObj[key];
+
+      if (typeof oldValue === "object" && typeof newValue === "object") {
+        // @ts-expect-error
+        const nestedUpdates = compareObjects(oldValue, newValue);
+        if (Object.keys(nestedUpdates).length > 0)
+          // @ts-expect-error
+          updatedObj[key] = nestedUpdates;
+      }
+      else if (oldValue !== newValue) {
+        updatedObj[key] = newValue;
+      }
+    }
+  }
+
+  return updatedObj;
+}

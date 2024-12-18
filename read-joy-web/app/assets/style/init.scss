@@ -239,10 +239,25 @@ body .el-message {
   }
 }
 
-
+// el-box层级错误
 .el-overlay.is-message-box {
   z-index: 3000 !important;
 }
 .el-message-box__header.show-close {
   padding-right: 0 !important;
 }
+
+// // el-menu
+// .el-sub-menu.is-active {
+//   .el-sub-menu__title {
+//     color: var(--el-color-primary);
+//   }
+// }
+// .el-menu-item.is-active {
+//   background-color: var(--el-color-primary);
+//   color: #fff;
+//   &:hover {
+//     background-color: var(--el-color-primary) !important;
+//     color: #fff !important;
+//   }
+// }

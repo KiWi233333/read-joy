@@ -36,7 +36,7 @@ function downloadResource(resource: ResourceVO) {
 }
 
 // 点赞
-const actionResorceMap = useSessionStorage(`${user.userId}_actionResorceMap`, {
+const actionResourceMap = useSessionStorage(`${user.userId}_actionResourceMap`, {
 
 }) as any;
 async function likeResource(item: ResourceVO) {
@@ -46,7 +46,7 @@ async function likeResource(item: ResourceVO) {
   }
   ElMessage.success("点赞成功！");
   item.likeCount++;
-  actionResorceMap.value[item.resourceId] = true;
+  actionResourceMap.value[item.resourceId] = true;
 }
 </script>
 
@@ -120,7 +120,7 @@ async function likeResource(item: ResourceVO) {
           价格：<small>￥</small>{{ bookDetial?.price }}
         </div>
         <div class="mt-4 pt-4 border-default-t">
-          <BtnElButton icon-class="i-solar:download-outline mr-2" transition-icon @click="activeName = 'resorce'">
+          <BtnElButton icon-class="i-solar:download-outline mr-2" transition-icon @click="activeName = 'resource'">
             下载资源
           </BtnElButton>
           <BtnElButton icon-class="i-solar:eye-outline mr-2" transition-icon type="primary" class="border-default" @click="activeName = 'read'">
@@ -142,7 +142,7 @@ async function likeResource(item: ResourceVO) {
             {{ bookDetial?.introduction }}
           </div>
         </el-tab-pane>
-        <el-tab-pane lazy label="课程资源" name="resorce" class="tab-pane">
+        <el-tab-pane lazy label="课程资源" name="resource" class="tab-pane">
           <ul class="grid cols-2 gap-2 sm:cols-3 sm:gap-4" data-fade style="--anima: latter-slice-blur-top;">
             <li
               v-for="item in bookDetial?.resourceList"
@@ -171,7 +171,7 @@ async function likeResource(item: ResourceVO) {
               </div>
               <!-- 点赞 -->
               <ClientOnly>
-                <i :title="actionResorceMap[`${item.resourceId}`] ? '已点赞' : '点赞'" :class="actionResorceMap[`${item.resourceId}`] ? 'i-solar:like-bold text-danger' : 'i-solar:like-broken'" class="block h-6 w-6 btn-danger" @click.stop.prevent.capture="likeResource(item)" />
+                <i :title="actionResourceMap[`${item.resourceId}`] ? '已点赞' : '点赞'" :class="actionResourceMap[`${item.resourceId}`] ? 'i-solar:like-bold text-danger' : 'i-solar:like-broken'" class="block h-6 w-6 btn-danger" @click.stop.prevent.capture="likeResource(item)" />
               </ClientOnly>
             </li>
             <li

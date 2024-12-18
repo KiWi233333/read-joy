@@ -5,10 +5,11 @@ import { useHttp } from "../../utils/useHttp";
 /**
  * 获取首页统计数据
  * @param dto
+ * @param token
  * @returns Result<SelectHomeStatisticsDto>
  */
-export function selectHomeStatistics(dto: SelectHomeStatisticsDto) {
-  return useHttp.get<Result<SelectHomeStatisticsDto>>("/admin/res/statistics/home", dto);
+export function selectHomeStatistics(dto: SelectHomeStatisticsDto, token: string) {
+  return useHttp.get<Result<AdminHomeStatisticsVO>>("/admin/res/statistics/home", dto, { headers: { Authorization: token } });
 }
 
 export interface SelectHomeStatisticsDto {
@@ -30,38 +31,55 @@ export interface SelectHomeStatisticsDto {
  */
 export interface AdminHomeStatisticsVO {
   /**
+   * 用户数量
+   */
+  userCount: number;
+  /**
+   * 图书总量
+   */
+  bookCount: number;
+  /**
+   * 分类总量
+   */
+  bookCategoryCount: number;
+  /**
+   * 资源总数
+   */
+  resourceCount: number;
+  /**
+   * 总评论数
+   */
+  totalCommentCount: number;
+  /**
+   * 待审核评论数
+   */
+  pendingCommentCount: number,
+  /**
+   * 已驳回评论数
+   */
+  rejectionCommentCount: number,
+  /**
+   * 总下载量
+   */
+  totalDownloadCount: number;
+
+  /**
    * 按类别图书总量统计
    */
   bookCategoryTotalList?: BookCategoryTotal[];
   /**
-   * 首页数据统计 图书总量、用户数量、总下载量、资源总数、总评论数
-   * 图书总量
-   */
-  bookCount?: number;
-  /**
    * 按天统计发表图书统计
    */
-  bookPublishTotalByDayList?: BookPublishTotalByDay[];
+  bookPublishTotalByDayList: BookPublishTotal[];
   /**
    * 按月统计发表图书统计
    */
-  bookPublishTotalByMonthList?: BookPublishTotalByMonth[];
+  bookPublishTotalByMonthList: BookPublishTotal[];
+  bookPublishTotalByYearList: BookPublishTotal[];
   /**
-   * 资源总数
+   * 时间
    */
-  resourceCount?: number;
-  /**
-   * 总评论数
-   */
-  totalCommentCount?: number;
-  /**
-   * 总下载量
-   */
-  totalDownloadCount?: number;
-  /**
-   * 用户数量
-   */
-  userCount?: number;
+  requestTime: string;
 }
 
 /**
@@ -73,45 +91,29 @@ export interface BookCategoryTotal {
   /**
    * 发表图书总量
    */
-  bookCount?: number;
+  bookCount: number;
   /**
    * 分类id
    */
-  categoryId?: string;
+  categoryId: string;
   /**
    * 分类名称
    */
-  categoryName?: string;
+  categoryName: string;
 }
 
 /**
  * 首页统计数据
  *
- * BookPublishTotalByDay
+ * BookPublishTotal
  */
-export interface BookPublishTotalByDay {
+export interface BookPublishTotal {
   /**
    * 日期
    */
-  date?: string;
+  date: string;
   /**
    * 发表图书总量
    */
-  total?: number;
-}
-
-/**
- * 首页统计数据
- *
- * BookPublishTotalByMonth
- */
-export interface BookPublishTotalByMonth {
-  /**
-   * 日期
-   */
-  date?: string;
-  /**
-   * 发表图书总量
-   */
-  total?: number;
+  total: number;
 }

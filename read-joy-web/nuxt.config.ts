@@ -17,7 +17,9 @@ export default defineNuxtConfig({
     "@element-plus/nuxt",
     "@nuxt/image",
     "@formkit/auto-animate",
+    "nuxt-echarts",
   ],
+
   ssr: true,
   devtools: {
     enabled: false,
@@ -54,6 +56,9 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: "",
   },
+  build: {
+    transpile: [/echarts/],
+  },
   routeRules: {
     "/": {
       prerender: true,
@@ -67,7 +72,6 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
-
   // 实验性
   experimental: {
     // when using generate, payload js assets included in sw precache manifest
@@ -104,6 +108,9 @@ export default defineNuxtConfig({
         },
       },
     },
+  },
+  echarts: {
+
   },
   elementPlus: {
     icon: "ElIcon",

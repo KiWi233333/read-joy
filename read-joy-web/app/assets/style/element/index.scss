@@ -109,5 +109,59 @@
     "base-level-padding": 0.875rem,
     "level-padding": 0.875rem,
     "icon-width": 1.2rem
+  ),
+  
+  // 表格
+  $table:
+    (
+      // "border": 1px solid getCssVar("table-border-color"),
+      // "border-color": getCssVar("border-color-lighter"),
+      // "text-color": getCssVar("text-color-default"),
+      // "current-row-bg-color": getCssVar("color-primary-light-9"),
+      // "fixed-box-shadow": getCssVar("box-shadow", "light"),
+      // "header-text-color": #fff,
+      // "header-bg-color": var(--el-color-),
+      // "bg-color": transparent,
+      // "row-hover-bg-color":#7a7a7a18,
+      // "tr-bg-color": transparent,
+      "expanded-cell-bg-color": #c5c5c51e,
+      // "fixed-left-column": inset 4px 0 4px -4px rgb(0 0 0 / 15%),
+      // "fixed-right-column": inset -4px 0 4px -4px rgb(0 0 0 / 15%)
+    ),
+  $table-font-size: (
+    "large": getCssVar("font-size", "base"),
+    "default": 14px,
+    "small": 12px
+  ),
+
+  $table-padding: (
+    "large": 12px 0,
+    "default": 0 0,
+    "small": 4px 0
+  ),
+
+  $table-cell-padding: (
+    "large": 0 16px,
+    "default": 0 12px,
+    "small": 0 8px
+  ),
+  $pagination:  (
+    'font-size': 14px,
+    'bg-color': getCssVar('fill-color', 'blank'),
+    'text-color': getCssVar('text-color-primary'),
+    'border-radius': 4px,
+    'button-color': getCssVar('text-color-primary'),
+    'button-width': 1.8rem,
+    'button-height': 1.8rem,
+    'button-disabled-color': getCssVar('text-color-placeholder'),
+    'button-disabled-bg-color': getCssVar('fill-color', 'blank'),
+    'button-bg-color': getCssVar('fill-color'),
+    'hover-color': getCssVar('color-primary'),
+    'font-size-small': 12px,
+    'button-width-small': 1.5rem,
+    'button-height-small': 1.5rem,
+    'button-width-large': 2.6rem,
+    'button-height-large': 2.6rem,
+    'item-gap': 1rem,
   )
 );

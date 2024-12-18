@@ -1,150 +1,35 @@
 <script lang="ts" setup>
 import { useSettingStore } from "~/composables/sotre/useSettingStore";
+import { rawRoutes } from "~/composables/utils/useRoute";
+
 
 const route = useRoute();
-const router = useRouter();
 const setting = useSettingStore();
 const activeMenu = computed({
   get() {
     return route.path;
   },
   set(val: string) {
-    router.push(val);
+    navigateTo(val);
   },
 });
-
-export interface MenuItem {
-  path: string;
-  name: string;
-  meta: {
-    title: string;
-    icon: string;
-    onIcon: string;
-    url?: string;
-    first?: boolean;
-    [key: string]: any;
-  };
-  children?: MenuItem[];
-  [key: string]: any;
-}
-
-// @unocss-include
-const rawRoutes: MenuItem[] = [
-  {
-    path: "home",
-    name: "admin:index",
-    meta: {
-      title: "首页",
-      icon: "i-solar:home-2-outline",
-      onIcon: "i-solar:home-2-bold",
-      url: "/admin",
-      first: true,
-    },
-  },
-  /** ------------------ 用户管理 ---------------- */
-  {
-    path: "user",
-    name: "admin:user",
-    meta: {
-      url: "/admin/user",
-      title: "用户",
-      icon: "i-solar:user-broken",
-      onIcon: "i-solar:user-bold",
-    },
-  },
-  /** ------------------ 图书管理 ---------------- */
-  {
-    path: "book",
-    name: "admin:book",
-    meta: {
-      title: "图书",
-      icon: "i-solar:book-2-outline",
-      onIcon: "i-solar:book-2-bold-duotone",
-    },
-    children: [
-      {
-        path: "book",
-        name: "admin:book:index",
-        meta: {
-          url: "/admin/book",
-          title: "图书列表",
-          icon: "i-solar:book-bookmark-outline",
-          onIcon: "i-solar:book-bookmark-bold-duotone",
-        },
-      },
-      {
-        path: "category",
-        name: "admin:category",
-        meta: {
-          url: "/admin/book/category",
-          title: "分类列表",
-          icon: "i-solar:widget-2-broken",
-          onIcon: "i-solar:widget-2-bold-duotone",
-        },
-      },
-    ],
-  },
-  /** ------------------ 资源模块 ---------------- */
-  {
-    path: "resorce",
-    name: "admin:resorce",
-    meta: {
-      url: "/admin/resorce",
-      title: "资源",
-      icon: "i-solar:library-line-duotone",
-      onIcon: "i-solar:library-bold-duotone",
-    },
-  },
-  {
-    path: "comment",
-    name: "admin:comment",
-    meta: {
-      url: "/admin/comment",
-      title: "评论",
-      icon: "i-solar:chat-line-broken",
-      onIcon: "i-solar:chat-line-bold",
-    },
-  },
-  /** ------------------ 其他模块 ---------------- */
-  // {
-  //   path: "tools",
-  //   name: "admin:tools",
-  //   meta: {
-  //     title: "工具",
-  //     url: "/admin/tools",
-  //     icon: "i-solar:inbox-archive-linear",
-  //     onIcon: "i-solar:inbox-archive-bold-duotone",
-  //   },
-  //   children: [
-  //     {
-  //       path: "chat",
-  //       name: "admin:tools:chat",
-  //       meta: {
-  //         url: "/admin/tools/chat",
-  //         title: "聊天",
-  //         icon: "i-solar:chat-line-broken",
-  //         onIcon: "i-solar:chat-line-bold-duotone",
-  //       },
-  //     },
-  //   ],
-  // },
-];
 </script>
 
 <template>
-  <menu :class="{ 'w-0 -translate-x-full': setting.isMenuCollapse }" class="transition-200">
+  <menu
+    transition="all 300 cubic-bezier(0.61, 0.225, 0.195, 1.3)"
+    class="fixed left-0 top-0 z-1000 sm:sticky" :class="setting.isMenuCollapse ? 'max-w-0 truncate' : 'max-w-12rem' "
+  >
     <ClientOnly>
       <div
-        v-if="!setting.isMenuCollapse"
-        class="v-card fixed left-0 top-0 z-99 block h-100vh w-full opacity-80 backdrop-blur-20px sm:hidden"
+        v-show="!setting.isMenuCollapse"
+        class="fixed left-0 top-0 z-999 block h-100vh w-full opacity-80 backdrop-blur-20px sm:hidden"
         @click="setting.isMenuCollapse = true"
       />
       <div
-        transition="all 300  cubic-bezier(0.61, 0.225, 0.195, 1.3)"
-        class="group menu fixed z-999 h-full px-2 pb-2 md:sticky md:block border-default-r bg-color"
-        :class="{ 'w-0 truncate -translate-x-full': setting.isMenuCollapse }"
+        class="group menu sticky left-0 top-0 z-1000 h-full px-2 pb-2 transition-all md:block border-default-r bg-color"
       >
-        <el-scrollbar height="calc(100vh - 60px)" view-class="pb-10">
+        <el-scrollbar view-class="pb-10">
           <!-- 顶部 -->
           <div
             sticky top-0 z-2
@@ -193,17 +78,12 @@ const rawRoutes: MenuItem[] = [
 $rounded-default: 0.5rem;
 $el-base-level-padding: 10px;
 .menu {
-  // height: calc(100vh - $top-nav-height);
-  // top: $top-nav-height;
-  top: 0;
-  left: 0;
   height: 100vh;
   height: 100dvh;
   user-select: none;
   :deep(.el-scrollbar__thumb) {
     width: 0;
   }
-
   :deep(.el-menu) {
     background-color: transparent;
     &.menu-first {
@@ -223,7 +103,8 @@ $el-base-level-padding: 10px;
 
     // 菜单单项
     .el-menu-item,
-    .el-sub-menu__title {
+    .el-sub-menu_title {
+      .is-active,
       &.is-active {
         border: 1px solid var(--el-color-primary);
         box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.2) 0px 1px 2px;
@@ -233,7 +114,7 @@ $el-base-level-padding: 10px;
       height: 2.6rem;
       border-radius: $rounded-default;
       transition: 150ms;
-      &:hover {
+      &:not(.is-active):hover {
         color: var(--el-color-primary);
         border-color: var(--el-color-primary);
       }
@@ -262,13 +143,11 @@ $el-base-level-padding: 10px;
 }
 
 
-:deep(.el-menu){
-  .el-menu-item.is-active {
-    &,
-    &:hover{
-      color: #fff;
-      background-color: var(--el-color-primary);
-    }
+:deep(.el-menu-item.is-active){
+  &,
+  &:hover{
+    color: #fff;
+    background-color: var(--el-color-primary);
   }
 }
 </style>

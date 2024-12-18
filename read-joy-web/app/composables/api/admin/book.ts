@@ -324,16 +324,6 @@ export interface AdminResourceVO {
   url: string;
 }
 
-export enum BookSortOrder {
-  /**
-   * 降序
-   */
-  DESC = 1,
-  /**
-   * 升序
-   */
-  ASC = 2,
-}
 export enum AdminBookSortType {
   /**
    * 按发布时间

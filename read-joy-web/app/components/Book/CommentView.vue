@@ -123,6 +123,7 @@ const commentTimeRange = computed({
       :show-load="false"
       :show-more-text="false"
       :ssr="true"
+      :animated="false"
     >
       <template #header="{ pageInfo }">
         <div class="mb-4 flex-row-bt-c text-sm">

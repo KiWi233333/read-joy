@@ -81,7 +81,7 @@ function showSearch() {
                   登录
                 </button>
               </div>
-              <div class="btn-primary-circle block sm:hidden" @click="user.showLoginForm = true">
+              <div class="block sm:hidden btn-primary-circle" @click="user.showLoginForm = true">
                 <i class="i-solar:user-bold p-2" />
               </div>
             </template>

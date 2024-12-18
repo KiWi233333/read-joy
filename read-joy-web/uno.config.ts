@@ -11,7 +11,7 @@ import {
 
 export default defineConfig({
   shortcuts: [
-    ["card-default", "bg-[#ffffff] dark:bg-dark-7 rounded-2"],
+    ["card-default", "bg-[#ffffff] dark:bg-#171717 rounded-2"],
     ["card-rounded-df", "rounded-2"],
     ["card-default-sm", "bg-[#ffffff] dark:bg-dark-7 rounded-1"],
     ["card-default-br", "bg-(light-4 op-60) dark:(bg-dark-5 bg-op-60) rounded-1.5 backdrop-blur-12px backdrop-saturate-180"],
@@ -22,7 +22,7 @@ export default defineConfig({
     ["text-mini", "text-dark-50 dark:text-[#979898] text-xs"],
     ["text-color-primary", "text-[var(--el-color-primary)]"],
     ["text-small-color", "text-dark-50 dark:text-[#979898]"],
-    ["bg-color-layout", "bg-[#f4f5f7] dark:bg-[#141414]"],
+    ["bg-color-layout", "bg-[#f7fafc] dark:bg-[#121212]"],
     ["bg-color", "bg-white dark:bg-dark-7"],
     ["bg-color-br", "bg-[#ffffff93] dark:(bg-dark-5 bg-op-60) backdrop-blur-6px"],
     ["bg-menu-color", "bg-white  dark:bg-dark-8"], // 控件菜单背景色

@@ -16,20 +16,20 @@ function showSearch() {
 const MenuTitleMap: Record<any, string> = {
   "/admin": "首页",
   "/admin/book": "图书管理",
+  "/admin/book/category": "分类管理",
   "/admin/resource": "资源管理",
-  "/admin/category": "分类管理",
   "/admin/comment": "评论管理",
   "/admin/user": "用户管理",
-  "/admin/login": "登录",
+  "/admin/tool/chat": "聊天",
 };
 </script>
 
 <template>
-  <header class="h-15 flex-row-bt-c px-2 -mt-1px border-default-b !rounded-0 card-default sm:px-4">
+  <header class="h-15 flex-row-bt-c shrink-0 px-2 -mt-1px border-default-b dark:border-color-[#1e1e1e] !rounded-0 card-default sm:px-4">
     <!-- 面包 -->
     <div class="flex items-center">
       <i
-        class="mr-2 p-2 btn-primary"
+        class="mr-4 p-2 btn-primary"
         :title="setting.isMenuCollapse ? '展开菜单' : '收起菜单'"
         :class="setting.isMenuCollapse ? 'i-solar:list-down-minimalistic-linear' : 'i-solar:sidebar-minimalistic-outline'"
         @click="setting.isMenuCollapse = !setting.isMenuCollapse"

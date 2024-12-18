@@ -19,8 +19,8 @@ const formData = new FormData();
  * 上传之前验证类型
  */
 const beforeUpload: UploadProps["beforeUpload"] = (rawFile) => {
-  if (rawFile.size / 1024 / 1024 > 2) {
-    ElMessage.error("头像需要小于2MB!");
+  if (rawFile.size / 1024 / 1024 > 5) {
+    ElMessage.error("头像需要小于5MB!");
     return false;
   }
   // check success
@@ -145,7 +145,6 @@ watch(editFiled, (val) => {
           size="1.5rem"
         />
       </el-upload>
-
       <h4 mt-3 truncate pb-3 text-center text-1rem font-500 border-default-b>
         {{ user.userInfo.loginName || "未填写" }}
       </h4>

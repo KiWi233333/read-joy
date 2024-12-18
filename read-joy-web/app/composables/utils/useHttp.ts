@@ -38,8 +38,16 @@ export function httpRequest<T = unknown>(
       if (data.code === ResultStatus.TOKEN_ERR || data.code === ResultStatus.TOKEN_EXPIRED_ERR || data.code === ResultStatus.TOKEN_DEVICE_ERR) {
         ElMessage.closeAll();
         // 登录失效，清除用户信息，跳转登录页
-        user.clearUserStore();
-        user.showLoginForm = true;
+        console.log(useRoute().path);
+
+        if (/^\/admin\//.test(useRoute().path)) { // 管理员
+          navigateTo("/admin/login");
+          return;
+        }
+        else { // 前台
+          user.clearUserStore();
+          user.showLoginForm = true;
+        }
         return;
       }
       else if (data.code === ResultStatus.STATUS_OFF_ERR) {

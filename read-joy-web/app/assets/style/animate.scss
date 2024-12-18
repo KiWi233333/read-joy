@@ -347,6 +347,24 @@ html.stop-transition-all {
   z-index: -1;
 }
 
+// 左右滑动动画
+.fade-lr-move,
+.fade-lr-enter-active,
+.fade-lr-leave-active {
+  transition: 0.2s ease-in-out;
+}
+
+.fade-lr-enter-from,
+.fade-lr-leave-to {
+  opacity: 0;
+  filter: blur(2%);
+  transform: translateX(20px);
+  z-index: 1;
+}
+
+.fade-lr-leave-active {
+  z-index: -1;
+}
 // fade动画
 .fade-lr-list-move,
 .fade-lr-list-enter-active,

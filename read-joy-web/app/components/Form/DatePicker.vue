@@ -58,7 +58,10 @@ const value = computed <DateRange | undefined> ({
       };
     }
     else {
-      return undefined;
+      return {
+        start: undefined,
+        end: undefined,
+      };
     }
   },
   set(newValue) {

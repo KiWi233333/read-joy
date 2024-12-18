@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 const { text, pretext, icon } = defineProps<{
-  text: string | number
+  text?: string | number | boolean
   pretext?: string
   icon?: string
 }>();
 </script>
 
 <template>
-  <small class="cursor-pointer transition-300 hover:text-[var(--el-color-info)]">
+  <span class="cursor-pointer transition-300 hover:text-[var(--el-color-info)]">
     <div inline>
       {{ pretext }}
     </div>
@@ -22,7 +22,7 @@ const { text, pretext, icon } = defineProps<{
       class="ml-1 p-0.5em opacity-60"
       :class="icon"
     />
-  </small>
+  </span>
 </template>
 
 <style scoped lang="scss"></style>

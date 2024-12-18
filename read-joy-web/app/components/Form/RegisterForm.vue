@@ -158,7 +158,7 @@ async function onRegisterHandle() {
         duration: 3000,
       });
       // 登录
-      let count = 3;
+      let count = 2;
       const timers = setInterval(() => {
         isLoading.value = true;
         loadingText.value = `${count}s后自动登录...`;

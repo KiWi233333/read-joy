@@ -18,6 +18,7 @@ useHead({
 const unMountedInit = useInit();
 onBeforeUnmount(unMountedInit);
 
+// 初始化
 onMounted(() => {
   store.init();
 });
