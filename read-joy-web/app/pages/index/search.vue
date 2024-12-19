@@ -244,6 +244,7 @@ onMounted(() => {
                     class="ml-2 bg-color"
                     style="width: 9rem;box-shadow: none;border: none; border-radius: 10px;"
                     placeholder="图书分类"
+                    fit-input-width
                     filterable
                     @change="onSearch"
                   >

@@ -69,6 +69,17 @@ export const rawRoutes: MenuItem[] = [
       },
     ],
   },
+  /** ------------------ 评论模块 ---------------- */
+  {
+    path: "comment",
+    name: "admin:comment",
+    meta: {
+      url: "/admin/comment",
+      title: "评论",
+      icon: "i-solar:chat-line-broken",
+      onIcon: "i-solar:chat-line-bold",
+    },
+  },
   /** ------------------ 资源模块 ---------------- */
   {
     path: "resource",
@@ -78,16 +89,6 @@ export const rawRoutes: MenuItem[] = [
       title: "资源",
       icon: "i-solar:library-line-duotone",
       onIcon: "i-solar:library-bold-duotone",
-    },
-  },
-  {
-    path: "comment",
-    name: "admin:comment",
-    meta: {
-      url: "/admin/comment",
-      title: "评论",
-      icon: "i-solar:chat-line-broken",
-      onIcon: "i-solar:chat-line-bold",
     },
   },
   /** ------------------ 其他模块 ---------------- */

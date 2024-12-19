@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { UploadInstance, UploadProps, UploadRawFile, UploadUserFile } from "element-plus";
+import type { UploadFile, UploadFiles, UploadInstance, UploadProps, UploadRawFile, UploadUserFile } from "element-plus";
 import type { IPage } from "~/composables/api/types";
 import { ElCollapseItem } from "#components";
 
@@ -12,6 +12,7 @@ import { BaseUrlImg } from "~/composables/utils/useBaseUrl";
 import { compareObjects, DATE_FORMAT, DATE_SELECTOR_OPTIONS, FILE_TYPE_ICON_DEFAULT, FILE_TYPE_ICON_MAP, formatFileSize, randomISBN } from "~/composables/utils/useUtils";
 import { appName } from "~/constants";
 
+const MAX_FILE_SIZE_MB = 12;
 const store = useAdminDefaultStore();
 const admin = useAdminStore();
 useSeoMeta({
@@ -32,6 +33,7 @@ const size = ref<number>(10);
 // 数据
 const updateTime = ref<string>();
 const formRef = ref();
+const tableRef = ref<any>();
 
 // 功能 （展开）
 const isEdit = ref<boolean>(false); // 是否编辑
@@ -329,19 +331,26 @@ function onBeforeCloseDialog(done: () => void, doneBack?: () => any, cancelBack?
 const uploadRef = ref();
 // 文件上传
 const beforeUpload: UploadProps["beforeUpload"] = (rawFile) => {
-  if (rawFile.size / 1024 / 1024 > 12) {
-    ElMessage.error("图片大小不能超过12M");
+  if (rawFile.size / 1024 / 1024 > MAX_FILE_SIZE_MB) {
+    ElMessage.error(`图片大小不能超过${formatFileSize(MAX_FILE_SIZE_MB * 1024 * 1024)}！`);
     return false;
   }
   form.value.coverImage = rawFile; // 赋值文件
   return true;
 };
-
 const handleExceed: UploadProps["onExceed"] = (files) => {
   uploadRef.value!.clearFiles();
   const file = files[0] as UploadRawFile;
   uploadRef.value!.handleStart(file);
 };
+function handleUploadChange(file: UploadFile, fileList: UploadFiles) {
+  if (file.raw && !beforeUpload(file.raw)) {
+    coverList.value = [];
+    return;
+  }
+  // 处理文件
+  form.value.coverImage = file.raw;
+}
 // 清除表单
 function clearForm(call?: () => void) {
   form.value = {
@@ -485,6 +494,7 @@ function resetSearchOption() {
     sortOrder: undefined,
     startDate: undefined,
   };
+  tableRef.value?.clearSort?.();
   loadData();
 }
 </script>
@@ -538,6 +548,7 @@ function resetSearchOption() {
             style="width: 9rem;box-shadow: none;border: none; border-radius: 10px;"
             placeholder="图书分类"
             filterable
+            fit-input-width
             @change="loadData"
           >
             <el-option v-for="item in store.categoryList" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId">
@@ -577,6 +588,7 @@ function resetSearchOption() {
       <template #default>
         <div class="overflow-hidden border-default card-default">
           <el-table
+            ref="tableRef"
             v-loading="isLoading"
             :disabled="isEdit"
             class-name="w-full"
@@ -842,6 +854,7 @@ function resetSearchOption() {
                 list-type="picture-card"
                 class="h-11rem w-8rem flex-row-c-c card-default"
                 :on-exceed="handleExceed"
+                @change="handleUploadChange"
               >
                 <CardElImage
                   v-if="coverList.length"
@@ -861,10 +874,10 @@ function resetSearchOption() {
               </el-upload>
             </el-form-item>
             <el-form-item label="ISBN" prop="isbn">
-              <el-input v-model.trim="form.isbn" :disabled="isEdit" placeholder="请输入ISBN">
+              <el-input v-model.trim="form.isbn" placeholder="请输入ISBN">
                 <template #suffix>
                   <span
-                    v-if="isAdd"
+                    v-if="isAdd || isEdit"
                     class="select-none text-sm text-info btn-info"
                     @click.stop="() => {
                       form.isbn = randomISBN();
@@ -964,8 +977,11 @@ function resetSearchOption() {
 </template>
 
 <style scoped lang="scss">
-.btns:hover .btns-hover {
-  width: 2.8em;
+// .btns:hover .btns-hover {
+//   width: 2.8em;
+// }
+.btns-hover {
+  width: auto;
 }
 :deep(.el-dialog__body) {
   padding-top: 10px;

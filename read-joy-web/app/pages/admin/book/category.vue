@@ -31,6 +31,7 @@ const size = ref<number>(10);
 // 数据
 const updateTime = ref<string>();
 const formRef = ref();
+const tableRef = ref();
 
 // 功能 （展开）
 const isEdit = ref<boolean>(false); // 是否编辑
@@ -334,6 +335,7 @@ function resetSearchOption() {
     size: 10,
     keyword: undefined,
   };
+  tableRef.value?.clearSort?.();
   loadData();
 }
 </script>
@@ -400,6 +402,7 @@ function resetSearchOption() {
       <template #default>
         <div class="overflow-hidden border-default card-default">
           <el-table
+            ref="tableRef"
             v-loading="isLoading"
             :header-cell-style="{
               padding: '1rem 0',
@@ -464,7 +467,7 @@ function resetSearchOption() {
             <el-table-column
               fixed="right"
               label="操作"
-              width="200%"
+              width="300%"
             >
               <template #default="{ row }">
                 <div class="flex opacity-0 transition-200 group-hover:opacity-100">
@@ -587,8 +590,11 @@ function resetSearchOption() {
 </template>
 
 <style scoped lang="scss">
-.btns:hover .btns-hover {
-  width: 2.8em;
+// .btns:hover .btns-hover {
+//   width: 2.8em;
+// }
+.btns-hover {
+  width: auto;
 }
 :deep(.el-dialog__body) {
   padding-top: 10px;

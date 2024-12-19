@@ -7,11 +7,9 @@ import { type AdminCommentVO, type AdminSelectCommentPageDTO, useAdminBatchDelet
 import { CommentStatusEnum } from "~/composables/api/comment";
 import { BoolEnum, DefaultOrderSort, ResultStatus } from "~/composables/api/types/result";
 import { useAdminStore } from "~/composables/sotre/useAdminStore";
-import { useSettingStore } from "~/composables/sotre/useSettingStore";
-import { compareObjects, DATE_FORMAT, DATE_SELECTOR_OPTIONS, DATE_TIME_FORMAT, randomISBN } from "~/composables/utils/useUtils";
+import { DATE_SELECTOR_OPTIONS, DATE_TIME_FORMAT, randomISBN } from "~/composables/utils/useUtils";
 import { appName } from "~/constants";
 
-const setting = useSettingStore();
 
 const admin = useAdminStore();
 useSeoMeta({
@@ -32,6 +30,7 @@ const size = ref<number>(10);
 // 数据
 const updateTime = ref<string>();
 const formRef = ref();
+const tableRef = ref();
 
 // 功能 （展开）
 const isEdit = ref<boolean>(false); // 是否编辑
@@ -303,6 +302,7 @@ function resetSearchOption() {
     size: 10,
     keyword: undefined,
   };
+  tableRef.value?.clearSort?.();
   loadData();
 }
 const searchFiledSize = "default";
@@ -421,6 +421,7 @@ const searchFiledSize = "default";
       <template #default>
         <div class="overflow-hidden border-default card-default">
           <el-table
+            ref="tableRef"
             v-loading="isLoading"
             :header-cell-style="{
               padding: '1rem 0',
@@ -534,7 +535,7 @@ const searchFiledSize = "default";
                 >
                   已删除
                 </el-tag>
-                <span v-else>正常</span>
+                <span v-else>否</span>
               </template>
             </el-table-column>
             <!-- 审核状态 -->
@@ -575,7 +576,7 @@ const searchFiledSize = "default";
                   </BtnElButton>
                   <!-- 驳回评论 -->
                   <BtnElButton
-                    v-if="row.commentStatus === CommentStatusEnum.PENDING"
+                    v-if="row.commentStatus === CommentStatusEnum.PENDING || row.commentStatus === CommentStatusEnum.APPROVED"
                     type="warning"
                     plain
                     style="padding: 0rem 0.6rem"
@@ -591,6 +592,7 @@ const searchFiledSize = "default";
 
                   <!-- 删除评论 -->
                   <BtnElButton
+                    v-if="row.isDeleted === BoolEnum.FALSE"
                     type="danger"
                     :plain="false"
                     style="padding: 0rem 0.6rem"
@@ -636,8 +638,11 @@ const searchFiledSize = "default";
 </template>
 
 <style scoped lang="scss">
-.btns:hover .btns-hover {
-  width: 2.8em;
+// .btns:hover .btns-hover {
+//   width: 2.8em;
+// }
+.btns-hover {
+  width: auto;
 }
 :deep(.el-dialog__body) {
   padding-top: 10px;

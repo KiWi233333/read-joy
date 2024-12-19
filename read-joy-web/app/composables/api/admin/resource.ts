@@ -122,12 +122,29 @@ export interface AdminSelectResourcePageDTO {
   /**
    * 排序方式 1-按发布时间 2-按下载量 3-按点赞
    */
-  sortType?: number;
+  sortType?: AdminResourceSortType;
   /**
    * 开始时间(精度：天)
    */
   startDate?: string;
 }
+
+// 排序方式 1-按发布时间 2-按下载量 3-按点赞
+export enum AdminResourceSortType {
+  /**
+   * 按发布时间
+   */
+  CREATE_TIME = 1,
+  /**
+   * 按下载量
+   */
+  DOWNLOAD_COUNT = 2,
+  /**
+   * 按点赞
+   */
+  LIKE_COUNT = 3,
+}
+
 /**
  * 资源VO对象
  *
