@@ -27,10 +27,11 @@ function downloadResource(resource: ResourceVO) {
     user.toLogin(); // 登录后再下载
     return;
   }
-  ElMessage.success("正在下载中，请稍后查看");
+  ElMessage.warning("正在下载中，请稍后查看");
   downloadFile(BaseUrlFile + resource.url, resource.title, {
     Authorization: user.getToken,
   }, () => {
+    ElMessage.closeAll("warning");
     ElMessage.success("下载完成！");
   });
 }
@@ -131,16 +132,6 @@ async function likeResource(item: ResourceVO) {
       </div>
     </section>
     <div class="main-content relative">
-      <!-- <ClientOnly>
-        <template #fallback>
-          <div class="w-full">
-            <div class="mt-4 h-4rem w-full rounded-2 border-default-hover" />
-            <div class="mt-4 h-20rem w-full rounded-2 border-default-hover" />
-          </div>
-          <div class="w-full">
-            <div class="mt-4 h-40rem w-full rounded-2 border-default-hover" />
-          </div>
-        </template> -->
       <el-tabs
         v-model="activeName"
         class="mt-4"
@@ -213,11 +204,11 @@ async function likeResource(item: ResourceVO) {
         <ListBookList
           v-if="store.theBookDetail?.categoryId"
           :show-load="true"
-          books-class="relative grid cols-3 gap-6 sm:gap-8"
+          books-class="relative grid cols-3 sm:cols-2 gap-6 sm:gap-8"
           :book-node="CardBookInfoSe"
           immediate
           auto-stop
-          :limit="9"
+          :limit="8"
           :ssr="true"
           :dto="{
             categoryId: store.theBookDetail.categoryId,
@@ -238,7 +229,7 @@ async function likeResource(item: ResourceVO) {
 
 <style lang="scss" scoped>
 .main-content {
-  --at-apply: "grid cols-1 gap-4 py-4 md:cols-[3fr_2fr] sm:gap-10";
+  --at-apply: "grid cols-1 gap-4 py-4 md:cols-[5fr_2fr] sm:gap-10";
 }
 :deep(.el-tabs) {
   .el-tabs__nav-wrap::after,

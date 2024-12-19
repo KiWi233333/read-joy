@@ -1,13 +1,10 @@
 
 <script setup lang="ts">
-const ignoreRoute: Record<string, boolean> = {
-  // "index-book-bid": true,
-};
 </script>
 
 <template>
   <el-scrollbar wrap-class="main-scrollbar-warp relative" height="100vh">
-    <MenuHeader v-if="!ignoreRoute[$route.name]" />
+    <MenuHeader />
     <div class="pt-4rem layout-default">
       <slot />
     </div>

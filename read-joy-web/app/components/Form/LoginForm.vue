@@ -163,13 +163,6 @@ async function onLogin(formEl: any | undefined) {
         >
           立即注册
         </span>
-        <span
-          flex-1
-          class="transition-all btn-info"
-          @click="loginType = loginType === LoginType.ADMIN ? LoginType.USER : LoginType.ADMIN"
-        >
-          {{ loginType === LoginType.ADMIN ? "管理员" : "用户" }}
-        </span>
       </p>
       <!-- 密码登录 -->
       <el-form-item

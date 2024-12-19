@@ -21,23 +21,18 @@ function toggleFn(e: MouseEvent) {
     circle
     @click="toggleFn"
   >
-    <ClientOnly>
-      <template #fallback>
-        <div class="h-5 w-5" />
-      </template>
-      <img
-        v-if="$colorMode.value === 'light'"
-        class="h-5 w-5"
-        src="/images/icon/sun.svg"
-        alt="sun 日间模式"
-      >
-      <img
-        v-else
-        src="/images/icon/moon.svg"
-        class="h-5 w-5 fill-light-5"
-        alt="sun 日间模式"
-      >
-    </ClientOnly>
+    <img
+      v-if="$colorMode.value === 'light'"
+      class="h-5 w-5"
+      src="/images/icon/sun.svg"
+      alt="sun 日间模式"
+    >
+    <img
+      v-else
+      src="/images/icon/moon.svg"
+      class="h-5 w-5 fill-light-5"
+      alt="sun 日间模式"
+    >
   </ElButton>
 </template>
 
