@@ -405,13 +405,12 @@ function resetSearchOption() {
               padding: '1rem 0',
               fontSize: '1em',
             }"
-            row-class-name="group h-4.2rem"
+            row-class-name="group h-4.16rem"
             :disabled="isEdit"
             class-name="w-full"
             :data="pageInfo.records"
             stripe
             select-on-indeterminate
-            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
             empty-text="暂无数据"
             row-key="id"
             height="75vh"
@@ -454,6 +453,7 @@ function resetSearchOption() {
               column-key="bookCount"
               prop="bookCount"
               label="图书数量"
+              sortable
               align="center"
             >
               <template #default="{ row }">
@@ -468,6 +468,19 @@ function resetSearchOption() {
             >
               <template #default="{ row }">
                 <div class="flex opacity-0 transition-200 group-hover:opacity-100">
+                  <!-- 图书列表 -->
+                  <BtnElButton
+                    :plain="false"
+                    style="padding: 0rem 0.6rem"
+                    class="btns"
+                    @click.stop="navigateTo(`/admin/book?categoryId=${row.categoryId}`)"
+                  >
+                    <i
+                      i-solar:book-line-duotone
+                      p-2
+                    />
+                    <span w-0 overflow-hidden transition-200 transition-all class="btns-hover">&nbsp;图书</span>
+                  </BtnElButton>
                   <!-- 编辑 -->
                   <BtnElButton
                     :plain="false"

@@ -9,7 +9,7 @@ import { useHttp } from "../../utils/useHttp";
  * @param token 用户token
  * @returns 分页
  */
-export function useAdminCommentPageByDTOApi(dto: AdminSelectCommentListDTO, token: string) {
+export function useAdminCommentPageByDTOApi(dto: AdminSelectCommentPageDTO, token: string) {
   return useHttp.get<Result<IPage<AdminCommentVO>>>(
     "/admin/comment/page",
     {
@@ -28,7 +28,7 @@ export function useAdminCommentPageByDTOApi(dto: AdminSelectCommentListDTO, toke
  * @param token 用户token
  * @returns 是否成功
  */
-export function useAdminUpdateCommentApi(commentId: number, status: CommentStatusEnum, token: string) {
+export function useAdminUpdateCommentStatusApi(commentId: number, status: CommentStatusEnum, token: string) {
   return useHttp.put<Result<number>>(
     `/admin/comment/${commentId}/${status}`,
     {},
@@ -47,6 +47,7 @@ export function useAdminUpdateCommentApi(commentId: number, status: CommentStatu
 export function useAdminDeleteCommentApi(commentId: number, token: string) {
   return useHttp.deleted<Result<number>>(
     `/admin/comment/${commentId}`,
+    {},
     {
       headers: { Authorization: token },
     },
@@ -72,7 +73,7 @@ export function useAdminBatchDeleteCommentApi(ids: number[], token: string) {
   );
 }
 
-export interface AdminSelectCommentListDTO {
+export interface AdminSelectCommentPageDTO {
   /**
    * 页码
    */
@@ -128,6 +129,7 @@ export interface AdminCommentVO {
    * 书籍ID
    */
   bookId: number;
+  bookTitle?: string;
   /**
    * 评论者ID
    */

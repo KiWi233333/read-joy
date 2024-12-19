@@ -1,14 +1,15 @@
 <script lang="ts" setup>
 import type { UploadInstance, UploadProps, UploadRawFile, UploadUserFile } from "element-plus";
 import type { IPage } from "~/composables/api/types";
-import { useDateFormat } from "@vueuse/core";
+import { ElCollapseItem } from "#components";
 
+import { useDateFormat } from "@vueuse/core";
 import { type AdminBookDetailVO, AdminBookSortType, type AdminBookVO, type AdminSelectBookPageDTO, type InsertBookDTO, type UpdateBookDTO, useAdminAddBookApi, useAdminBatchDeleteBookApi, useAdminBookDetailApi, useAdminBookPageByDTOApi, useAdminDeleteBookApi, useAdminUpdateBookApi } from "~/composables/api/admin/book";
 import { DefaultOrderSort, ResultStatus } from "~/composables/api/types/result";
 import { useAdminDefaultStore } from "~/composables/sotre/useAdminDefaultStore";
 import { useAdminStore } from "~/composables/sotre/useAdminStore";
 import { BaseUrlImg } from "~/composables/utils/useBaseUrl";
-import { compareObjects, DATE_FORMAT, DATE_SELECTOR_OPTIONS, randomISBN } from "~/composables/utils/useUtils";
+import { compareObjects, DATE_FORMAT, DATE_SELECTOR_OPTIONS, FILE_TYPE_ICON_DEFAULT, FILE_TYPE_ICON_MAP, formatFileSize, randomISBN } from "~/composables/utils/useUtils";
 import { appName } from "~/constants";
 
 const store = useAdminDefaultStore();
@@ -99,13 +100,13 @@ const formRules = computed<any>(() => ({
     { max: 1000, message: "书籍介绍长度不超过1000字", trigger: "blur" },
   ],
 }));
-
+const route = useRoute();
 // 查询参数
 const isShowSearch = ref<boolean>(true);
 const searchDTO = ref<AdminSelectBookPageDTO>({
   page: 1,
   size: 10,
-  categoryId: undefined,
+  categoryId: route.query?.categoryId ? +route?.query?.categoryId?.toString() : undefined,
   endDate: undefined,
   startDate: undefined,
   keyword: undefined,
@@ -116,6 +117,8 @@ const searchDTO = ref<AdminSelectBookPageDTO>({
 const isUpdate = computed(() => {
   return Object.keys(compareObjects(theRowInfo.value, form.value as AdminBookVO)).length > 0;
 });
+// 折叠面板
+const collapseActionList = ref([]);
 
 /**
  * 加载数据
@@ -579,7 +582,6 @@ function resetSearchOption() {
             class-name="w-full"
             :data="pageInfo.records"
             stripe
-            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
             empty-text="暂无数据"
             :header-cell-style="{
               padding: '1rem 0',
@@ -603,7 +605,7 @@ function resetSearchOption() {
             <el-table-column
               label="图书ID"
               property="bookId"
-              width="80%"
+              width="100%"
               column-key="bookId"
             >
               <template #default="{ row }">
@@ -614,7 +616,7 @@ function resetSearchOption() {
             <el-table-column
               label="ISBN"
               property="isbn"
-              min-width="120%"
+              width="160px"
               column-key="isbn"
             >
               <template #default="{ row }">
@@ -653,6 +655,7 @@ function resetSearchOption() {
               column-key="title"
               prop="title"
               show-overflow-tooltip
+              min-width="180%"
               label="图书名"
             >
               <template #default="{ row }">
@@ -676,6 +679,7 @@ function resetSearchOption() {
               prop="author"
               show-overflow-tooltip
               label="作者"
+              min-width="180%"
               align="center"
             >
               <template #default="{ row }">
@@ -821,89 +825,127 @@ function resetSearchOption() {
           class="px-4 pt-4"
           hide-required-asterisk
         >
-          <el-form-item label="封面" prop="coverImage">
-            <el-upload
-              ref="uploadRef"
-              v-model:file-list="coverList"
-              action="#"
-              name="coverImage"
-              :limit="1"
-              accept="image/*"
-              drag
-              :multiple="false"
-              :auto-upload="false"
-              :show-file-list="false"
-              :before-upload="beforeUpload"
-              list-type="picture-card"
-              class="h-11rem w-8rem flex-row-c-c card-default"
-              :on-exceed="handleExceed"
-            >
-              <CardElImage
-                v-if="coverList.length"
-                :src="coverList?.[0]?.url"
-                class="h-full w-full card-default"
+          <el-collapse v-model="collapseActionList">
+            <el-form-item label="封面" prop="coverImage" class="mt-4">
+              <el-upload
+                ref="uploadRef"
+                v-model:file-list="coverList"
+                action="#"
+                name="coverImage"
+                :limit="1"
+                accept="image/*"
+                drag
+                :multiple="false"
+                :auto-upload="false"
+                :show-file-list="false"
+                :before-upload="beforeUpload"
+                list-type="picture-card"
+                class="h-11rem w-8rem flex-row-c-c card-default"
+                :on-exceed="handleExceed"
               >
-                <template #error>
-                  <div h-full w-full flex-row-c-c text-lg>
-                    加载失败
-                  </div>
-                </template>
-              </CardElImage>
-              <ElIconPlus
-                v-else
-                size="2rem"
-              />
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="ISBN" prop="isbn">
-            <el-input v-model.trim="form.isbn" :disabled="isEdit" placeholder="请输入ISBN">
-              <template #suffix>
-                <span
-                  v-if="isAdd"
-                  class="select-none text-sm text-info btn-info"
-                  @click.stop="() => {
-                    form.isbn = randomISBN();
-                  }"
+                <CardElImage
+                  v-if="coverList.length"
+                  :src="coverList?.[0]?.url"
+                  class="h-full w-full card-default"
                 >
-                  生成
-                </span>
-              </template>
-            </el-input>
-          </el-form-item>
-          <el-form-item label="书名" prop="title">
-            <el-input v-model.trim="form.title" placeholder="请输入书名" />
-          </el-form-item>
-          <el-form-item label="分类ID" prop="categoryId">
-            <el-select
-              v-model="form.categoryId"
-              placeholder="请选择图书分类"
-              filterable
-            >
-              <el-option v-for="item in store.categoryList" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId">
-                <span>{{ item.categoryName }}</span>
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="作者" prop="author">
-            <el-input v-model.trim="form.author" placeholder="请输入作者" />
-          </el-form-item>
-          <el-form-item label="价格" prop="price">
-            <el-input v-model.number="form.price" type="number" step="0.01" :min="0" placeholder="请输入价格" />
-          </el-form-item>
-          <el-form-item label="出版社" prop="publisher">
-            <el-input v-model.trim="form.publisher" placeholder="请输入出版社名称" />
-          </el-form-item>
-          <el-form-item label="出版日期" prop="publishionDate">
-            <el-date-picker v-model="form.publishionDate" :clearable="false" type="date" style="width: 100%;" :format="DATE_FORMAT" placeholder="选择出版日期" />
-          </el-form-item>
-          <el-form-item label="书籍介绍" prop="introduction">
-            <el-input
-              v-model.trim="form.introduction"
-              type="textarea"
-              placeholder="请输入书籍介绍"
-              :rows="5"
-            />
-          </el-form-item>
+                  <template #error>
+                    <div h-full w-full flex-row-c-c text-lg>
+                      加载失败
+                    </div>
+                  </template>
+                </CardElImage>
+                <ElIconPlus
+                  v-else
+                  size="2rem"
+                />
+              </el-upload>
+            </el-form-item>
+            <el-form-item label="ISBN" prop="isbn">
+              <el-input v-model.trim="form.isbn" :disabled="isEdit" placeholder="请输入ISBN">
+                <template #suffix>
+                  <span
+                    v-if="isAdd"
+                    class="select-none text-sm text-info btn-info"
+                    @click.stop="() => {
+                      form.isbn = randomISBN();
+                    }"
+                  >
+                    生成
+                  </span>
+                </template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="书名" prop="title">
+              <el-input v-model.trim="form.title" placeholder="请输入书名" />
+            </el-form-item>
+            <el-form-item label="分类ID" prop="categoryId">
+              <el-select
+                v-model="form.categoryId"
+                placeholder="请选择图书分类"
+                filterable
+              >
+                <el-option v-for="item in store.categoryList" :key="item.categoryId" :label="item.categoryName" :value="item.categoryId">
+                  <span>{{ item.categoryName }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="作者" prop="author">
+              <el-input v-model.trim="form.author" placeholder="请输入作者" />
+            </el-form-item>
+            <el-form-item label="价格" prop="price">
+              <el-input v-model.number="form.price" type="number" step="0.01" :min="0" placeholder="请输入价格" />
+            </el-form-item>
+            <component :is="!isAdd ? ElCollapseItem : 'div'" title="更多信息" name="more">
+              <el-form-item label="出版社" prop="publisher">
+                <el-input v-model.trim="form.publisher" placeholder="请输入出版社名称" />
+              </el-form-item>
+              <el-form-item label="出版日期" prop="publishionDate">
+                <el-date-picker v-model="form.publishionDate" :clearable="false" type="date" style="width: 100%;" :format="DATE_FORMAT" placeholder="选择出版日期" />
+              </el-form-item>
+              <el-form-item label="书籍介绍" prop="introduction">
+                <el-input
+                  v-model.trim="form.introduction"
+                  type="textarea"
+                  placeholder="请输入书籍介绍"
+                  :rows="5"
+                />
+              </el-form-item>
+            </component>
+            <component :is="!isAdd ? ElCollapseItem : 'div'" title="资源列表" name="resourceList">
+              <el-form-item v-if="!isEdit && !isAdd" label="资源列表" prop="resourceList">
+                <ul class="flex flex-col gap-2">
+                  <li
+                    v-for="item in form?.resourceList"
+                    :key="item.resourceId"
+                    :title="`${item.title}- 点击下载`"
+                    class="flex cursor-pointer items-center card-rounded-df p-2 border-hover-primary card-default sm:p-3"
+                  >
+                    <CardElImage
+                      class="mr-2 h-6 w-6"
+                      :src="FILE_TYPE_ICON_MAP[item.type] || FILE_TYPE_ICON_DEFAULT"
+                    >
+                      <template #error>
+                        <small class="h-full w-full flex flex-row items-center justify-center">
+                          暂无图片
+                        </small>
+                      </template>
+                    </CardElImage>
+                    <div class="w-full truncate text-sm">
+                      {{ item.title?.replace(/(.{16}).*(.{5})/, '$1...$2') }}
+                      <div mt-1 truncate text-mini>
+                        大小：{{ formatFileSize(item.size || 0) }}
+                        下载：{{ item.downloadCount }}
+                        点赞：{{ item.likeCount }}
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <div v-if="form.resourceList?.length === 0" text-center text-small>
+                  暂无资源
+                </div>
+              </el-form-item>
+            </component>
+          </el-collapse>
         </el-form>
       </div>
       <template #footer>

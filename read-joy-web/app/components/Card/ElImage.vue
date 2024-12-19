@@ -18,7 +18,6 @@ const url = computed(() => defaultSrc ? `${BaseUrlImg}${defaultSrc}` : (src || "
     :src="url"
     fit="cover"
     hide-on-click-modal
-    loading="lazy"
     v-bind="$attrs"
   >
     <template #placeholder>

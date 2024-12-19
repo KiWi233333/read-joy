@@ -91,28 +91,28 @@ export const rawRoutes: MenuItem[] = [
     },
   },
   /** ------------------ 其他模块 ---------------- */
-  {
-    path: "tool",
-    name: "admin:tool",
-    meta: {
-      title: "工具",
-      url: "/admin/tool",
-      icon: "i-solar:inbox-archive-linear",
-      onIcon: "i-solar:inbox-archive-bold-duotone",
-    },
-    children: [
-      {
-        path: "chat",
-        name: "admin:tool:chat",
-        meta: {
-          url: "/admin/tool/chat",
-          title: "聊天",
-          icon: "i-solar:chat-line-broken",
-          onIcon: "i-solar:chat-line-bold-duotone",
-        },
-      },
-    ],
-  },
+  // {
+  //   path: "tool",
+  //   name: "admin:tool",
+  //   meta: {
+  //     title: "工具",
+  //     url: "/admin/tool",
+  //     icon: "i-solar:inbox-archive-linear",
+  //     onIcon: "i-solar:inbox-archive-bold-duotone",
+  //   },
+  //   children: [
+  //     {
+  //       path: "chat",
+  //       name: "admin:tool:chat",
+  //       meta: {
+  //         url: "/admin/tool/chat",
+  //         title: "聊天",
+  //         icon: "i-solar:chat-line-broken",
+  //         onIcon: "i-solar:chat-line-bold-duotone",
+  //       },
+  //     },
+  //   ],
+  // },
 ];
 
 export function getRouteTitle(path: string) {

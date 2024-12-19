@@ -1,10 +1,7 @@
 <script lang="ts" setup>
-import type { AdminUserVO } from "~/composables/api/admin/user";
-import { type AdminLoginVO, useAdminLoginApi } from "~/composables/api/admin/admin";
-import { type Result, ResultStatus } from "~/composables/api/types/result";
+import { useAdminLoginApi } from "~/composables/api/admin/admin";
+import { ResultStatus } from "~/composables/api/types/result";
 import { useAdminStore } from "~/composables/sotre/useAdminStore";
-import { useUserStore } from "~/composables/sotre/useUserStore";
-import { appName } from "~/constants";
 
 enum LoginType {
   ADMIN = "admin",

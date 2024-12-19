@@ -6,7 +6,7 @@ const ignoreRoute: Record<string, boolean> = {
 </script>
 
 <template>
-  <el-scrollbar wrap-class="main-scrollbar-warp" height="100vh" relative>
+  <el-scrollbar wrap-class="main-scrollbar-warp relative" height="100vh">
     <MenuHeader v-if="!ignoreRoute[$route.name]" />
     <div class="pt-4rem layout-default">
       <slot />

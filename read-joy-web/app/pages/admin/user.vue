@@ -395,13 +395,12 @@ function resetSearchOption() {
             class-name="w-full"
             :data="pageInfo.records"
             stripe
-            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
             empty-text="暂无数据"
             :header-cell-style="{
               padding: '1rem 0',
               fontSize: '1em',
             }"
-            row-class-name="group h-4.2rem items-center"
+            row-class-name="group h-4.16rem items-center"
             row-key="id"
             height="75vh"
             @row-click="(row: AdminUserVO) => {

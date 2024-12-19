@@ -28,11 +28,6 @@ async function loadData() {
 watch(() => user.isLogin, async (val) => {
   await loadData();
 });
-definePageMeta({
-  // transition: {
-  // name: "book-detail-page",
-  // },
-});
 useHead({
   title: () => `${store.theBookDetail?.title} - ${appName}`,
   meta: [

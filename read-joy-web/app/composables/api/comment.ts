@@ -121,6 +121,7 @@ export interface CommentVO {
    * 书籍ID
    */
   bookId?: number;
+  bookTitle?: string;
   /**
    * 评论者ID
    */

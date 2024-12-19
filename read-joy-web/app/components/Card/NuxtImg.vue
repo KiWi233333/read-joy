@@ -34,7 +34,7 @@ const url = computed(() => defaultSrc ? `${BaseUrlImg}${defaultSrc}` : (src || "
     v-else class="icon"
     v-bind="$attrs"
   >
-    <slot name="error">
+    <slot name="error" v-bind="$attrs">
       <div bg-color />
     </slot>
   </div>
