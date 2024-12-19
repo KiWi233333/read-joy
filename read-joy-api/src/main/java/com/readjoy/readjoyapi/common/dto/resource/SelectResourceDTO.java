@@ -27,7 +27,7 @@ public class SelectResourceDTO extends PageDTO<AdminResourceVO> {
     private Integer bookId;
 
     @Schema(description = "排序方式 1-按发布时间 2-按下载量 3-按点赞")
-    @Range(min = 1, max = 2, message = "排序方式只能为1或2！")
+    @Range(min = 1, max = 3, message = "排序方式只能为1或2！")
     private Integer sortType;
 
     @Schema(description = "排序方式 1-降序 desc 2-升序 asc")
@@ -51,6 +51,9 @@ public class SelectResourceDTO extends PageDTO<AdminResourceVO> {
 
     public boolean checkIsSortByDownloadCount() {
         return sortType != null && sortType == 2;
+    }
+    public boolean checkIsSortByLikeCount() {
+        return sortType != null && sortType == 3;
     }
 
     public boolean checkDesc() {

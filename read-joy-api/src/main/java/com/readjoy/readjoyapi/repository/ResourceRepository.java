@@ -38,6 +38,7 @@ public class ResourceRepository extends JoinCrudRepository<ResourceMapper, Resou
         if (dto.getSortType() != null && dto.getSortOrder() != null) {
             qw.orderBy(dto.checkIsSortByPubDate(), dto.checkAsc(), Resource::getCreateTime);
             qw.orderBy(dto.checkIsSortByDownloadCount(), dto.checkAsc(), Resource::getDownloadCount);
+            qw.orderBy(dto.checkIsSortByLikeCount(), dto.checkAsc(), Resource::getLikeCount);
         }
         // 时间范围
         if (dto.getStartDate() != null && dto.getEndDate() != null) {
