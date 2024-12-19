@@ -24,4 +24,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
       return "/admin";
     }
   }
+  // 其他页面不需要权限
+  return true;
 });
