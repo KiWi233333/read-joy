@@ -34,6 +34,12 @@ public class CommentVO implements Serializable {
     @Schema(description = "书籍ID", example = "101")
     private Integer bookId;
 
+    @Schema(description = "书籍标题", example = "Java从入门到放弃")
+    private String bookTitle;
+
+    @Schema(description = "书籍封面", example = "files/book_cover.jpg")
+    private String bookCoverUrl;
+
     /**
      * 评论者ID
      */

@@ -42,8 +42,11 @@ public class CommentRepository extends JoinCrudRepository<CommentMapper, Comment
                 .eq(dto.getIsDeleted() != null, Comment::getIsDeleted, dto.getIsDeleted()) // 是否删除
                 .eq(dto.getCommentator() != null, Comment::getCommentator, dto.getCommentator())// 评论人
                 .like(StringUtils.isNotBlank(dto.getKeyword()), Comment::getCommentBody, dto.getKeyword())
+                .leftJoin(User.class, User::getId, Comment::getCommentator)
 
-                .leftJoin(User.class, User::getId, Comment::getCommentator);
+                .selectAs(Book::getTitle, CommentVO::getBookTitle) // 书籍标题
+                .selectAs(Book::getCoverImageUrl, CommentVO::getBookCoverUrl) // 书籍封面
+                .leftJoin(Book.class, Book::getBookId, Comment::getBookId);
         // 有则链表
         if (dto.getBookId() != null) {
             qw.leftJoin(Book.class, Book::getBookId, Comment::getBookId)
