@@ -14,12 +14,12 @@ import java.util.Date;
 public class AdminDataDTO {
 
     @Schema(description = "开始时间", example = "2024-01-01 00:00:00")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startDateTime;
 
     @Schema(description = "结束时间", example = "2024-12-31 00:00:00")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endDateTime;
 

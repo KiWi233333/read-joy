@@ -1,10 +1,12 @@
 package com.readjoy.readjoyapi.common.vo.resource;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -42,6 +44,8 @@ public class AdminResourceVO implements Serializable {
     private String submitter;
 
     @Schema(description = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     @Schema(description = "是否删除（0 - 否，1 - 是）")

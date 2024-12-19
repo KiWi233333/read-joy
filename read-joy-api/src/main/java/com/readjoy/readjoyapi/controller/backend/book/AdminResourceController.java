@@ -37,7 +37,7 @@ public class AdminResourceController {
     @GetMapping("/page")
     Result<IPage<AdminResourceVO>> getResourceListByPage(
             @RequestHeader(name = HEADER_NAME) String token,
-            @RequestBody @Valid SelectResourceDTO dto) {
+            @Valid SelectResourceDTO dto) {
         return Result.ok(resourceService.getPageByDTO(dto));
     }
 
