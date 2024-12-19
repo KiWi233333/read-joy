@@ -1,5 +1,4 @@
 import { useAdminStore } from "~/composables/sotre/useAdminStore";
-import { useUserStore } from "~/composables/sotre/useUserStore";
 
 // 路由中间件
 export default defineNuxtRouteMiddleware((to, from) => {
@@ -18,12 +17,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
     const admin = useAdminStore();
     // 检查用户是否登录
     if (!admin.isLogin && to.path !== "/admin/login") {
-      return "/admin/login";
+      return navigateTo("/admin/login");
     }
     else if (admin.isLogin && to.path === "/admin/login") {
-      return "/admin";
+      return navigateTo("/admin");
     }
   }
-  // 其他页面不需要权限
-  return true;
 });
