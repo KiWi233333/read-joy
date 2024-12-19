@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 我的电脑
+ Source Server         : ReadJoy
  Source Server Type    : MySQL
  Source Server Version : 80039 (8.0.39)
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80039 (8.0.39)
  File Encoding         : 65001
 
- Date: 16/12/2024 02:04:31
+ Date: 20/12/2024 00:06:44
 */
 
 SET NAMES utf8mb4;
@@ -50,7 +50,7 @@ CREATE TABLE `book`  (
   `coverImageUrl` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '封面图片URL',
   `publishionDate` datetime NOT NULL COMMENT '出版日期',
   PRIMARY KEY (`bookId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '书籍表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 44 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '书籍表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of book
@@ -67,7 +67,33 @@ INSERT INTO `book` VALUES (9, '978-7-208-07978-8', '万历十五年', 3, '黄仁
 INSERT INTO `book` VALUES (10, '978-7-101-09500-1', '史记', 3, '司马迁', '中国古代史学巨著', 128.00, '中华书局', 'files/public/cover10.jpg', '2019-01-01 00:00:00');
 INSERT INTO `book` VALUES (11, '978-7-5447-7148-0', '世界历史', 3, '威尔·杜兰特', '世界历史的全景式描述', 98.00, '上海译文出版社', 'files/public/cover11.jpg', '2024-01-01 00:00:00');
 INSERT INTO `book` VALUES (12, '978-0-19-936041-5', '枪炮、病菌与钢铁', 3, '贾雷德·戴蒙德', '人类社会的命运', 58.00, '上海译文出版社', 'files/public/cover12.jpg', '2009-01-16 08:00:00');
-INSERT INTO `book` VALUES (13, '978-0-7617-5504-3', '云南通志', 3, '赫连梓睿', '须马们X', 20.00, '山西省鹏煊保险股份有限公司', 'files/public/1734249544145.png', '2025-07-26 00:00:00');
+INSERT INTO `book` VALUES (13, '978-0-7617-5504-3', '云南通志', 3, '鄂尔泰', '他如杨慎之《滇程记》、《滇载记》诸书，掇拾成编，不免挂一漏万。谢肇淛所辑《滇略》，号为善本，然所述止於明代。本朝康熙三十年始草创《通志》，稍具规模，犹多舛略。雍正七年，鄂尔泰总督云贵，奉诏纂辑，乃属姚州知州靖道谟因旧志增修。凡为门三十，门为一卷。乾隆元年书成，后任总督尹继善等具表进之。其间视旧志增并不一，如图之有说及府州县题名，皆补旧志之所无。《大事考》、《使命》、《师命》诸目，旧志所有而冗复失当者，则删去之。又课程原附盐法，闸坝、堰塘原附城池，今皆别自为门。纲领粲然，视原本颇有条理焉。', 20.00, '云南人民出版社出版', 'files/public/1734249544145.png', '2007-03-01 00:00:00');
+INSERT INTO `book` VALUES (14, '978-3-16-148410-0', '未来简史', 1, '尤瓦尔·赫拉利', '探讨人类未来可能面临的科技和社会挑战。', 59.99, '中信出版社', 'files/public/1734527874544.jpg', '2023-01-15 00:00:00');
+INSERT INTO `book` VALUES (15, '978-7-121-34567-8', '深度学习', 1, 'Ian Goodfellow', '深度学习领域的经典之作，详细介绍了深度学习的原理和应用。', 99.99, '电子工业出版社', 'files/public/1734527994643.jpg', '2023-06-20 00:00:00');
+INSERT INTO `book` VALUES (16, '978-0-13-235612-0', '计算机程序设计艺术', 10, 'Donald E. Knuth', '计算机科学领域的经典著作，深入探讨了算法和程序设计。', 49.99, '机械工业出版社', 'files/public/1734528002135.jpg', '2023-09-10 00:00:00');
+INSERT INTO `book` VALUES (17, '978-7-302-56789-0', '算法导论', 10, 'Thomas H. Cormen', '算法领域的经典教材，详细介绍了各种算法的设计和分析。', 49.99, '清华大学出版社', 'files/public/1734527806008.jpg', '2023-11-05 00:00:00');
+INSERT INTO `book` VALUES (18, '978-7-100-12345-6', '教育心理学', 2, 'Jeanne Ellis Ormrod', '深入探讨了教育过程中的心理学原理和实践。', 69.99, '人民教育出版社', 'files/public/1734528014959.jpg', '2023-03-01 00:00:00');
+INSERT INTO `book` VALUES (19, '978-7-5447-87654-3', '围城', 3, '钱钟书', '一部讽刺小说，讲述了主人公方鸿渐的人生经历。', 39.99, '人民文学出版社', 'files/public/1734528023001.jpg', '2023-05-20 00:00:00');
+INSERT INTO `book` VALUES (20, '978-3-16-789012-3', '百年孤独', 3, '加西亚·马尔克斯', '魔幻现实主义文学的代表作，讲述了布恩迪亚家族七代人的故事。', 49.99, '南海出版公司', 'files/public/1734528031303.jpg', '2023-07-30 00:00:00');
+INSERT INTO `book` VALUES (21, '978-7-121-34567-8', '心理学的100个基本（口袋里的心理学指南）', 2, '陈琳', '人生无须大道理，懂点心理学过好每一天。100张世界名画，轻松读图加深理解，视觉美感治愈心灵。', 22.10, '四川文艺出版社', '', '2023-09-01 00:00:00');
+INSERT INTO `book` VALUES (22, '978-3-16-148410-0', '未来简史', 1, '尤瓦尔·赫拉利', '探讨人类未来可能面临的科技和社会挑战。', 59.99, '中信出版社', '', '2023-01-15 00:00:00');
+INSERT INTO `book` VALUES (23, '978-7-302-56789-0', '算法导论', 10, 'Thomas H. Cormen', '算法领域的经典教材，详细介绍了各种算法的设计和分析。', 49.99, '清华大学出版社', 'files/public/1734601601129.webp', '2023-11-05 00:00:00');
+INSERT INTO `book` VALUES (24, '978-7-100-12345-6', '教育心理学', 2, '罗伯特斯莱文', '系统性地介绍了教育心理学的基本理论和实践应用。', 69.99, '人民教育出版社', 'files/public/1734528042267.jpg', '2023-03-01 00:00:00');
+INSERT INTO `book` VALUES (25, '978-0-13-235612-0', '计算机程序设计艺术', 10, 'Donald E. Knuth', '计算机科学领域的经典著作，深入探讨了算法和程序设计。', 49.99, '机械工业出版社', 'files/public/1734527834646.jpg', '2023-09-10 00:00:00');
+INSERT INTO `book` VALUES (26, '978-7-5447-87654-3', '积极心理学研究（2024）', 2, '今心', '积极心理学领域中人格频率学与PERMA模型融合应用的探讨。', 49.99, '经济日报出版社', 'files/public/1734526558482.jpg', '2024-01-01 00:00:00');
+INSERT INTO `book` VALUES (27, '978-7-100-67890-1', '心理学与生活', 2, '理查德·格里格、菲利普·津巴多', '斯坦福大学多年来使用的教材，也是许多大学里推广使用的经典教材。', 62.60, '人民邮电出版社', 'files/public/1734528051162.jpg', '2023-09-01 00:00:00');
+INSERT INTO `book` VALUES (28, '978-7-300-12345-7', '社会心理学', 2, 'D.A.巴伦, D.伯恩', '社会心理学是一门研究人们如何看待他人，如何相互影响，以及如何与他人相互关联的科学。', 39.99, '华东师范大学出版社', 'files/public/1734528067967.jpg', '2023-05-20 00:00:00');
+INSERT INTO `book` VALUES (29, '978-7-300-23456-8', '发展心理学', 2, '林崇德', '一部关于生命之旅，成长之旅的经典著作。', 59.99, '北京师范大学出版社', 'files/public/1734528076452.jpg', '2023-08-15 00:00:00');
+INSERT INTO `book` VALUES (30, '978-7-300-34567-9', '改变心理学的40项研究', 2, '罗杰·霍克', '用通俗的语言介绍了心理学研究发展历程中对心理学发展影响深远的40项研究。', 39.99, '中国轻工业出版社', 'files/public/1734528084940.jpg', '2023-10-30 00:00:00');
+INSERT INTO `book` VALUES (31, '978-3-16-789456-1', '黑暗之光：后真理时代的现实主义', 1, 'Massimiliano Gioni', '探索后真理时代现实主义的深度作品。', 88.00, 'Skira Editore', 'files/public/1734528126729.jpg', '2023-04-10 00:00:00');
+INSERT INTO `book` VALUES (32, '978-7-305-23456-7', '身体、空间与后现代性', 2, '汪民安', '对身体、空间等论题所做的研究结集。', 58.00, '南京大学出版社', 'files/public/1734528547244.jpg', '2023-07-15 00:00:00');
+INSERT INTO `book` VALUES (33, '978-1-23-456789-0', '策展人手册', 8, 'Adrian George', '掌握策展的乐趣与知识。', 69.99, '北京美术摄影出版社', 'files/public/1734528555614.jpg', '2023-09-20 00:00:00');
+INSERT INTO `book` VALUES (34, '978-7-5447-56789-6', '微笑偷盗者', 3, 'Richard Barnett', '全景式的牙科学演化史。', 45.00, '北京日报出版社', 'files/public/1734527820413.jpg', '2023-11-05 00:00:00');
+INSERT INTO `book` VALUES (35, '978-3-16-123456-7', '岛屿书', 9, 'Judith Schalansky', '探索不为世界所知的孤独小岛。', 39.99, '湖南文艺出版社', 'files/public/1734527747872.jpg', '2023-12-01 00:00:00');
+INSERT INTO `book` VALUES (36, '978-7-300-12345-8', '肉桂色铺子', 3, 'Bruno Schulz', '15个相对独立又自成一体的小短篇，构成一个神话的世俗化过程。', 29.99, '北京大学出版社', 'files/public/1734526521004.jpg', '2024-01-25 00:00:00');
+INSERT INTO `book` VALUES (37, '978-7-543-23456-9', '虞美人草', 3, '夏目漱石', '一本难读、奇怪又华丽无比，被称作“炫技”的小说。', 35.00, '人民文学出版社', 'files/public/1734526507639.jpg', '2024-03-30 00:00:00');
+INSERT INTO `book` VALUES (38, '978-1-23-456789-1', '第一个人', 3, 'Albert Camus', '一部寻根小说，叙述作者怎样从蒙昧中蹒跚走来。', 48.00, '上海译文出版社', 'files/public/1734526481555.jpg', '2024-05-15 00:00:00');
+INSERT INTO `book` VALUES (39, '978-7-108-56789-0', '丛林故事', 3, 'Rudyard Kipling', '英国19世纪末20世纪初的文学大家，儿童文学巨匠的代表作品。', 39.99, '商务印书馆', 'files/public/1734526462157.jpg', '2024-07-10 00:00:00');
 
 -- ----------------------------
 -- Table structure for category
@@ -77,7 +103,7 @@ CREATE TABLE `category`  (
   `categoryId` int NOT NULL AUTO_INCREMENT COMMENT '分类ID',
   `categoryName` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '分类名称',
   PRIMARY KEY (`categoryId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '分类表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '分类表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of category
@@ -123,7 +149,7 @@ CREATE TABLE `comment`  (
   `isDeleted` tinyint(1) NOT NULL COMMENT '是否删除',
   `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '评论表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '评论表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of comment
@@ -133,11 +159,16 @@ INSERT INTO `comment` VALUES (2, 1, 2, '感觉还可以吧。', 2, 0, '2024-12-1
 INSERT INTO `comment` VALUES (3, 1, 2, '感觉还可以吧。', 2, 0, '2024-12-14 20:20:31');
 INSERT INTO `comment` VALUES (4, 1, 3, '挪威的森林名字感觉不错！', 2, 0, '2024-12-15 19:16:57');
 INSERT INTO `comment` VALUES (5, 1, 3, '挪威的森林', 2, 0, '2024-12-15 19:22:09');
-INSERT INTO `comment` VALUES (6, 1, 2, '你好', 2, 0, '2024-12-15 19:23:40');
-INSERT INTO `comment` VALUES (7, 1, 2, '**', 1, 0, '2024-12-15 19:23:55');
+INSERT INTO `comment` VALUES (6, 1, 2, '你好', 2, 1, '2024-12-15 19:23:40');
+INSERT INTO `comment` VALUES (7, 1, 2, '**', 3, 0, '2024-12-15 19:23:55');
 INSERT INTO `comment` VALUES (8, 1, 10, '这个史记也不错', 2, 0, '2024-12-15 21:08:33');
-INSERT INTO `comment` VALUES (9, 4, 10, '你好', 1, 0, '2024-12-15 22:07:10');
-INSERT INTO `comment` VALUES (10, 1, 2, '这个是百年孤独', 1, 0, '2024-12-15 23:15:10');
+INSERT INTO `comment` VALUES (9, 4, 10, '你好', 2, 0, '2024-12-15 22:07:10');
+INSERT INTO `comment` VALUES (10, 1, 2, '这个是百年孤独', 2, 0, '2024-12-15 23:15:10');
+INSERT INTO `comment` VALUES (11, 2, 2, '红楼梦挺不错，经典！', 2, 0, '2024-12-17 00:28:14');
+INSERT INTO `comment` VALUES (12, 2, 2, '赞赞赞', 2, 0, '2024-12-17 00:30:06');
+INSERT INTO `comment` VALUES (13, 13, 2, '云南通志 小说', 2, 0, '2024-12-17 00:32:15');
+INSERT INTO `comment` VALUES (14, 13, 2, '还可以', 2, 0, '2024-12-17 00:32:19');
+INSERT INTO `comment` VALUES (15, 11, 2, '史记', 2, 0, '2024-12-17 00:39:26');
 
 -- ----------------------------
 -- Table structure for resource
@@ -156,13 +187,14 @@ CREATE TABLE `resource`  (
   `downloadCount` int NOT NULL DEFAULT 0 COMMENT '下载数',
   `likeCount` int NOT NULL DEFAULT 0 COMMENT '点赞数',
   PRIMARY KEY (`resourceId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '资源表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '资源表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of resource
 -- ----------------------------
-INSERT INTO `resource` VALUES (4, 'application/pdf', 1, '《百年孤独》高长荣[译]（正版）.pdf', 2615527, 'files/auth/1734252417307.pdf', 'admin', '2024-12-15 12:50:15', 0, 9, 2);
+INSERT INTO `resource` VALUES (4, 'application/pdf', 1, '《百年孤独》高长荣[译]（正版）.pdf', 2615527, 'files/auth/1734252417307.pdf', 'admin', '2024-12-15 12:50:15', 0, 10, 2);
 INSERT INTO `resource` VALUES (5, 'image/png', 1, '杂谈2.png', 33922, 'files/auth/1734284945239.png', 'admin', '2024-12-16 01:49:05', 0, 2, 1);
+INSERT INTO `resource` VALUES (6, 'application/x-msdownload', 2, 'wtsapi32.dll', 46080, 'files/auth/1734621909997.dll', 'admin123', '2024-12-19 23:25:10', 1, 0, 0);
 
 -- ----------------------------
 -- Table structure for user
@@ -179,18 +211,18 @@ CREATE TABLE `user`  (
   `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `userType` tinyint(1) NOT NULL COMMENT '用户类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, '头委听段', '123456', '领流', '18624581213', NULL, 1, '2024-12-08 22:06:40', 1);
-INSERT INTO `user` VALUES (2, 'kiwi2333', '1234567', '张武', '13415000000', 'files/public/2_1734272754454.jpg', 1, '2024-12-09 23:23:25', 1);
+INSERT INTO `user` VALUES (2, 'kiwi2333', '123456', '张武', '13415000000', 'files/public/2_1734272754454.jpg', 1, '2024-12-09 23:23:25', 1);
 INSERT INTO `user` VALUES (3, 'Huya2333', '123456', '张', '18624581213', NULL, 1, '2024-12-08 22:10:43', 1);
 INSERT INTO `user` VALUES (4, 'Liwu12', '123456', '张', '18624581213', NULL, 1, '2024-12-08 22:10:50', 1);
 INSERT INTO `user` VALUES (7, 'liuxiwu2', '123456', '张', '18624581213', NULL, 1, '2024-12-13 03:27:55', 1);
 INSERT INTO `user` VALUES (8, 'liuxiw2', '123456', '张', '18624581213', NULL, 1, '2024-12-13 03:28:17', 1);
-INSERT INTO `user` VALUES (9, 'wudi233', '123456', NULL, NULL, NULL, 1, '2024-12-13 03:28:51', 1);
-INSERT INTO `user` VALUES (10, 'ikun233', '123456', NULL, NULL, 'files/public/10_1734273896322.png', 1, '2024-12-15 19:26:27', 1);
+INSERT INTO `user` VALUES (10, 'ikun233', '123456', NULL, NULL, 'files/public/10_1734525111020.png', 1, '2024-12-15 19:26:27', 1);
+INSERT INTO `user` VALUES (11, 'ikun2333', '123456', NULL, NULL, NULL, 0, '2024-12-16 12:05:51', 1);
+INSERT INTO `user` VALUES (12, 'bjj2333', '123456', NULL, NULL, NULL, 1, '2024-12-18 10:44:26', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
