@@ -26,12 +26,23 @@ public class ResourceRepository extends JoinCrudRepository<ResourceMapper, Resou
 
     public IPage<AdminResourceVO> getPageByDTO(SelectResourceDTO dto) {
         final MPJLambdaWrapper<Resource> qw = new MPJLambdaWrapper<Resource>()
-                .selectAll(Resource.class)
+                .select(Resource::getResourceId,
+                        Resource::getBookId,
+                        Resource::getTitle,
+                        Resource::getUrl,
+                        Resource::getType,
+                        Resource::getSize,
+                        Resource::getLikeCount,
+                        Resource::getDownloadCount,
+                        Resource::getSubmitter,
+                        Resource::getIsDeleted,
+                        Resource::getCreateTime)
                 .selectAs(Book::getTitle, AdminResourceVO::getBookTitle) // 图书名称
                 .and(StringUtils.isNotBlank(dto.getKeyword()), q -> q // 关键字
                         .or().like(Resource::getTitle, dto.getKeyword())
                         .or().like(Resource::getUrl, dto.getKeyword())
                 )
+                .eq(dto.getIsDeleted() != null, Resource::getIsDeleted, dto.getIsDeleted()) // 是否删除 排序
                 .eq(dto.getBookId() != null, Resource::getBookId, dto.getBookId())
                 .leftJoin(Book.class, Book::getBookId, Resource::getBookId);
         // 排序
@@ -52,6 +63,7 @@ public class ResourceRepository extends JoinCrudRepository<ResourceMapper, Resou
                 .selectAs(Book::getTitle, AdminResourceVO::getBookTitle) // 图书名称
 
                 .selectAs(Resource::getResourceId, AdminResourceVO::getResourceId)
+                .selectAs(Resource::getBookId, AdminResourceVO::getBookId)
                 .selectAs(Resource::getTitle, AdminResourceVO::getTitle)
                 .selectAs(Resource::getUrl, AdminResourceVO::getUrl)
                 .selectAs(Resource::getType, AdminResourceVO::getType)

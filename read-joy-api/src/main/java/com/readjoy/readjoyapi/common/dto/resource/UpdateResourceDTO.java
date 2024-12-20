@@ -32,7 +32,7 @@ public class UpdateResourceDTO {
     private String title;
 
     @Schema(description = "资源文件")
-    @NotNull(message = "资源文件不能为空！")
+//    @NotNull(message = "资源文件不能为空！")
     private MultipartFile resourceFile = null;
 
 
