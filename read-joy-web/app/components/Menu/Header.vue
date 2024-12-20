@@ -57,8 +57,8 @@ function showSearch() {
               <div class="h-2.1rem w-2.1rem cursor-pointer truncate border border-1px border-color-transparent rounded-full px-2 py-2.2 transition-border sm:max-w-14em hover:border-default card-default-br text-small" />
             </div>
           </template>
-          <div flex items-center gap-2 text-sm sm:gap-4>
-            <ClientOnly>
+          <ClientOnly>
+            <div flex items-center gap-2 text-sm sm:gap-4>
               <LazyPopperUserInfo v-if="user.isLogin">
                 <CardNuxtImg :default-src="user.userInfo.imgUrl" class="order-0 h-2.2rem w-2.2rem rounded-full rounded-full btn-primary-border border-default bg-color-br">
                   <template #error>
@@ -88,8 +88,8 @@ function showSearch() {
               <div class="block sm:hidden">
                 <el-button :icon="ElIconSearch" circle @click="showSearch" />
               </div>
-            </ClientOnly>
-          </div>
+            </div>
+          </ClientOnly>
         </ClientOnly>
       </div>
     </menu>
