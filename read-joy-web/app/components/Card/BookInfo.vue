@@ -19,8 +19,8 @@ const store = useDefaultStore();
   >
     <div class="book relative h-fit">
       <CardNuxtImg
-        class="img"
         :default-src="book.coverImageUrl"
+        class="img h-full w-full card-rounded-df card-default"
       >
         <template #error>
           <small class="h-full w-full flex flex-row items-center justify-center">

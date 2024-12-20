@@ -5,6 +5,7 @@ import {
   DrawerContent,
 } from "@/components/ui/drawer";
 import { useDefaultStore } from "~/composables/sotre/useDefaultStore";
+import { useSettingStore } from "~/composables/sotre/useSettingStore";
 
 const { open, book = {} } = defineProps<{
   open: boolean
@@ -23,6 +24,8 @@ const show = computed({
   },
 });
 
+const setting = useSettingStore();
+
 function onNewTaget(book: Partial<BookDetailVO>) {
   if (book.bookId) {
     store.openBookDetail(book.bookId, true);
@@ -36,6 +39,9 @@ function onNewTaget(book: Partial<BookDetailVO>) {
       <section class="relative w-full">
         <menu class="bg-linear flex-row-bt-c py-4 layout-default">
           <div class="group ml-a">
+            <el-checkbox v-model="setting.isNewTabOpenBook">
+              默认打开新标签页
+            </el-checkbox>
             <i i-solar:circle-top-up-linear mr-4 p-2.4 op-60 transition-opacity btn-info title="新标签页打开" group-hover:op-100 @click="onNewTaget(book)" />
             <i i-solar:close-circle-outline p-3 op-60 transition-opacity btn-danger group-hover:op-100 title="关闭" @click="show = false" />
           </div>
