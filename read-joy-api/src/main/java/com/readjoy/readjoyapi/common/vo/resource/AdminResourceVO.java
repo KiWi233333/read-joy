@@ -2,10 +2,12 @@ package com.readjoy.readjoyapi.common.vo.resource;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.readjoy.readjoyapi.common.pojo.Resource;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serial;
@@ -16,6 +18,7 @@ import java.util.Date;
  * 资源VO对象
  */
 @Data
+@Accessors(chain = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdminResourceVO implements Serializable {
@@ -60,4 +63,19 @@ public class AdminResourceVO implements Serializable {
     @Serial
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+    public static AdminResourceVO toVO(Resource resource) {
+        return new AdminResourceVO()
+                   .setResourceId(resource.getResourceId())
+                   .setType(resource.getType())
+                   .setBookId(resource.getBookId())
+                   .setTitle(resource.getTitle())
+                   .setSize(resource.getSize().intValue())
+                   .setUrl(resource.getUrl())
+                   .setSubmitter(resource.getSubmitter())
+                   .setCreateTime(resource.getCreateTime())
+                   .setIsDeleted(resource.getIsDeleted())
+                   .setDownloadCount(resource.getDownloadCount())
+                   .setLikeCount(resource.getLikeCount());
+    }
 }

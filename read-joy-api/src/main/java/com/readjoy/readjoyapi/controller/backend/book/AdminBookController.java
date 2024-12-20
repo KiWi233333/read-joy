@@ -38,8 +38,16 @@ public class AdminBookController {
     @GetMapping("/page")
     Result<IPage<BookVO>> getBookListByPage(
             @RequestHeader(name = HEADER_NAME) String token,
-            @Valid SelectBookDTO dto) {
-        return Result.ok(bookService.getPageByDTO(dto));
+            @Valid SelectBookDTO<BookVO> dto) {
+        return Result.ok(bookService.getAdminPageByDTO(dto));
+    }
+
+    @Operation(description = "获取图书详情列表（分页）（包含对应资源列表）")
+    @GetMapping("/page/detail")
+    Result<IPage<BookDetailVO>> getBookDetailListByPage(
+            @RequestHeader(name = HEADER_NAME) String token,
+            @Valid SelectBookDTO<BookDetailVO> dto) {
+        return Result.ok(bookService.getBookDetailListByPage(dto));
     }
 
     @Operation(description = "获取图书详情")

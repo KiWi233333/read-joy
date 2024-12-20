@@ -31,7 +31,7 @@ public class BookController {
     @Operation(description = "获取图书列表（分页）")
     @GetMapping("/page")
     Result<IPage<BookVO>> getBookListByPage(
-            @Valid SelectBookDTO dto) {
+            @Valid SelectBookDTO<BookVO> dto) {
         return Result.ok(bookService.getPageByDTO(dto));
     }
 

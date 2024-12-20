@@ -17,7 +17,11 @@ import com.readjoy.readjoyapi.common.vo.book.BookVO;
  */
 public interface BookService {
 
-    IPage<BookVO> getPageByDTO(SelectBookDTO dto);
+    IPage<BookVO> getAdminPageByDTO(SelectBookDTO<BookVO> dto);
+
+    IPage<BookDetailVO> getBookDetailListByPage(SelectBookDTO<BookDetailVO> dto);
+
+    IPage<BookVO> getPageByDTO(SelectBookDTO<BookVO> dto);
 
     Integer addBook(InsertBookDTO dto);
 

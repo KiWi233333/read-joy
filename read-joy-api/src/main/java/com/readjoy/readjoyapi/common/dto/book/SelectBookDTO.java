@@ -2,6 +2,7 @@ package com.readjoy.readjoyapi.common.dto.book;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.readjoy.readjoyapi.common.dto.defaults.PageDTO;
+import com.readjoy.readjoyapi.common.vo.book.BookDetailVO;
 import com.readjoy.readjoyapi.common.vo.book.BookVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class SelectBookDTO extends PageDTO<BookVO> {
+public class SelectBookDTO<T> extends PageDTO<T> {
 
     @Length(max = 100, message = "关键字不超过100字！")
     @Schema(description = "关键字", example = "java")

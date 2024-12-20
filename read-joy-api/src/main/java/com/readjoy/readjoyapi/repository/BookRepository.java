@@ -26,7 +26,8 @@ import java.util.List;
 @Component
 public class BookRepository extends JoinCrudRepository<BookMapper, Book> {
 
-    public IPage<BookVO> selectPageByDTO(SelectBookDTO dto) {
+    // 用户
+    public IPage<BookVO> selectPageByDTO(SelectBookDTO<BookVO> dto) {
         final MPJLambdaWrapper<Book> qw = new MPJLambdaWrapper<Book>()
                 .selectAll(Book.class)
                 .selectAs(Category::getCategoryName, BookVO::getCategoryName) // 分类名称
@@ -47,6 +48,31 @@ public class BookRepository extends JoinCrudRepository<BookMapper, Book> {
             qw.between(Book::getPublishionDate, dto.getStartDate(), dto.getEndDate());
         }
         return this.selectJoinListPage(dto.toPage(), BookVO.class, qw);
+    }
+
+
+    public IPage<BookDetailVO> getAdminPageByDTO(SelectBookDTO<BookDetailVO> dto) {
+        final MPJLambdaWrapper<Book> qw = new MPJLambdaWrapper<Book>()
+                .selectAll(Book.class)
+                .selectAs(Category::getCategoryName, BookDetailVO::getCategoryName) // 分类名称
+                .and(StringUtils.isNotBlank(dto.getKeyword()), q -> q // 关键字
+                        .or().like(Book::getTitle, dto.getKeyword())
+                        .or().like(Book::getIntroduction, dto.getKeyword())
+                        .or().like(Book::getIsbn, dto.getKeyword())
+                        .or().like(Category::getCategoryName, dto.getKeyword())
+                        .or().like(Book::getAuthor, dto.getKeyword())
+                )
+                .eq(dto.getCategoryId() != null, Book::getCategoryId, dto.getCategoryId())
+                .leftJoin(Category.class, Category::getCategoryId, Book::getCategoryId);
+//                .leftJoin(Resource.class, Resource::getBookId, Book::getBookId);
+        if (dto.getSortType() != null && dto.getSortOrder() != null) {
+            qw.orderBy(dto.checkIsSortByPubDate(), dto.checkAsc(), Book::getPublishionDate);
+            qw.orderBy(dto.checkIsSortByPrice(), dto.checkAsc(), Book::getPrice);
+        }
+        if (dto.getStartDate() != null && dto.getEndDate() != null) {
+            qw.between(Book::getPublishionDate, dto.getStartDate(), dto.getEndDate());
+        }
+        return this.selectJoinListPage(dto.toPage(), BookDetailVO.class, qw);
     }
 
 
@@ -77,7 +103,7 @@ public class BookRepository extends JoinCrudRepository<BookMapper, Book> {
 
     // 图书发布统计 yyyy-MM-dd
     public List<BookPublishTotalByDay> bookPublishTotalByDay() {
-         return this.getBaseMapper().bookPublishTotalByDay();
+        return this.getBaseMapper().bookPublishTotalByDay();
     }
 
     // 图书发布统计 yyyy-MM-dd
@@ -88,4 +114,5 @@ public class BookRepository extends JoinCrudRepository<BookMapper, Book> {
     public List<BookPublishTotalByYear> bookPublishTotalByYear() {
         return this.getBaseMapper().bookPublishTotalByYear();
     }
+
 }
