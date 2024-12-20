@@ -37,9 +37,6 @@ onMounted(() => {
     hide-on-click-modal
   >
   <div v-else v-bind="$attrs">
-    <slot name="placeholder">
-      <div v-if="status === 'loading' || !url" :class="loadClass !== undefined ? loadClass : 'h-full w-full'" />
-    </slot>
     <slot name="error">
       <div v-if="status === 'error' || !url" class="h-full w-full flex-row-c-c" :class="errorRootClass">
         <i class="icon i-solar-gallery-remove-bold-duotone op-60" :class="errorClass" />

@@ -230,13 +230,13 @@ onMounted(() => {
           <div
             :title="`${appName}助手`"
             data-fade
-            class="h-12 w-12 flex-row-c-c rounded-1/2 bg-[var(--el-color-primary)] shadow-[#2f7cfd] shadow-sm shadow-opacity-60 border-default-hover"
+            class="shadow-bg h-12 w-12 flex-row-c-c rounded-1/2 bg-[var(--el-color-primary)] shadow border-default-hover"
           >
             <i class="i-solar:ghost-bold bg-light p-2" />
           </div>
         </template>
         <template #default>
-          <section class="w-90vw text-1rem md:w-500px">
+          <section class="w-90vw text-1rem md:w-480px">
             <!-- header -->
             <p class="mb-2 text-[var(--el-color-primary)] font-600 tracking-0.2em">
               <i class="i-solar:ghost-bold mr-2 p-3" />
@@ -245,7 +245,10 @@ onMounted(() => {
             <!-- 内容 -->
             <el-scrollbar
               v-if="isShow || msgList.length"
-              ref="scollRef" view-class="p-2 md:p-4 h-50vh md:h-400px" class="bg-light card-default dark:bg-dark-9"
+              ref="scollRef"
+              view-class="p-2 md:p-4 h-58vh md:h-480px"
+              wrap-class="shadow-inset shadow-sm "
+              class="bg-light border-default card-default dark:bg-dark-9"
             >
               <div v-auto-animate relative flex flex-col>
                 <!-- 消息适配器 -->
@@ -310,6 +313,36 @@ onMounted(() => {
       box-shadow: transparent !important;
       border-bottom: 1px solid #88888811;
     }
+  }
+}
+.shadow-bg {
+  background-color: var(--el-color-primary);
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
+}
+
+.shadow-bg::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  animation: GreenDot 2s ease 1s infinite;
+  background-color:  var(--el-color-primary);
+}
+@keyframes GreenDot {
+  0% {
+      transform: scale(0.5);
+      opacity: 1;
+  }
+  30% {
+      opacity: 1;
+  }
+  100% {
+      transform: scale(1.4);
+      opacity: 0;
   }
 }
 </style>
