@@ -143,7 +143,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         String fileUrl = null;
         String originalFilename = null;
         Long fileSize = null;
-        String fileType = LocalFileUtil.DEFAULT_FILE_MIME_TYPE;
+        String fileType = null;
         try {
             // 1、若有文件，则更新文件
             if (dto.getResourceFile() != null) {
