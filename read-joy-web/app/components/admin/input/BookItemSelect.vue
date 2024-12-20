@@ -84,6 +84,13 @@ async function fetchBooks(keyword?: string, loadMore: boolean = false) {
     isLoading.value = false;
   }, debounce || 300); // 确保 debounce 有默认值
 }
+
+watch(() => dto, () => {
+  fetchBooks(dto?.keyword);
+}, {
+  immediate: true,
+  deep: true,
+});
 </script>
 
 <template>

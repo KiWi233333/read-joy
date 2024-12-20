@@ -409,13 +409,14 @@ function resetSearchOption() {
               fontSize: '1em',
             }"
             row-class-name="group h-4.16rem"
+            header-cell-class-name="!bg-color"
             :disabled="isEdit"
             class-name="w-full"
             :data="pageInfo.records"
             stripe
             select-on-indeterminate
             empty-text="暂无数据"
-            row-key="id"
+            row-key="categoryId"
             height="75vh"
             @row-click="(row: AdminCategoryVO) => {
               theRowInfo = row;

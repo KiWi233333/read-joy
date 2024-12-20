@@ -403,6 +403,7 @@ function resetSearchOption() {
               padding: '1rem 0',
               fontSize: '1em',
             }"
+            header-cell-class-name="!bg-color"
             row-class-name="group h-4.16rem items-center"
             row-key="id"
             height="75vh"

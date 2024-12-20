@@ -391,8 +391,9 @@ const searchFiledSize = "default";
                 btnProps: {
                   size: searchFiledSize,
                 },
-                icon: 'i-solar:refresh-outline',
-                type: 'info' },
+                icon: 'i-solar:refresh-outline group-hover:rotate-90 transition-transform',
+                type: 'info',
+              },
               {
                 show: selectList.length > 0,
                 title: '批量',
@@ -423,6 +424,7 @@ const searchFiledSize = "default";
           <el-table
             ref="tableRef"
             v-loading="isLoading"
+            header-cell-class-name="!bg-color"
             :header-cell-style="{
               padding: '1rem 0',
               fontSize: '1em',

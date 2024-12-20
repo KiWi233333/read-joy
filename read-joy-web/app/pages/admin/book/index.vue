@@ -4,7 +4,7 @@ import type { IPage } from "~/composables/api/types";
 import { ElCollapseItem } from "#components";
 
 import { useDateFormat } from "@vueuse/core";
-import { type AdminBookDetailVO, AdminBookSortType, type AdminBookVO, type AdminSelectBookPageDTO, type InsertBookDTO, type UpdateBookDTO, useAdminAddBookApi, useAdminBatchDeleteBookApi, useAdminBookDetailApi, useAdminBookPageByDTOApi, useAdminDeleteBookApi, useAdminUpdateBookApi } from "~/composables/api/admin/book";
+import { type AdminBookDetailVO, AdminBookSortType, type AdminBookVO, type AdminSelectBookPageDTO, type InsertBookDTO, type UpdateBookDTO, useAdminAddBookApi, useAdminBatchDeleteBookApi, useAdminBookDetailApi, useAdminBookDetailPageByDTOApi, useAdminBookPageByDTOApi, useAdminDeleteBookApi, useAdminUpdateBookApi } from "~/composables/api/admin/book";
 import { DefaultOrderSort, ResultStatus } from "~/composables/api/types/result";
 import { useAdminDefaultStore } from "~/composables/sotre/useAdminDefaultStore";
 import { useAdminStore } from "~/composables/sotre/useAdminStore";
@@ -18,7 +18,8 @@ const admin = useAdminStore();
 useSeoMeta({
   title: `图书管理 - ${appName}`,
 });
-
+// 只展开单个
+const tableExpand = ref([]);
 // 数据
 const pageInfo = ref<IPage<AdminBookVO>>({
   records: [],
@@ -45,8 +46,20 @@ const theRowInfo = ref<Partial<AdminBookVO>>({});
 // 多选
 const selectList = ref<AdminBookVO[]>([]);
 function onSelectChange(list: AdminBookVO[]) {
-  // 添加
   selectList.value = list?.length ? list : [];
+}
+
+// 折叠
+const expandList = ref<string[]>([]);
+function onExpand(row: AdminBookVO) {
+  if (!tableRef.value || !row)
+    return;
+
+  tableRef.value?.toggleRowExpansion(row, !expandList.value.includes(String(row.bookId)));
+  if (expandList.value.includes(String(row.bookId)))
+    expandList.value.splice(expandList.value.indexOf(String(row.bookId)), 1);
+  else
+    expandList.value.push(String(row.bookId));
 }
 
 // 表单参数
@@ -96,7 +109,6 @@ const formRules = computed<any>(() => ({
   ],
   coverImage: [
     { required: true, message: "请上传封面图", trigger: "blur" },
-    { type: "file", message: "请上传图片文件", trigger: "blur" },
   ],
   introduction: [
     { max: 1000, message: "书籍介绍长度不超过1000字", trigger: "blur" },
@@ -593,21 +605,40 @@ function resetSearchOption() {
             :disabled="isEdit"
             class-name="w-full"
             :data="pageInfo.records"
-            stripe
             empty-text="暂无数据"
             :header-cell-style="{
               padding: '1rem 0',
               fontSize: '1em',
             }"
-            row-class-name="group h-4.5rem"
-            row-key="id"
+            header-cell-class-name="!bg-color"
             height="75vh"
+            :tree-props="{ children: 'resourceList', hasChildren: 'isResource' }"
+            row-class-name="group h-4.5rem"
+            :expand="tableExpand"
+            :expand-row-keys="expandList"
+            row-key="bookId"
+            @row-click.self="onExpand"
             @row-click="(row: AdminBookVO) => {
               theRowInfo = row;
               form = { ...row }
             }"
             @selection-change="onSelectChange"
           >
+            <!-- 资源列表 table list -->
+            <el-table-column
+              fixed
+              type="expand"
+              label="资源列表"
+              width="100%"
+              column-key="bookId"
+              style="padding: 0;"
+            >
+              <template #default="{ row }">
+                <div class="p-2 pt-0 bg-color-layout sm:p-4">
+                  <AdminTableResourceTable class="second-table truncate shadow-md shadow-inset border-default card-default" :book-id="row?.bookId!" :book-item="row" />
+                </div>
+              </template>
+            </el-table-column>
             <!-- 选择 -->
             <el-table-column
               fixed
@@ -728,14 +759,14 @@ function resetSearchOption() {
               label="出版时间"
               sortable
               align="center"
-              width="180%"
-              min-width="180%"
+              width="120%"
+              min-width="120%"
             />
             <!-- 动作+弹窗 -->
             <el-table-column
               fixed="right"
               label="操作"
-              min-width="200%"
+              min-width="240%"
             >
               <template #default="{ row }">
                 <div class="flex opacity-0 transition-200 group-hover:opacity-100">
@@ -775,7 +806,7 @@ function resetSearchOption() {
                     :plain="false"
                     style="padding: 0rem 0.6rem"
                     class="btns"
-                    @click="onSubmit('delete', row.bookId)"
+                    @click.stop="onSubmit('delete', row.bookId)"
                   >
                     <i
                       i-solar:trash-bin-trash-line-duotone
@@ -925,38 +956,36 @@ function resetSearchOption() {
               </el-form-item>
             </component>
             <component :is="!isAdd ? ElCollapseItem : 'div'" title="资源列表" name="resourceList">
-              <el-form-item v-if="!isEdit && !isAdd" label="资源列表" prop="resourceList">
-                <ul class="flex flex-col gap-2">
-                  <li
-                    v-for="item in form?.resourceList"
-                    :key="item.resourceId"
-                    :title="`${item.title}- 点击下载`"
-                    class="flex cursor-pointer items-center card-rounded-df p-2 border-hover-primary card-default sm:p-3"
+              <ul v-if="!isEdit && !isAdd" class="max-h-20rem w-full flex flex-col gap-2 overflow-y-auto">
+                <li
+                  v-for="item in form?.resourceList"
+                  :key="item.resourceId"
+                  :title="`${item.title} - 点击预览`"
+                  class="flex cursor-pointer items-center card-rounded-df p-2 border-hover-primary card-default sm:p-3"
+                >
+                  <CardElImage
+                    class="mr-2 h-6 w-6"
+                    :src="FILE_TYPE_ICON_MAP[item.type] || FILE_TYPE_ICON_DEFAULT"
                   >
-                    <CardElImage
-                      class="mr-2 h-6 w-6"
-                      :src="FILE_TYPE_ICON_MAP[item.type] || FILE_TYPE_ICON_DEFAULT"
-                    >
-                      <template #error>
-                        <small class="h-full w-full flex flex-row items-center justify-center">
-                          暂无图片
-                        </small>
-                      </template>
-                    </CardElImage>
-                    <div class="w-full truncate text-sm">
-                      {{ item.title?.replace(/(.{16}).*(.{5})/, '$1...$2') }}
-                      <div mt-1 truncate text-mini>
-                        大小：{{ formatFileSize(item.size || 0) }}
-                        下载：{{ item.downloadCount }}
-                        点赞：{{ item.likeCount }}
-                      </div>
+                    <template #error>
+                      <small class="h-full w-full flex flex-row items-center justify-center">
+                        暂无图片
+                      </small>
+                    </template>
+                  </CardElImage>
+                  <div class="w-full truncate text-sm">
+                    {{ item.title?.replace(/(.{12}).*(.{5})/, '$1...$2') }}
+                    <div mt-1 truncate text-mini>
+                      大小：{{ formatFileSize(item.size || 0) }}
+                      下载：{{ item.downloadCount }}
+                      点赞：{{ item.likeCount }}
                     </div>
-                  </li>
-                </ul>
-                <div v-if="form.resourceList?.length === 0" text-center text-small>
-                  暂无资源
-                </div>
-              </el-form-item>
+                  </div>
+                </li>
+              </ul>
+              <div v-if="form.resourceList?.length === 0" text-center text-small>
+                暂无资源
+              </div>
             </component>
           </el-collapse>
         </el-form>
@@ -1047,4 +1076,15 @@ function resetSearchOption() {
     align-items: center;
   }
 }
+
+// .second-table {
+
+//   :deep(.el-table__cell.el-table__expanded-cell) {
+//     background-color: transparent !important;
+//     td,
+//     tr {
+//         background-color: transparent !important;
+//     }
+//   }
+// }
 </style>

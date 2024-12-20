@@ -19,6 +19,26 @@ export function useAdminBookPageByDTOApi(dto: AdminSelectBookPageDTO, token: str
     },
   );
 }
+
+
+/**
+ * 获取图书详情列表(分页) （管理员）（包含资源列表）
+ * @param dto 条件
+ * @param token 用户token
+ * @returns 分页
+ */
+export function useAdminBookDetailPageByDTOApi(dto: AdminSelectBookPageDTO, token: string) {
+  return useHttp.get<Result<IPage<AdminBookDetailVO>>>(
+    "/admin/book/page/detail",
+    {
+      ...dto,
+    },
+    {
+      headers: { Authorization: token },
+    },
+  );
+}
+
 /**
  * 获取图书详情（管理员）
  * @param bookId 图书ID

@@ -104,6 +104,10 @@ export interface AdminSelectResourcePageDTO {
    */
   endDate?: string;
   /**
+   * 是否删除（0 - 否，1 - 是）
+   */
+  isDeleted?: BoolEnum;
+  /**
    * 关键字
    */
   keyword?: string;

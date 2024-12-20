@@ -94,7 +94,6 @@ body.dark {
   background-color: rgba(85, 85, 85, 0.479);
 }
 
-
 // 关闭所有动画渐变保证变化的流畅
 html.stop-transition {
   &,
@@ -219,7 +218,7 @@ html.stop-transition-all {
 // popper
 .el-popper-init {
   padding: 2px 4px;
-}  
+}
 
 // 消息框
 body .el-message {
@@ -257,17 +256,32 @@ body .el-message {
   z-index: 3100 !important;
 }
 
-// // el-menu
-// .el-sub-menu.is-active {
-//   .el-sub-menu__title {
-//     color: var(--el-color-primary);
-//   }
-// }
-// .el-menu-item.is-active {
-//   background-color: var(--el-color-primary);
-//   color: #fff;
-//   &:hover {
-//     background-color: var(--el-color-primary) !important;
-//     color: #fff !important;
-//   }
-// }
+// el-menu
+.el-sub-menu.is-active {
+  color: var(--el-color-primary);
+}
+.el-menu.el-menu--popup {
+  padding: 0.4rem;
+  .el-menu-item {
+    margin-top: 0.4rem;
+    border-radius: calc(var(--el-popper-border-radius) / 2);
+    border: 1px solid transparent;
+    &:first-child {
+      margin-top: 0;
+    }
+    &:hover {
+      border: 1px dashed var(--el-color-primary);
+    }
+    &.is-active {
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+      background-color: var(--el-color-primary);
+      color: #fff !important;
+      border-radius: calc(var(--el-popper-border-radius) / 2);
+      &:hover {
+        background-color: var(--el-color-primary) !important;
+        color: #fff !important;
+        border-radius: calc(var(--el-popper-border-radius) / 2);
+      }
+    }
+  }
+}

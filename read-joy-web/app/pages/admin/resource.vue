@@ -6,7 +6,7 @@ import { useDateFormat } from "@vueuse/core";
 import { AdminResourceSortType, type AdminResourceVO, type AdminSelectResourcePageDTO, type InsertResourceDTO, type UpdateResourceDTO, useAdminAddResourceApi, useAdminBatchDeleteResourceApi, useAdminDeleteResourceApi, useAdminResourceDetailApi, useAdminResourcePageByDTOApi, useAdminUpdateResourceApi } from "~/composables/api/admin/resource";
 import { BoolEnum, DefaultOrderSort, ResultStatus } from "~/composables/api/types/result";
 import { useAdminStore } from "~/composables/sotre/useAdminStore";
-import { BaseUrlImg } from "~/composables/utils/useBaseUrl";
+import { BaseUrlFile } from "~/composables/utils/useBaseUrl";
 import { compareObjects, DATE_FORMAT, DATE_SELECTOR_OPTIONS, FILE_TYPE_ICON_DEFAULT, FILE_TYPE_ICON_MAP, formatFileSize } from "~/composables/utils/useUtils";
 import { appName } from "~/constants";
 
@@ -67,13 +67,13 @@ const form = ref<Partial<AdminResourceVO & InsertResourceDTO & UpdateResourceDTO
 const fileList = ref<UploadUserFile[]>([]);
 const formRules = computed<any>(() => ({
   bookId: [
-    { required: true, message: "请选择图书！", trigger: "blur" },
+    { required: isAdd.value, message: "请选择图书！", trigger: "blur" },
   ],
   resourceFile: [
-    { required: true, message: "请上传资源文件！", trigger: "blur" },
+    { required: isAdd.value, message: "请上传资源文件！", trigger: "blur" },
   ],
   title: [
-    { required: true, message: "请输入资源标题！", trigger: "blur" },
+    { required: isAdd.value, message: "请输入资源标题！", trigger: "blur" },
     { type: "string", min: 1, max: 100, message: "资源标题长度必须在 1 到 100 个字符之间！", trigger: "blur" },
   ],
 }));
@@ -83,6 +83,7 @@ const isShowSearch = ref<boolean>(true);
 const searchDTO = ref<AdminSelectResourcePageDTO>({
   page: 1,
   size: 10,
+  isDeleted: BoolEnum.FALSE,
   bookId: undefined,
   endDate: undefined,
   keyword: undefined,
@@ -117,7 +118,7 @@ async function loadData() {
 
 watch([searchDTO, page, size], () => {
   loadData();
-}, { immediate: true });
+}, { immediate: true, deep: true });
 
 // 打开添加弹窗
 function onAddItem() {
@@ -134,7 +135,7 @@ function onEditItem(row: AdminResourceVO) {
  * 资源操作
  * @param type 类型
  */
-async function onSubmit(type: "insert" | "update" | "delete" | "batchDel", data: any) {
+async function onSubmit(type: "insert" | "update" | "delete" | "batchDel" | "recover", data: any) {
   const tip = {
     class: "el-button--primary",
     title: "操作",
@@ -155,16 +156,16 @@ async function onSubmit(type: "insert" | "update" | "delete" | "batchDel", data:
     tip.class = "el-button--danger";
     tip.title = "批量删除资源";
   }
+  else if (type === "recover") {
+    tip.class = "el-button--primary";
+    tip.title = "恢复该资源";
+  }
   else {
     return;
   }
   if (isLoading.value)
     return;
   const resourceFile = fileList.value[0];
-  // if (type === "insert" && (!resourceFile || !resourceFile.raw)) {
-  //   ElMessage.error("请上传资源文件!");
-  //   return;
-  // }
   // 二步确认
   checkForm(type, () => {
     ElMessageBox.confirm(`是否确认${tip.title}？`, "操作提醒", {
@@ -197,6 +198,16 @@ async function onSubmit(type: "insert" | "update" | "delete" | "batchDel", data:
               form.value.isDeleted !== undefined && formData.append("isDeleted", form.value.isDeleted);
               resourceFile && resourceFile.raw && formData.append("resourceFile", resourceFile.raw, resourceFile.name || "default.txt");
               res = await useAdminUpdateResourceApi(data.resourceId, formData, admin.getToken);
+            }
+            else if (type === "recover") { // 恢复
+              if (typeof data !== "number") {
+                ElMessage.warning("参数错误！");
+                return;
+              }
+              const formData = new FormData() as any;
+              form.value.bookId !== undefined && formData.append("bookId", form.value.bookId);
+              formData.append("isDeleted", BoolEnum.FALSE);
+              res = await useAdminUpdateResourceApi(data, formData, admin.getToken);
             }
             else if (type === "delete") {
               if (typeof data !== "number") {
@@ -247,8 +258,8 @@ async function onSubmit(type: "insert" | "update" | "delete" | "batchDel", data:
 /**
  * 验证校验
  */
-function checkForm(type: "insert" | "update" | "delete" | "batchDel", call: () => any) {
-  if (type === "delete" || type === "batchDel") {
+function checkForm(type: "insert" | "update" | "delete" | "batchDel" | "recover", call: () => any) {
+  if (type === "delete" || type === "batchDel" || type === "recover") {
     call && call();
     return;
   }
@@ -337,7 +348,7 @@ function clearForm(call?: () => void) {
     bookTitle: undefined,
     createTime: undefined,
     downloadCount: undefined,
-    isDeleted: undefined,
+    isDeleted: BoolEnum.FALSE,
     likeCount: undefined,
     size: undefined,
 
@@ -362,9 +373,10 @@ async function onShowInfoDetail(row?: AdminResourceVO, call?: () => any) {
     fileList.value = row?.url
       ? [{
           name: row?.url?.split?.("/")?.pop() || "img.png",
-          url: BaseUrlImg + row.url,
+          url: BaseUrlFile + row.url,
         }]
       : [];
+
     // 补充详情
     const res = await useAdminResourceDetailApi(row.resourceId, admin.getToken);
     if (res.code === ResultStatus.SUCCESS) {
@@ -482,6 +494,7 @@ function resetSearchOption() {
   searchDTO.value = {
     page: 1,
     size: 10,
+    isDeleted: undefined,
     bookId: undefined,
     endDate: undefined,
     keyword: undefined,
@@ -507,7 +520,7 @@ function resetSearchOption() {
           class="top-menu flex-shrink-0 transform-origin-left-center overflow-hidden transition-300 transition-all"
           flex="~ gap-2 md:gap-4 items-center"
         >
-          <small sticky left-0 flex-shrink-0 opacity-70>筛选：</small>
+          <small sticky left-0 flex-shrink-0>筛选：</small>
           <!-- 资源名 -->
           <el-input v-model.lazy.trim="searchDTO.keyword" class="w-12rem sm:w-14rem" :prefix-icon="ElIconSearch" placeholder="聚合搜索" label="资源名" @keyup.enter="loadData" />
           <!-- 分类select -->
@@ -523,6 +536,7 @@ function resetSearchOption() {
               </div>
             </template>
           </el-segmented>
+          <el-checkbox-button v-model="searchDTO.isDeleted" :true-value="BoolEnum.TRUE" :false-value="BoolEnum.FALSE" style="border: none;border-radius: 0;outline: none;box-shadow: none;" class="truncate !border-default !card-default" label="是否删除" />
           <FormDatePicker
             v-model="dateGroupModel"
             :format="DATE_FORMAT"
@@ -572,6 +586,7 @@ function resetSearchOption() {
           <el-table
             ref="tableRef"
             v-loading="isLoading"
+            header-cell-class-name="!bg-color"
             :disabled="isEdit"
             class-name="w-full"
             :data="pageInfo.records"
@@ -582,7 +597,7 @@ function resetSearchOption() {
               fontSize: '1em',
             }"
             row-class-name="group h-4rem"
-            row-key="id"
+            row-key="resourceId"
             height="75vh"
             @row-click="(row: AdminResourceVO) => {
               theRowInfo = row;
@@ -720,7 +735,7 @@ function resetSearchOption() {
                 >
                   已删除
                 </el-tag>
-                <span v-else>正常</span>
+                <span v-else>否</span>
               </template>
             </el-table-column>
             <!-- 创建时间 -->
@@ -730,13 +745,13 @@ function resetSearchOption() {
               label="创建时间"
               sortable
               align="center"
-              min-width="160%"
+              min-width="140%"
             />
             <!-- 动作+弹窗 -->
             <el-table-column
               fixed="right"
               label="操作"
-              min-width="160%"
+              min-width="220%"
             >
               <template #default="{ row }">
                 <div class="flex opacity-0 transition-200 group-hover:opacity-100">
@@ -790,7 +805,7 @@ function resetSearchOption() {
                     :plain="false"
                     style="padding: 0rem 0.6rem"
                     class="btns"
-                    @click="onSubmit('delete', row.resourceId)"
+                    @click="onSubmit(row.isDeleted === BoolEnum.TRUE ? 'recover' : 'delete', row.resourceId)"
                   >
                     <i
                       :class="row.isDeleted ? 'i-solar:refresh-outline' : 'i-solar:trash-bin-minimalistic-broken'"
@@ -855,7 +870,7 @@ function resetSearchOption() {
           hide-required-asterisk
         >
           <el-form-item label="选择图书" prop="bookId">
-            <AdminInputBookItemSelect v-model:book-id="form.bookId" class="w-full" />
+            <AdminInputBookItemSelect v-model:book-id="form.bookId" :dto="{ keyword: isEdit ? theRowInfo.bookTitle : '' }" class="w-full" />
           </el-form-item>
           <el-form-item label="资源文件" prop="resourceFile" class="h-10rem w-full">
             <el-upload
@@ -987,6 +1002,9 @@ function resetSearchOption() {
     .el-checkbox__input {
       display: none;
     }
+  }
+  .el-checkbox-button__inner {
+    border: none;
   }
 }
 :deep(.el-dialog__header.show-close) {

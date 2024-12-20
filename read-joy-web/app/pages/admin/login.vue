@@ -2,7 +2,7 @@
 import { appName } from "~/constants";
 
 definePageMeta({
-  layout: "empty",
+  layout: "default",
   title: `管理员登录 - ${appName}`,
 });
 </script>

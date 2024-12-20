@@ -43,7 +43,7 @@ function getPercent(num = 0): number {
         color="var(--el-color-danger)"
         title-class="!text-danger"
         title="待审评论"
-        :percentage="+((total?.pendingCommentCount || 0) / (total?.totalCommentCount || 1) * 100).toFixed(2)"
+        :percentage="+((total?.pendingCommentCount || 0) / (total?.totalCommentCount || 1) * 100).toFixed(1)"
       >
         <i class="animate-icon i-solar:chat-line-broken text-danger" />
         <template #count>
