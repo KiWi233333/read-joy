@@ -57,41 +57,39 @@ function showSearch() {
               <div class="h-2.1rem w-2.1rem cursor-pointer truncate border border-1px border-color-transparent rounded-full px-2 py-2.2 transition-border sm:max-w-14em hover:border-default card-default-br text-small" />
             </div>
           </template>
-          <template #default>
+          <div flex items-center gap-2 text-sm sm:gap-4>
             <ClientOnly>
-              <div flex items-center gap-2 text-sm sm:gap-4>
-                <LazyPopperUserInfo v-if="user.isLogin">
-                  <CardNuxtImg :default-src="user.userInfo.imgUrl" class="order-0 h-2.2rem w-2.2rem rounded-full rounded-full btn-primary-border border-default bg-color-br">
-                    <template #error>
-                      <div h-full w-full flex-row-c-c text-lg>
-                        {{ user?.userInfo?.loginName?.[0] || "未设置" }}
-                      </div>
-                    </template>
-                  </CardNuxtImg>
-                </LazyPopperUserInfo>
-                <div v-if="!user.isLogin" hidden sm:block>
-                  <button
-                    btn-primary-text
-                    title="注册"
-                    class="mr-2 border-r-2px pr-2 sm:(mr-4 pr-4) border-default-r"
-                    @click="user.showRegisterForm = true"
-                  >
-                    注册
-                  </button>
-                  <button btn-primary-text title="登录" @click="user.showLoginForm = true">
-                    登录
-                  </button>
-                </div>
-                <div v-if="!user.isLogin" class="block sm:hidden btn-primary-circle" @click="user.showLoginForm = true">
-                  <i class="i-solar:user-bold p-2" />
-                </div>
-                <BtnToggleTheme />
-                <div class="block sm:hidden">
-                  <el-button :icon="ElIconSearch" circle @click="showSearch" />
-                </div>
+              <LazyPopperUserInfo v-if="user.isLogin">
+                <CardNuxtImg :default-src="user.userInfo.imgUrl" class="order-0 h-2.2rem w-2.2rem rounded-full rounded-full btn-primary-border border-default bg-color-br">
+                  <template #error>
+                    <div h-full w-full flex-row-c-c text-lg>
+                      {{ user?.userInfo?.loginName?.[0] || "未设置" }}
+                    </div>
+                  </template>
+                </CardNuxtImg>
+              </LazyPopperUserInfo>
+              <div v-if="!user.isLogin" hidden sm:block>
+                <button
+                  btn-primary-text
+                  title="注册"
+                  class="mr-2 border-r-2px pr-2 sm:(mr-4 pr-4) border-default-r"
+                  @click="user.showRegisterForm = true"
+                >
+                  注册
+                </button>
+                <button btn-primary-text title="登录" @click="user.showLoginForm = true">
+                  登录
+                </button>
+              </div>
+              <div v-if="!user.isLogin" class="block sm:hidden btn-primary-circle" @click="user.showLoginForm = true">
+                <i class="i-solar:user-bold p-2" />
+              </div>
+              <BtnToggleTheme />
+              <div class="block sm:hidden">
+                <el-button :icon="ElIconSearch" circle @click="showSearch" />
               </div>
             </ClientOnly>
-          </template>
+          </div>
         </ClientOnly>
       </div>
     </menu>

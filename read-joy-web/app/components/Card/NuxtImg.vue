@@ -1,11 +1,7 @@
 <script lang="ts" setup>
 import { BaseUrlImg } from "~/composables/utils/useBaseUrl";
 
-const {
-  defaultSrc,
-  src,
-  quality = 80,
-} = defineProps<{
+const props = defineProps<{
   src?: string
   defaultSrc?: string
   loadClass?: string
@@ -14,31 +10,46 @@ const {
   errorClass?: string
   quality?: number
 }>();
-const img = useImage();
-const url = computed(() => defaultSrc ? `${BaseUrlImg}${defaultSrc}` : (src || ""));
+const url = computed(() => props.defaultSrc ? `${BaseUrlImg}${props.defaultSrc}` : (props.src || ""));
+const status = ref<"loading" | "loaded" | "error">("loading");
+const imgRef = ref<HTMLImageElement>();
+onMounted(() => {
+  if (imgRef.value) {
+    imgRef.value.onload = () => {
+      status.value = "loaded";
+    };
+    imgRef.value.onerror = () => {
+      status.value = "error";
+    };
+  }
+});
 </script>
 
 <template>
-  <NuxtImg
-    v-if="url"
-    fit="cover"
+  <img
+    v-if="url && status !== 'error'"
+    v-bind="$attrs"
+    ref="imgRef"
     :src="url"
-    alt="图片"
-    :quality="quality"
+    fit="cover"
     loading="lazy"
-    class="object-cover"
-    :placeholder="img(url, { f: 'png', blur: 2, q: 40 })"
-    v-bind="$attrs"
-  />
-  <div
-    v-else class="icon"
-    v-bind="$attrs"
+    class="obj-cover"
+    hide-on-click-modal
   >
-    <slot name="error" v-bind="$attrs">
-      <div bg-color />
+  <div v-else v-bind="$attrs">
+    <slot name="placeholder">
+      <div v-if="status === 'loading' || !url" :class="loadClass !== undefined ? loadClass : 'h-full w-full'" />
+    </slot>
+    <slot name="error">
+      <div v-if="status === 'error' || !url" class="h-full w-full flex-row-c-c" :class="errorRootClass">
+        <i class="icon i-solar-gallery-remove-bold-duotone op-60" :class="errorClass" />
+      </div>
     </slot>
   </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
+.icon {
+  --at-apply: "block max-w-4/5 min-h-5 min-w-5"
+}
 </style>

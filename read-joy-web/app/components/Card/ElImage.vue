@@ -14,25 +14,28 @@ const url = computed(() => defaultSrc ? `${BaseUrlImg}${defaultSrc}` : (src || "
 </script>
 
 <template>
-  <el-image
-    :src="url"
-    fit="cover"
-    hide-on-click-modal
-    v-bind="$attrs"
-  >
-    <template #placeholder>
-      <slot name="placeholder">
-        <div :class="loadClass !== undefined ? loadClass : 'sky-loading h-full w-full'" />
-      </slot>
-    </template>
-    <template #error>
-      <slot name="error">
-        <div class="h-full w-full flex-row-c-c" :class="errorRootClass">
-          <i class="icon i-solar-gallery-remove-bold-duotone op-60" :class="errorClass" />
-        </div>
-      </slot>
-    </template>
-  </el-image>
+  <ClientOnly>
+    <el-image
+      :src="url"
+      loading="lazy"
+      fit="cover"
+      hide-on-click-modal
+      v-bind="$attrs"
+    >
+      <template #placeholder>
+        <slot name="placeholder">
+          <div :class="loadClass !== undefined ? loadClass : 'sky-loading h-full w-full'" />
+        </slot>
+      </template>
+      <template #error>
+        <slot name="error">
+          <div class="h-full w-full flex-row-c-c" :class="errorRootClass">
+            <i class="icon i-solar-gallery-remove-bold-duotone op-60" :class="errorClass" />
+          </div>
+        </slot>
+      </template>
+    </el-image>
+  </ClientOnly>
 </template>
 
 <style scoped lang="scss">

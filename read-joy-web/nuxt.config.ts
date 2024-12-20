@@ -15,7 +15,6 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "@nuxtjs/tailwindcss",
     "@element-plus/nuxt",
-    "@nuxt/image",
     "@formkit/auto-animate",
     "nuxt-echarts",
   ],

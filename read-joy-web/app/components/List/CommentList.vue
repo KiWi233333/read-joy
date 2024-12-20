@@ -194,7 +194,7 @@ await reload();
             <div font-500>
               <div>
                 {{ item.commentatorName }}
-                <span v-if="item.commentator === user.userId" class="rounded px-1 py-1px !text-info card-default text-small border-default-hover">自己</span>
+                <span v-if="item.commentator === user.userId" class="rounded px-1 py-2px dark:!text-info card-default text-mini border-default-hover">自己</span>
                 <span v-if="item.createTime" class="float-right ml-a text-small">{{ formatDate(new Date(item.createTime.replace(/-/g, '/'))) }}</span>
               </div>
               <span v-if="item.createTime" float-right flex-row-c-c text-right text-mini>

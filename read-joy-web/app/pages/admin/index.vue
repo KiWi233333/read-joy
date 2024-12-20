@@ -49,9 +49,9 @@ loadData();
         grid="~ cols-1 gap-8"
       >
         <!-- 数据统计本月 -->
-        <AdminTotalDesTotal :data="homeStatistics" class="box-content" />
+        <LazyAdminTotalDesTotal :data="homeStatistics" class="box-content" />
         <!-- 图书发表统计 -->
-        <AdminTotalBookPublishTable
+        <LazyAdminTotalBookPublishTable
           title="出版统计"
           :data="homeStatistics" class="box-content h-40vh sm:h-400px border-default-hover"
         />
@@ -61,7 +61,7 @@ loadData();
         grid="~ cols-1 gap-8 "
         class="right"
       >
-        <AdminTotalBooksPie
+        <LazyAdminTotalBooksPie
           chart-class="w-300px h-400px flex-row-c-c"
           :data="homeStatistics"
           class="flex-row-c-c pb-10 card-default border-default-hover"

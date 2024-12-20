@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { IPage } from "~/composables/api/types";
-import { type AdminCommentVO, type AdminSelectCommentListDTO, useAdminCommentPageByDTOApi } from "~/composables/api/admin/comment";
+import { type AdminCommentVO, type AdminSelectCommentPageDTO, useAdminCommentPageByDTOApi } from "~/composables/api/admin/comment";
 import { CommentStatusEnum } from "~/composables/api/comment";
 import { ResultStatus } from "~/composables/api/types/result";
 import { useAdminStore } from "~/composables/sotre/useAdminStore";
@@ -18,7 +18,7 @@ const {
   itemsClass = "relative grid gap-4 cols-1",
   itemClass,
 } = defineProps<{
-  dto?: Partial<AdminSelectCommentListDTO>
+  dto?: Partial<AdminSelectCommentPageDTO>
   autoStop?: boolean
   showLoad?: boolean
   showMoreText?: boolean
@@ -50,7 +50,7 @@ const setting = useSettingStore();
 /**
  * 加载图书列表
  */
-async function loadData(appendDTO?: Partial<AdminSelectCommentListDTO>) {
+async function loadData(appendDTO?: Partial<AdminSelectCommentPageDTO>) {
   if (isLoading.value || noMore.value)
     return;
   if (limit !== undefined && pageInfo.value.records && +pageInfo?.value?.records.length >= limit) {
@@ -80,7 +80,7 @@ async function loadData(appendDTO?: Partial<AdminSelectCommentListDTO>) {
   }, debounce);
 }
 
-async function reload(appendDTO?: Partial<AdminSelectCommentListDTO>) {
+async function reload(appendDTO?: Partial<AdminSelectCommentPageDTO>) {
   pageInfo.value = {
     page: 0,
     current: undefined,
@@ -107,7 +107,7 @@ const unWatch = watchDebounced(
 const BadgeTypeMap: Record<CommentStatusEnum, any> = {
   [CommentStatusEnum.PENDING]: "warning",
   [CommentStatusEnum.APPROVED]: "info",
-  [CommentStatusEnum.REJECTED]: "error",
+  [CommentStatusEnum.REJECTED]: "danger",
 };
 
 
