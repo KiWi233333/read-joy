@@ -536,7 +536,7 @@ function resetSearchOption() {
               </div>
             </template>
           </el-segmented>
-          <el-checkbox-button v-model="searchDTO.isDeleted" :true-value="BoolEnum.TRUE" :false-value="BoolEnum.FALSE" style="border: none;border-radius: 0;outline: none;box-shadow: none;" class="truncate !border-default !card-default" label="是否删除" />
+          <el-checkbox-button v-model="searchDTO.isDeleted" :true-value="BoolEnum.TRUE" :false-value="BoolEnum.FALSE" style="border: none;border-radius: 0;outline: none;box-shadow: none;" class="truncate !border-default !card-default" label="回收站" />
           <FormDatePicker
             v-model="dateGroupModel"
             :format="DATE_FORMAT"

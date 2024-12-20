@@ -16,7 +16,8 @@
       <slot />
     </div>
     <ClientOnly>
-      <el-backtop :bottom="40" class="shadow-lg card-default border-default-hover">
+      <MenuAichatBar class="fixed bottom-100px right-40px z-998" />
+      <el-backtop :bottom="40" :right="40" title="回到顶部" style="width: 3rem; height: 3rem; line-height: 3rem; text-align: center;" class="shadow border-default card-default">
         <i i-solar:alt-arrow-up-linear />
       </el-backtop>
     </ClientOnly>

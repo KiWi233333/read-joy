@@ -8,5 +8,9 @@ export const BaseUrlVideo = FILES_PATH;
 export const BaseUrlSound = FILES_PATH;
 export const BaseUrlFile = FILES_PATH;
 export const AuthKey = "Authorization";
-export const XUN_FEI_WSS_URL = import.meta.env.VITE_XUN_FEI_WSS_URL;
+
+
+// 讯飞
+export const AiBaseUrl = import.meta.env.VITE_XUN_FEI_WSS_URL;
+export const AiAppId = import.meta.env.VITE_XUN_FEI_APP_ID;
 
