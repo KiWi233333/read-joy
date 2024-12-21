@@ -84,4 +84,22 @@ public class ResourceRepository extends JoinCrudRepository<ResourceMapper, Resou
                 .select(Resource::getResourceId, Resource::getDownloadCount)).stream().mapToLong(Resource::getDownloadCount).sum();
     }
 
+    public List<AdminResourceVO> downloadCountRanking() {
+        return this.list(new LambdaQueryWrapper<Resource>()
+                .select(Resource::getResourceId,
+                        Resource::getDownloadCount,
+                        Resource::getTitle,
+                        Resource::getBookId,
+                        Resource::getLikeCount,
+                        Resource::getSubmitter,
+                        Resource::getCreateTime,
+                        Resource::getIsDeleted,
+                        Resource::getType,
+                        Resource::getSize,
+                        Resource::getUrl
+                )
+                .orderByDesc(Resource::getDownloadCount)
+                .last("LIMIT 20")
+                ).stream().map(AdminResourceVO::toVO).toList();
+    }
 }

@@ -54,6 +54,6 @@ public class UserUpdateInfoDTO {
     }
 
     public boolean checkEmpty() {
-        return StringUtils.isBlank(loginName) && StringUtils.isBlank(trueName) && StringUtils.isBlank(telephone);
+        return StringUtils.isBlank(loginName) && StringUtils.isBlank(trueName) && StringUtils.isBlank(telephone) && cover == null;
     }
 }

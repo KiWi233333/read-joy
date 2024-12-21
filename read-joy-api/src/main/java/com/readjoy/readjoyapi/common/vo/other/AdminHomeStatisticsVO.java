@@ -1,6 +1,7 @@
 package com.readjoy.readjoyapi.common.vo.other;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.readjoy.readjoyapi.common.vo.resource.AdminResourceVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -44,8 +45,13 @@ public class AdminHomeStatisticsVO {
     @Schema(description = "按年统计发表图书统计")
     private List<BookPublishTotalByYear> bookPublishTotalByYearList;
 
+    @Schema(description = "下载量排行榜(前20)")
+    private List<AdminResourceVO> downloadCountRankingList;
+
     @Schema(description = "按类别图书总量统计")
     private List<BookCategoryTotal> bookCategoryTotalList;
+
+
 
     @Schema(description = "请求统计时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

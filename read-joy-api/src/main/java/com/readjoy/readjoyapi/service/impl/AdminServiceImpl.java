@@ -10,6 +10,7 @@ import com.readjoy.readjoyapi.common.pojo.Admin;
 import com.readjoy.readjoyapi.common.pojo.Comment;
 import com.readjoy.readjoyapi.common.vo.admin.AdminInfoVO;
 import com.readjoy.readjoyapi.common.vo.other.*;
+import com.readjoy.readjoyapi.common.vo.resource.AdminResourceVO;
 import com.readjoy.readjoyapi.repository.*;
 import com.readjoy.readjoyapi.service.AdminService;
 import com.readjoy.readjoyapi.common.utils.*;
@@ -124,6 +125,8 @@ public class AdminServiceImpl implements AdminService {
         Long pendingCommentCount = commentRepository.count(new LambdaQueryWrapper<Comment>().eq(Comment::getCommentStatus, CommentStatusEnum.PENDING.getCode()));
         // 11、已驳回评论数
         Long rejectedCommentCount = commentRepository.count(new LambdaQueryWrapper<Comment>().eq(Comment::getCommentStatus, CommentStatusEnum.REJECTED.getCode()));
+        // 12、下载量排行榜
+        List<AdminResourceVO> downloadRankingList = resourceRepository.downloadCountRanking();
         return new AdminHomeStatisticsVO()
                 .setUserCount(userCount)
                 .setBookCount(bookCount)
@@ -138,6 +141,7 @@ public class AdminServiceImpl implements AdminService {
                 .setBookCategoryCount(bookCategoryCount)
                 .setPendingCommentCount(pendingCommentCount)
                 .setRejectionCommentCount(rejectedCommentCount)
+                .setDownloadCountRankingList(downloadRankingList) // 12、下载量排行榜
                 ;
     }
 }
