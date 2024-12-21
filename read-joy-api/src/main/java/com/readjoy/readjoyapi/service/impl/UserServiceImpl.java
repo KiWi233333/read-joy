@@ -86,6 +86,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public UserInfoVO updateUserBaseInfo(UserUpdateInfoDTO dto) {
+        // 判断是否为空对象
+        AssertUtil.isFalse(dto.checkEmpty(), "修改信息不能为空！");
         // 查询用户
         final Integer uid = RequestHolderUtil.get().getId();
         User oldUser = userRepository.getById(uid);

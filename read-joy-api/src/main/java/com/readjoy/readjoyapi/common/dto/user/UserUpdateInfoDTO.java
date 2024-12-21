@@ -32,6 +32,7 @@ public class UserUpdateInfoDTO {
     private MultipartFile cover = null;
 
     @Schema(description = "真实姓名")
+    @Length(max = 20, message = "真实姓名长度不正确！")
     private String trueName;
 
     @Schema(description = "电话号码")
@@ -52,4 +53,7 @@ public class UserUpdateInfoDTO {
                 ;
     }
 
+    public boolean checkEmpty() {
+        return StringUtils.isBlank(loginName) && StringUtils.isBlank(trueName) && StringUtils.isBlank(telephone);
+    }
 }
