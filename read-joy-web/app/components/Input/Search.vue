@@ -125,11 +125,12 @@ $scle-input-width: min(70vw, 32rem);
 @media (max-width: 768px) {
   .search {
     :deep(.el-input__wrapper) {
-      width: 2rem;
+      width: 0;
+      overflow: hidden;
       height: 2rem;
       font-size: 0.8em;
       transition: all $transition-delay;
-      transform: translateY(-4rem);
+      transform: translateY(-4rem) scale(0);
       &.is-focus {
         transform: none;
         .el-input__inner {

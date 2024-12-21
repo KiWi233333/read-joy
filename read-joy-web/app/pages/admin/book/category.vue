@@ -461,7 +461,7 @@ function resetSearchOption() {
               align="center"
             >
               <template #default="{ row }">
-                {{ row?.bookCount || '-' }}
+                {{ row?.bookCount || '' }}
               </template>
             </el-table-column>
             <!-- 动作+弹窗 -->
@@ -489,6 +489,7 @@ function resetSearchOption() {
                   <BtnElButton
                     :plain="false"
                     style="padding: 0rem 0.6rem"
+                    type="primary"
                     class="btns"
                     @click.stop="() => onEditItem(row)"
                   >

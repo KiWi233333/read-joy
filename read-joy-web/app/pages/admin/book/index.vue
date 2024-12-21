@@ -12,6 +12,9 @@ import { BaseUrlImg } from "~/composables/utils/useBaseUrl";
 import { compareObjects, DATE_FORMAT, DATE_SELECTOR_OPTIONS, FILE_TYPE_ICON_DEFAULT, FILE_TYPE_ICON_MAP, formatFileSize, randomISBN } from "~/composables/utils/useUtils";
 import { appName } from "~/constants";
 
+
+const route = useRoute();
+const initCategoryId = route.query?.categoryId ? +route?.query?.categoryId?.toString() : undefined;
 const MAX_FILE_SIZE_MB = 12;
 const store = useAdminDefaultStore();
 const admin = useAdminStore();
@@ -114,13 +117,12 @@ const formRules = computed<any>(() => ({
     { max: 1000, message: "书籍介绍长度不超过1000字", trigger: "blur" },
   ],
 }));
-const route = useRoute();
 // 查询参数
 const isShowSearch = ref<boolean>(true);
 const searchDTO = ref<AdminSelectBookPageDTO>({
   page: 1,
   size: 10,
-  categoryId: route.query?.categoryId ? +route?.query?.categoryId?.toString() : undefined,
+  categoryId: initCategoryId,
   endDate: undefined,
   startDate: undefined,
   keyword: undefined,
@@ -161,6 +163,9 @@ watch([searchDTO, page, size], () => {
 // 打开添加弹窗
 function onAddItem() {
   clearForm();
+  if (initCategoryId) {
+    form.value.categoryId = initCategoryId;
+  }
   isAdd.value = true;
   isShowForm.value = true;
 }
@@ -792,6 +797,7 @@ function resetSearchOption() {
                     :plain="false"
                     style="padding: 0rem 0.6rem"
                     class="btns"
+                    type="primary"
                     @click.stop="() => onEditItem(row)"
                   >
                     <i

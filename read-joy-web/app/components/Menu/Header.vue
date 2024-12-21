@@ -25,7 +25,7 @@ function showSearch() {
       >
         <LazyInputSearch ref="searchInputRef" v-model="searchWord" @open="isShowSearch = true" @close="isShowSearch = false" />
         <h2
-          class="scale-10 text-center text-lg text-light font-500 transition-300 absolute-center -translate-y-5em"
+          class="scale-0 truncate text-center text-lg text-light font-500 transition-300 absolute-center -translate-y-5em"
           :class="{ '-translate-y-5em scale-100 drop-shadow-2xl': isShowSearch }"
         >
           <img src="/logo-text-light.png" alt="logo" class="block h-30px select-none object-cover dark:hidden">
@@ -57,7 +57,7 @@ function showSearch() {
           <ClientOnly>
             <div flex items-center gap-2 text-sm sm:gap-4>
               <LazyPopperUserInfo v-if="user.isLogin">
-                <CardNuxtImg :default-src="user.userInfo.imgUrl" class="order-0 h-2.2rem w-2.2rem rounded-full rounded-full btn-primary-border border-default bg-color-br">
+                <CardNuxtImg :default-src="user.userInfo.imgUrl" class="order-0 h-2rem w-2rem rounded-full rounded-full btn-primary-border border-default bg-color-br">
                   <template #error>
                     <div h-full w-full flex-row-c-c text-lg>
                       {{ user?.userInfo?.loginName?.[0] || " " }}
@@ -82,6 +82,10 @@ function showSearch() {
                 <i class="i-solar:user-bold p-2" />
               </div>
               <BtnToggleTheme />
+              <ClientOnly>
+                <!-- pwa安装 -->
+                <BtnPwaInstall />
+              </ClientOnly>
               <div class="block sm:hidden">
                 <el-button :icon="ElIconSearch" circle @click="showSearch" />
               </div>

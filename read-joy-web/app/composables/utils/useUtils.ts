@@ -1,3 +1,8 @@
+import type { AdminResourceVO } from "../api/admin/book";
+import type { ResourceVO } from "../api/book";
+import { BaseUrlFile } from "./useBaseUrl";
+import { downloadFile } from "./useFile";
+
 export const DATE_FORMAT = "YYYY-MM-DD";
 export const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm:ss";
 export const DATE_SELECTOR_OPTIONS: DatePreloadItem[] = [{
@@ -81,6 +86,21 @@ export const FILE_UPLOAD_ACCEPT = Object.keys(FILE_TYPE_ICON_MAP).join(",");
  * 默认文件图标
  */
 export const FILE_TYPE_ICON_DEFAULT = "/images/icon/file/DEFAULT.png";
+
+export function downloadResource(resource: ResourceVO | AdminResourceVO, token: string, callback?: (status: "403" | "200", message: string) => void) {
+  if (!token) {
+    ElMessage.error("没有权限，请先登录！");
+    callback && callback("403", "没有权限，请先登录！");
+    return;
+  }
+  ElMessage.warning("正在下载中，请稍后查看");
+  downloadFile(BaseUrlFile + resource.url, resource.title, {
+    Authorization: token,
+  }, () => {
+    ElMessage.closeAll("warning");
+    ElMessage.success("下载完成！");
+  });
+}
 
 /**
  * 格式化文件大小

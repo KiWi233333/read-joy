@@ -7,9 +7,13 @@ import { BoolEnum, DefaultOrderSort, type Result, ResultStatus } from "~/composa
 import { useAdminStore } from "~/composables/sotre/useAdminStore";
 import { BaseUrlImg } from "~/composables/utils/useBaseUrl";
 import { compareObjects, markPhone } from "~/composables/utils/useUtils";
+import { appName } from "~/constants";
 
 const admin = useAdminStore();
 
+useSeoMeta({
+  title: `用户管理 - ${appName}`,
+});
 // 数据
 const pageInfo = ref<IPage<AdminUserVO>>({
   records: [],

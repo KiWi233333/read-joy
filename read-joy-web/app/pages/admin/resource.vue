@@ -7,7 +7,7 @@ import { AdminResourceSortType, type AdminResourceVO, type AdminSelectResourcePa
 import { BoolEnum, DefaultOrderSort, ResultStatus } from "~/composables/api/types/result";
 import { useAdminStore } from "~/composables/sotre/useAdminStore";
 import { BaseUrlFile } from "~/composables/utils/useBaseUrl";
-import { compareObjects, DATE_FORMAT, DATE_SELECTOR_OPTIONS, FILE_TYPE_ICON_DEFAULT, FILE_TYPE_ICON_MAP, formatFileSize } from "~/composables/utils/useUtils";
+import { compareObjects, DATE_FORMAT, DATE_SELECTOR_OPTIONS, downloadResource, FILE_TYPE_ICON_DEFAULT, FILE_TYPE_ICON_MAP, formatFileSize } from "~/composables/utils/useUtils";
 import { appName } from "~/constants";
 
 const MAX_FILE_SIZE_MB = 100;
@@ -494,7 +494,7 @@ function resetSearchOption() {
   searchDTO.value = {
     page: 1,
     size: 10,
-    isDeleted: undefined,
+    isDeleted: BoolEnum.FALSE,
     bookId: undefined,
     endDate: undefined,
     keyword: undefined,
@@ -673,12 +673,17 @@ function resetSearchOption() {
             <el-table-column
               column-key="url"
               prop="url"
-              label="路径"
+              label="路径（点击预览）"
               min-width="120%"
               show-overflow-tooltip
             >
               <template #default="{ row }">
-                <BtnCopyText :text="row.url || ''" />
+                <a
+                  target="_blank" block max-w-12em truncate
+                  :href="admin.token && row.url ? `${BaseUrlFile}${row.url}?Authorization=${admin.token}` : ''"
+                >
+                  {{ row.url }}
+                </a>
               </template>
             </el-table-column>
             <!-- 文件大小 -->
@@ -751,10 +756,29 @@ function resetSearchOption() {
             <el-table-column
               fixed="right"
               label="操作"
-              min-width="220%"
+              min-width="300%"
             >
               <template #default="{ row }">
                 <div class="flex opacity-0 transition-200 group-hover:opacity-100">
+                  <!-- 下载 -->
+                  <BtnElButton
+                    :plain="false"
+                    style="padding: 0rem 0.6rem;margin: 0 0 0 0.2rem;"
+                    class="btns"
+                    @click.stop="downloadResource(row, admin.token, (status) => {
+                      if (status === '403') {
+                        ElMessage.error('您没有权限下载该资源！');
+                        navigateTo('/admin/login');
+                        return
+                      }
+                    })"
+                  >
+                    <i
+                      i-solar:download-minimalistic-bold
+                      p-2
+                    />
+                    <span w-0 overflow-hidden transition-200 transition-all class="btns-hover">&nbsp;下载</span>
+                  </BtnElButton>
                   <!-- 详情 -->
                   <BtnElButton
                     :plain="false"
@@ -777,6 +801,7 @@ function resetSearchOption() {
                     :plain="false"
                     style="padding: 0rem 0.6rem"
                     class="btns"
+                    type="primary"
                     @click.stop="() => onEditItem(row)"
                   >
                     <i
@@ -785,20 +810,6 @@ function resetSearchOption() {
                     />
                     <span w-0 overflow-hidden transition-200 transition-all class="btns-hover">&nbsp;编辑</span>
                   </BtnElButton>
-                  <!-- 删除资源 -->
-                  <!-- <BtnElButton
-                    type="danger"
-                    :plain="false"
-                    style="padding: 0rem 0.6rem"
-                    class="btns"
-                    @click="onSubmit('delete', row.resourceId)"
-                  >
-                    <i
-                      i-solar:trash-bin-trash-line-duotone
-                      p-2
-                    />
-                    <span w-0 overflow-hidden transition-200 transition-all class="btns-hover">&nbsp;删除</span>
-                  </BtnElButton> -->
                   <!-- 删除资源 -->
                   <BtnElButton
                     :type="row.isDeleted ? 'default' : 'danger'"

@@ -7,8 +7,8 @@ import { useDateFormat } from "@vueuse/core";
 import { type AdminResourceVO, type AdminSelectResourcePageDTO, type InsertResourceDTO, type UpdateResourceDTO, useAdminAddResourceApi, useAdminBatchDeleteResourceApi, useAdminDeleteResourceApi, useAdminResourceDetailApi, useAdminResourcePageByDTOApi, useAdminUpdateResourceApi } from "~/composables/api/admin/resource";
 import { BoolEnum, ResultStatus } from "~/composables/api/types/result";
 import { useAdminStore } from "~/composables/sotre/useAdminStore";
-import { BaseUrlImg } from "~/composables/utils/useBaseUrl";
-import { compareObjects, FILE_TYPE_ICON_DEFAULT, FILE_TYPE_ICON_MAP, formatFileSize } from "~/composables/utils/useUtils";
+import { BaseUrlFile, BaseUrlImg } from "~/composables/utils/useBaseUrl";
+import { compareObjects, downloadResource, FILE_TYPE_ICON_DEFAULT, FILE_TYPE_ICON_MAP, formatFileSize } from "~/composables/utils/useUtils";
 import { appName } from "~/constants";
 
 const {
@@ -487,7 +487,7 @@ async function onShowInfoDetail(row?: AdminResourceVO, call?: () => any) {
       column-key="title"
       prop="title"
       show-overflow-tooltip
-      min-width="140%"
+      min-width="120%"
       label="文件名"
     >
       <template #default="{ row }">
@@ -523,12 +523,17 @@ async function onShowInfoDetail(row?: AdminResourceVO, call?: () => any) {
     <el-table-column
       column-key="url"
       prop="url"
-      label="路径"
-      min-width="120%"
+      label="路径（点击预览）"
+      min-width="140%"
       show-overflow-tooltip
     >
       <template #default="{ row }">
-        <BtnCopyText :text="row.url || ''" />
+        <a
+          target="_blank" block max-w-12em truncate
+          :href="admin.token && row.url ? `${BaseUrlFile}${row.url}?Authorization=${admin.token}` : ''"
+        >
+          {{ row.url }}
+        </a>
       </template>
     </el-table-column>
     <!-- 文件大小 -->
@@ -601,7 +606,7 @@ async function onShowInfoDetail(row?: AdminResourceVO, call?: () => any) {
     <el-table-column
       fixed="right"
       label="操作"
-      width="280%"
+      width="300%"
     >
       <template #header>
         <!-- 按钮 -->
@@ -642,10 +647,29 @@ async function onShowInfoDetail(row?: AdminResourceVO, call?: () => any) {
       </template>
       <template #default="{ row }">
         <div class="flex opacity-0 transition-200 group-hover:opacity-100">
+          <!-- 下载 -->
+          <BtnElButton
+            :plain="false"
+            style="padding: 0rem 0.6rem;margin: 0 0 0 0.2rem;"
+            class="btns" size="small"
+            @click.stop="downloadResource(row, admin.token, (status) => {
+              if (status === '403') {
+                ElMessage.error('您没有权限下载该资源！');
+                navigateTo('/admin/login');
+                return
+              }
+            })"
+          >
+            <i
+              i-solar:download-minimalistic-bold
+              p-2
+            />
+            <span w-0 overflow-hidden transition-200 transition-all class="btns-hover">&nbsp;下载</span>
+          </BtnElButton>
           <!-- 详情 -->
           <BtnElButton
             :plain="false"
-            style="padding: 0rem 0.6rem"
+            style="padding: 0rem 0.6rem;margin: 0 0 0 0.2rem;"
             class="btns" size="small"
             @click.stop="() => {
               isEdit = false;
@@ -662,7 +686,7 @@ async function onShowInfoDetail(row?: AdminResourceVO, call?: () => any) {
           <!-- 编辑 -->
           <BtnElButton
             :plain="false"
-            style="padding: 0rem 0.6rem"
+            style="padding: 0rem 0.6rem;margin: 0 0 0 0.2rem;"
             class="btns" size="small"
             @click.stop="() => onEditItem(row)"
           >
@@ -675,7 +699,7 @@ async function onShowInfoDetail(row?: AdminResourceVO, call?: () => any) {
           <BtnElButton
             :type="row.isDeleted ? 'default' : 'danger'"
             :plain="false"
-            style="padding: 0rem 0.6rem"
+            style="padding: 0rem 0.6rem;margin: 0 0 0 0.2rem;"
             class="btns" size="small"
             @click="onSubmit(row.isDeleted === BoolEnum.TRUE ? 'recover' : 'delete', row.resourceId)"
           >

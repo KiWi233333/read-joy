@@ -4,7 +4,7 @@ import { AiAppId, AiBaseUrl } from "~/composables/utils/useBaseUrl";
 import { appName } from "~/constants";
 import { type ChatMessageVO, MessageType, WsStatusEnum } from "./Chat/chat";
 
-const MAX_HISTORY_LENGTH = 0;
+const MAX_HISTORY_LENGTH = 10;
 const isShow = ref(false);
 
 const INIT_MSG: ChatMessageVO = {
@@ -99,8 +99,7 @@ function senMsg(msg: string, id: number) {
   status.value = WsStatusEnum.OPEN;
   body.value.ws.onopen = (e) => {
     // 截取最后几条消息
-    // const last10 = msgList.value.slice(-MAX_HISTORY_LENGTH).map(item => ({ content: item.message.content as string, role: String(item.fromUser.userId) === String(user.userInfo.id) ? "user" : "assistant" }));
-    const last10 = [];
+    const last10 = msgList.value.slice(-MAX_HISTORY_LENGTH).map(item => ({ content: item.message.content as string, role: String(item.fromUser.userId) === String(user.userInfo.id) ? "user" : "assistant" }));
     // 用户
     last10.push({
       content: msg,
@@ -232,7 +231,7 @@ onMounted(() => {
           <div
             :title="`${appName}助手`"
             data-fade
-            :class="{ 'shadow-bg': isShow }"
+            :class="{ 'shadow-bg': !isShow }"
             class="h-12 w-12 flex-row-c-c cursor-pointer rounded-1/2 bg-[var(--el-color-primary)] shadow transition-all hover:shadow-lg border-default-hover"
           >
             <i class="i-solar:ghost-bold bg-light p-2" />

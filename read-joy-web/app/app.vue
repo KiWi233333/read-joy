@@ -51,31 +51,29 @@ onMounted(() => {
 .layout-enter-from,
 .layout-leave-to {
   opacity: 0;
+  /* filter: blur(10px); */
 }
 .page-enter-active,
 .page-leave-active {
-    transition: opacity 0.3s;
+  transition: opacity 0.3s;
 }
 .page-enter-from,
 .page-leave-to {
+  /* filter: blur(10px); */
   opacity: 0;
 }
 
+/* 图书详情 */
 /* [data-nuxt-img] {
   transform: scale(1);
-  transition: transform 0.3s;
+  transition: transform 0.2s;
 } */
-/* 图书详情 */
-.book-detail-page-enter-active,
+/* .book-detail-page-enter-active,
 .book-detail-page-leave-active {
-    transition: opacity 0.3s;
+    transition: opacity 0.2s;
 }
 .book-detail-page-enter-from,
 .book-detail-page-leave-to {
   opacity: 0;
-  /* filter: blur(10px); */
-  /* [data-nuxt-img] {
-    transform: scale(2)
-  } */
-}
+} */
 </style>

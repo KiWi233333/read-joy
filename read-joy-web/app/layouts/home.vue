@@ -15,6 +15,6 @@
       </el-backtop>
     </ClientOnly>
     <!-- 页脚 -->
-    <MenuFooter />
+    <MenuFooter mt-a />
   </div>
 </template>

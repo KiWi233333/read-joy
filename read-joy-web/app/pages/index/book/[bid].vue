@@ -41,7 +41,7 @@ await loadData();
 
 <template>
   <div relative pb-10vh>
-    <BookDetailView class="data-fades mt-10 sm:mt-6vh" :book-detial="store.theBookDetail" />
+    <BookDetailView class="mt-10 sm:mt-8vh" :book-detial="store.theBookDetail" />
   </div>
 </template>
 

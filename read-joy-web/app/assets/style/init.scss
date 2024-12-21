@@ -257,8 +257,15 @@ body .el-message {
 }
 
 // el-menu
+.el-menu.is-fold {
+  .el-sub-menu.is-active {
+    border: 1px dashed var(--el-color-primary) !important;
+  }
+}
 .el-sub-menu.is-active {
-  color: var(--el-color-primary);
+  .el-sub-menu__title {
+    color: var(--el-color-primary) !important;
+  }
 }
 .el-menu.el-menu--popup {
   padding: 0.4rem;
