@@ -153,7 +153,7 @@ onMounted(() => {
           :clearable="false"
           :prefix-icon="ElIconSearch"
           placeholder="搜索"
-          class="search hidden sm:block"
+          class="search"
           @keyup.enter="onSearch"
           @focus="$emit('open')"
           @keyup.esc="() => {

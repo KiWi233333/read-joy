@@ -24,22 +24,22 @@ useHead({
     },
   ],
 });
-const isNew = computed({
-  get: () => {
-    return pageDTO.value.sortType === BookSortType.PUBLISH_TIME && pageDTO.value.sortOrder === BookSortOrder.DESC;
-  },
-  set: (val) => {
-    if (val) {
-      pageDTO.value.sortType = BookSortType.PUBLISH_TIME;
-      pageDTO.value.sortOrder = BookSortOrder.DESC;
-    }
-    else {
-      pageDTO.value.sortType = undefined;
-      pageDTO.value.sortOrder = undefined;
-    }
-    tempDto.value = JSON.parse(JSON.stringify(pageDTO.value));
-  },
-});
+// const isNew = computed({
+//   get: () => {
+//     return pageDTO.value.sortType === BookSortType.PUBLISH_TIME && pageDTO.value.sortOrder === BookSortOrder.DESC;
+//   },
+//   set: (val) => {
+//     if (val) {
+//       pageDTO.value.sortType = BookSortType.PUBLISH_TIME;
+//       pageDTO.value.sortOrder = BookSortOrder.DESC;
+//     }
+//     else {
+//       pageDTO.value.sortType = undefined;
+//       pageDTO.value.sortOrder = undefined;
+//     }
+//     tempDto.value = JSON.parse(JSON.stringify(pageDTO.value));
+//   },
+// });
 </script>
 
 <template>
@@ -61,9 +61,9 @@ const isNew = computed({
             <span class="ml-2 min-w-6em" py-1 font-500 text-small>
               共{{ pageInfo?.total }}本图书
             </span>
-            <el-checkbox v-model="isNew" size="small" label="asc" class="ml-2">
+            <!-- <el-checkbox v-model="isNew" size="small" label="asc" class="ml-2">
               只看最新
-            </el-checkbox>
+            </el-checkbox> -->
           </h2>
           <div class="group relative z-9 flex items-center" @click="inputRef?.focus">
             <ElInput
@@ -72,7 +72,7 @@ const isNew = computed({
               type="text"
               :prefix-icon="ElIconSearch"
               placeholder="搜索"
-              class="search mx-1 hidden rounded-2rem sm:block border-default"
+              class="search mx-1 rounded-2rem sm:block border-default"
               @keyup.esc="() => {
                 inputRef?.blur()
               }"
@@ -100,7 +100,7 @@ const isNew = computed({
 
 <style lang="scss" scoped>
 $input-width: min(50vw, 16rem);
-$scle-input-width: min(60vw, 22rem);
+$scle-input-width: min(65vw, 20rem);
 .search {
   :deep(.el-input__wrapper) {
     width: $input-width;

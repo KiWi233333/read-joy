@@ -185,7 +185,7 @@ await reload();
           <CardNuxtImg :default-src="item.commentatorAvatar" class="h-12 w-12 flex-shrink-0 rounded-full border-default card-default">
             <template #error>
               <div h-full w-full flex-row-c-c text-lg>
-                {{ item?.commentatorName?.[0] || "未设置" }}
+                {{ item?.commentatorName?.[0] || " " }}
               </div>
             </template>
           </CardNuxtImg>

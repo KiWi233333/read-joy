@@ -99,8 +99,8 @@ importers:
         specifier: ^0.1.3
         version: 0.1.3(eslint@9.17.0(jiti@2.4.1))
       md-editor-v3:
-        specifier: ^5.1.0
-        version: 5.1.0(vue@3.5.13(typescript@5.7.2))
+        specifier: ^5.1.1
+        version: 5.1.1(vue@3.5.13(typescript@5.7.2))
       nuxt:
         specifier: ^3.14.1592
         version: 3.14.1592(@parcel/watcher@2.5.0)(@types/node@22.10.2)(eslint@9.17.0(jiti@2.4.1))(ioredis@5.4.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.28.1)(sass@1.83.0)(terser@5.37.0)(tsx@4.19.2)(typescript@5.7.2)(vite@6.0.3(@types/node@22.10.2)(jiti@2.4.1)(sass@1.83.0)(terser@5.37.0)(tsx@4.19.2)(yaml@2.6.1))(vue-tsc@2.1.10(typescript@5.7.2))(yaml@2.6.1)
@@ -4224,8 +4224,8 @@ packages:
     resolution: {integrity: sha512-4MqMiKP90ybymYvsut0CH2g4XWbfLtmlCkXmtmdcDCxNB+mQcu1w/1+L/VD7vi/PSv7X2JYV7SCcR+jiPXnQtA==}
     engines: {node: '>= 0.4'}
 
-  md-editor-v3@5.1.0:
-    resolution: {integrity: sha512-c++wFxzJOs5ILyntyf0CpBWWosc5GNNT3j8NoOd/n5UsqVH9dv1p2OymrxBmU5XuOyc6xEazfDMAKK7FxtmZTw==}
+  md-editor-v3@5.1.1:
+    resolution: {integrity: sha512-qF7NCQOyg8dndm8RRTp+l8fIUpRKooWY7DqHLjr2jkuIZKN4kOei8tQcrNivDKsR1sHuQ1Vdvps5ssI6Aw2ruQ==}
     peerDependencies:
       vue: ^3.5.3
 
@@ -11425,7 +11425,7 @@ snapshots:
 
   math-intrinsics@1.0.0: {}
 
-  md-editor-v3@5.1.0(vue@3.5.13(typescript@5.7.2)):
+  md-editor-v3@5.1.1(vue@3.5.13(typescript@5.7.2)):
     dependencies:
       '@codemirror/lang-markdown': 6.3.1
       '@codemirror/language-data': 6.5.1

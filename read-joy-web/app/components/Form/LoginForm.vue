@@ -212,11 +212,11 @@ async function onLogin(formEl: any | undefined) {
       </el-form-item>
     </template>
     <template v-else>
-      <div data-fades class="relative flex-row-c-c flex-col gap-4 pb-2 sm:gap-6">
+      <div data-fade class="relative flex-row-c-c flex-col gap-4 pb-2 sm:gap-6">
         <CardNuxtImg :src="user.userInfo.imgUrl ? BaseUrlImg + user.userInfo.imgUrl : ''" class="h-6rem w-6rem border-default card-default">
           <template #error>
             <div h-full w-full flex-row-c-c text-lg>
-              {{ user?.userInfo?.loginName?.[0] || "未设置" }}
+              {{ user?.userInfo?.loginName?.[0] || " " }}
             </div>
           </template>
         </CardNuxtImg>

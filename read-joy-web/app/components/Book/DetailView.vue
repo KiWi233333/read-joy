@@ -19,6 +19,7 @@ const user = useUserStore();
 const store = useDefaultStore();
 const likeAllCount = computed(() => bookDetial?.resourceList?.reduce((pre, cur) => pre + cur.likeCount, 0) || 0);
 const downAllCount = computed(() => bookDetial?.resourceList?.reduce((pre, cur) => pre + cur.downloadCount, 0) || 0);
+const bookListDto = computed(() => store.theBookDetail.categoryId === bookDetial?.categoryId ? { categoryId: store.theBookDetail.categoryId } : {});
 // tabs栏
 const activeName = ref("read");
 function downloadResource(resource: ResourceVO) {
@@ -202,7 +203,7 @@ async function likeResource(item: ResourceVO) {
       </el-tabs>
       <div>
         <ListBookList
-          v-if="store.theBookDetail?.categoryId"
+          v-if="bookListDto?.categoryId"
           :show-load="true"
           books-class="relative grid cols-3 sm:cols-2 gap-6 sm:gap-8"
           :book-node="CardBookInfoSe"
@@ -210,9 +211,7 @@ async function likeResource(item: ResourceVO) {
           auto-stop
           :limit="8"
           :ssr="true"
-          :dto="{
-            categoryId: store.theBookDetail.categoryId,
-          }"
+          :dto="bookListDto"
           :animated="false"
           :ignore-ids="bookDetial?.bookId ? [bookDetial.bookId] : undefined"
         >

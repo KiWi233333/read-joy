@@ -108,9 +108,6 @@ async function reload(appendDTO?: Partial<SelectBookPageDTO>) {
 const unWatch = watchDebounced(
   () => dto,
   (newVal, oldVal) => {
-    if (newVal && oldVal && !Object.keys(compareObjects(newVal, oldVal))?.length) {
-      return;
-    }
     reload();
   },
   {

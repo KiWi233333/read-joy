@@ -55,10 +55,8 @@ export function useUpdateUserPwdApi(dto: UserUpdatePwdDTO, token: string) {
  * @param dto 参数
  * @returns 是否成功
  */
-export function updateUserInfoApi(dto: UserUpdateInfoDTO, token: string) {
-  return useHttp.post_params<Result<UserInfoVO>>("/user", {
-    ...dto,
-  }, {
+export function updateUserInfoApi(dto: FormData, token: string) {
+  return useHttp.put_formdata<Result<UserInfoVO>>("/user", dto, {
     headers: {
       Authorization: token,
     },

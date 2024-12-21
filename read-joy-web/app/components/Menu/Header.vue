@@ -1,15 +1,13 @@
 <script lang="ts" setup>
 import { useUserStore } from "~/composables/sotre/useUserStore";
 
-defineProps({
-  search: { type: Boolean, default: true }, // 是否显示搜索框，默认显示
-});
 const user = useUserStore();
 // 搜索
 const isShowSearch = ref<boolean>(false);
 const searchInputRef = ref();
 const searchWord = ref<string>("");
 function showSearch() {
+  isShowSearch.value = true;
   searchInputRef.value.inputRef?.focus?.();
 }
 </script>
@@ -22,8 +20,7 @@ function showSearch() {
       </template>
       <!-- 搜索框 -->
       <div
-        v-if="search"
-        class="top-4 z-3 translate-y-0 animate-[fade-in_0.2s] transition-300 transition-ease-in-out absolute-center"
+        class="absolute top-4 z-3 translate-y-0 animate-[fade-in_0.2s] transition-300 transition-ease-in-out absolute-center"
         :class="{ 'translate-y-20vh scale-120': isShowSearch }"
       >
         <LazyInputSearch ref="searchInputRef" v-model="searchWord" @open="isShowSearch = true" @close="isShowSearch = false" />
@@ -37,8 +34,8 @@ function showSearch() {
       </div>
       <transition name="fade" :duration="200">
         <div
-          v-if="search"
           v-show="isShowSearch"
+          key="search"
           class="fixed left-0 top-0 z-2 h-100vh w-full bg-[rgba(240,240,240,0.9)] backdrop-blur-12px dark:bg-[rgba(20,20,20,0.92)] sm-dark:bg-[rgba(10,10,10,0.4)]"
           @click="isShowSearch = false"
         />
@@ -63,7 +60,7 @@ function showSearch() {
                 <CardNuxtImg :default-src="user.userInfo.imgUrl" class="order-0 h-2.2rem w-2.2rem rounded-full rounded-full btn-primary-border border-default bg-color-br">
                   <template #error>
                     <div h-full w-full flex-row-c-c text-lg>
-                      {{ user?.userInfo?.loginName?.[0] || "未设置" }}
+                      {{ user?.userInfo?.loginName?.[0] || " " }}
                     </div>
                   </template>
                 </CardNuxtImg>

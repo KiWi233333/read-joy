@@ -37,10 +37,10 @@ function useNowDateText(date: Date = new Date()): string {
         欢迎回来，{{ getNowStatus }}
       </h2>
     </div>
-    <div ml-a cursor-pointer p-2 card-default-br border-default-hover @click="totalData?.pendingCommentCount && navigateTo('/admin/comment')">
+    <div ml-a min-w-6rem cursor-pointer px-4 py-2 card-default border-default-hover @click="totalData?.pendingCommentCount && navigateTo('/admin/comment')">
       <h1>待办</h1>
       <small :class="{ 'cursor-pointer text-danger': totalData?.pendingCommentCount }">
-        {{ totalData?.pendingCommentCount ? `${totalData?.pendingCommentCount}条评论待审` : "暂无" }}
+        {{ totalData?.pendingCommentCount ? `${totalData?.pendingCommentCount}条评论待审` : "暂无更多" }}
       </small>
     </div>
   </div>

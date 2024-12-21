@@ -4,6 +4,7 @@ import { AiAppId, AiBaseUrl } from "~/composables/utils/useBaseUrl";
 import { appName } from "~/constants";
 import { type ChatMessageVO, MessageType, WsStatusEnum } from "./Chat/chat";
 
+const MAX_HISTORY_LENGTH = 0;
 const isShow = ref(false);
 
 const INIT_MSG: ChatMessageVO = {
@@ -97,8 +98,9 @@ function senMsg(msg: string, id: number) {
   body.value.ws = new WebSocket(AiBaseUrl);
   status.value = WsStatusEnum.OPEN;
   body.value.ws.onopen = (e) => {
-    // 截取最后10条消息
-    const last10 = msgList.value.slice(-10).map(item => ({ content: item.message.content as string, role: String(item.fromUser.userId) === String(user.userInfo.id) ? "user" : "assistant" }));
+    // 截取最后几条消息
+    // const last10 = msgList.value.slice(-MAX_HISTORY_LENGTH).map(item => ({ content: item.message.content as string, role: String(item.fromUser.userId) === String(user.userInfo.id) ? "user" : "assistant" }));
+    const last10 = [];
     // 用户
     last10.push({
       content: msg,
@@ -230,7 +232,8 @@ onMounted(() => {
           <div
             :title="`${appName}助手`"
             data-fade
-            class="shadow-bg h-12 w-12 flex-row-c-c rounded-1/2 bg-[var(--el-color-primary)] shadow border-default-hover"
+            :class="{ 'shadow-bg': isShow }"
+            class="h-12 w-12 flex-row-c-c cursor-pointer rounded-1/2 bg-[var(--el-color-primary)] shadow transition-all hover:shadow-lg border-default-hover"
           >
             <i class="i-solar:ghost-bold bg-light p-2" />
           </div>
@@ -316,9 +319,9 @@ onMounted(() => {
   }
 }
 .shadow-bg {
-  background-color: var(--el-color-primary);
   border-radius: 50%;
   position: relative;
+  background-color: var(--el-color-primary);
   z-index: 1;
 }
 
@@ -334,7 +337,7 @@ onMounted(() => {
 }
 @keyframes GreenDot {
   0% {
-      transform: scale(0.5);
+      transform: scale(0.7);
       opacity: 1;
   }
   30% {

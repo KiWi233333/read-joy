@@ -50,14 +50,14 @@ defineExpose({
 
 <template>
   <div class="group relative z-9 flex items-center" @click="inputRef?.focus">
-    <ElInput
+    <el-input
       ref="inputRef"
       v-model.trim="word"
       type="text"
       :prefix-icon="ElIconSearch"
       v-bind="inputAttrs"
       placeholder="搜索"
-      class="search mx-1 hidden sm:block"
+      class="search mx-1"
       @keyup.enter="onSearch"
       @focus="$emit('open')"
       @keyup.esc="() => {

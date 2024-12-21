@@ -81,7 +81,9 @@ watch(editFiled, (val) => {
     center: true,
   }).then(async ({ value }) => {
     if (value) {
-      const res = await updateUserInfoApi({ [`${val}`]: value }, user.token);
+      const formData = new FormData();
+      formData.append(val, value);
+      const res = await updateUserInfoApi(formData, user.token);
       if (res.code === ResultStatus.SUCCESS) {
         user.userInfo = res.data;
         ElMessage.success("修改成功！");
@@ -92,6 +94,8 @@ watch(editFiled, (val) => {
         }, 300);
       }
     }
+    editFiled.value = undefined;
+  }).catch(() => {
     editFiled.value = undefined;
   });
 });
@@ -136,7 +140,7 @@ watch(editFiled, (val) => {
         >
           <template #error>
             <div h-full w-full flex-row-c-c text-lg>
-              {{ user?.userInfo?.loginName?.[0] || "未设置" }}
+              {{ user?.userInfo?.loginName?.[0] || " " }}
             </div>
           </template>
         </CardNuxtImg>
