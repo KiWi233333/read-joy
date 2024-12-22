@@ -111,7 +111,7 @@ const formRules = computed<any>(() => ({
     { required: isAdd.value, message: "请输入出版日期", trigger: "blur" },
   ],
   coverImage: [
-    { required: true, message: "请上传封面图", trigger: "blur" },
+    { required: isAdd.value, message: "请上传封面图", trigger: "blur" },
   ],
   introduction: [
     { max: 1000, message: "书籍介绍长度不超过1000字", trigger: "blur" },
