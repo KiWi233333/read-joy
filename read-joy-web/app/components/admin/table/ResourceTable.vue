@@ -813,8 +813,8 @@ async function onShowInfoDetail(row?: AdminResourceVO, call?: () => any) {
         <el-form-item label="是否隐藏" prop="isDeleted">
           <el-switch
             v-model="form.isDeleted"
-            :true-value="BoolEnum.TRUE"
-            :false-value="BoolEnum.FALSE"
+            :active-value="BoolEnum.TRUE"
+            :inactive-value="BoolEnum.FALSE"
             inline-prompt
             style="--el-switch-on-color: var(--el-color-danger); --el-switch-off-color: var(--el-color-primary);"
             inactive-text="显示"

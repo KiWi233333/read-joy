@@ -76,12 +76,12 @@ function reloadCache() {
           退出登录
         </BtnElButton>
         <BtnElButton
-          type="danger"
           transition-icon
-          icon-class="i-solar:refresh-bold"
-          class="w-full op-60" @click="reloadCache"
+          icon-class="i-solar:lock-outline"
+          type="danger" class="w-full shadow"
+          @click="admin.showEditForm = true"
         >
-          刷新缓存
+          修改密码
         </BtnElButton>
       </div>
     </div>

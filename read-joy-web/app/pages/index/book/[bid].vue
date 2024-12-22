@@ -11,7 +11,6 @@ const route = useRoute();
 // @ts-expect-error
 const bookId = (route.params?.bid || undefined) as number;
 
-
 async function loadData() {
   const res = await getBookDetailApi(bookId, user.token);
   if (res.code === ResultStatus.SUCCESS) {

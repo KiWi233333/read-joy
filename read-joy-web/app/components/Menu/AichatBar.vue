@@ -9,7 +9,7 @@ const isShow = ref(false);
 
 const INIT_MSG: ChatMessageVO = {
   fromUser: {
-    userId: "1234567890",
+    userId: "12345678960",
     avatar: "/maskable-icon.png",
     nickName: "悦读Zero",
   },
@@ -40,7 +40,7 @@ const dto = ref({
   parameter: {
     chat: {
       domain: "general",
-      temperature: 0.8,
+      temperature: 0.7,
       top_k: 4,
       max_tokens: 2048,
     },
@@ -79,7 +79,6 @@ function onSubmit() {
 }
 // 消息列表
 const msgList = useLocalStorage<ChatMessageVO[]>(`ai_chat_history_${user.userInfo.id}`, [INIT_MSG]);
-
 
 // dom
 const scollRef = ref();
@@ -213,7 +212,6 @@ onMounted(() => {
   <div>
     <ClientOnly>
       <el-popover
-        v-if="user.isLogin"
         placement="top"
         width="fit-content"
         class="shadow-lg"

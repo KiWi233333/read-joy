@@ -188,6 +188,7 @@ async function likeResource(item: ResourceVO) {
                   v-if="user.isLogin && item.url"
                   target="_blank"
                   :href="user.token && item.url ? `${BaseUrlFile}${item.url}?Authorization=${user.token}` : ''"
+                  @click.stop="() => {}"
                 >
                   <i title="预览文件" class="i-solar:eye-outline mr-2 block h-5 w-5 transition-all btn-primary" />
                 </a>

@@ -1089,15 +1089,4 @@ function resetSearchOption() {
     align-items: center;
   }
 }
-
-// .second-table {
-
-//   :deep(.el-table__cell.el-table__expanded-cell) {
-//     background-color: transparent !important;
-//     td,
-//     tr {
-//         background-color: transparent !important;
-//     }
-//   }
-// }
 </style>

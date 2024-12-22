@@ -48,7 +48,7 @@ export function addCommentApi(dto: InsertCommentDTO, token: string) {
  * @param token token
  * @returns 是否成功
  */
-export function deleteCommentApi(id: number, token: string) {
+export function useDeleteCommentApi(id: number, token: string) {
   return useHttp.deleted<Result<number>>(
     `/comment/${id}`,
     {

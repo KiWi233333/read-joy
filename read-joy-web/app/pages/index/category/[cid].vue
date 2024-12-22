@@ -24,22 +24,6 @@ useHead({
     },
   ],
 });
-// const isNew = computed({
-//   get: () => {
-//     return pageDTO.value.sortType === BookSortType.PUBLISH_TIME && pageDTO.value.sortOrder === BookSortOrder.DESC;
-//   },
-//   set: (val) => {
-//     if (val) {
-//       pageDTO.value.sortType = BookSortType.PUBLISH_TIME;
-//       pageDTO.value.sortOrder = BookSortOrder.DESC;
-//     }
-//     else {
-//       pageDTO.value.sortType = undefined;
-//       pageDTO.value.sortOrder = undefined;
-//     }
-//     tempDto.value = JSON.parse(JSON.stringify(pageDTO.value));
-//   },
-// });
 </script>
 
 <template>
@@ -61,9 +45,6 @@ useHead({
             <span class="ml-2 min-w-6em" py-1 font-500 text-small>
               共{{ pageInfo?.total }}本图书
             </span>
-            <!-- <el-checkbox v-model="isNew" size="small" label="asc" class="ml-2">
-              只看最新
-            </el-checkbox> -->
           </h2>
           <div class="group relative z-9 flex items-center" @click="inputRef?.focus">
             <ElInput

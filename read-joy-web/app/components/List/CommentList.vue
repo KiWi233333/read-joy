@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import type { IPage } from "~/composables/api/types";
-import { CommentStatusEnum, type CommentVO, getCommentPageByDTOApi, type SelectCommentPageDTO } from "~/composables/api/comment";
+import { CommentStatusEnum, type CommentVO, getCommentPageByDTOApi, type SelectCommentPageDTO, useDeleteCommentApi } from "~/composables/api/comment";
 
-import { ResultStatus } from "~/composables/api/types/result";
+import { BoolEnum, ResultStatus } from "~/composables/api/types/result";
 import { useSettingStore } from "~/composables/sotre/useSettingStore";
 import { useUserStore } from "~/composables/sotre/useUserStore";
 import { formatDate } from "~/composables/utils/useUtils";
@@ -131,6 +131,7 @@ function addComment(vo: CommentVO) {
     }
   }
 }
+const filterRecords = computed(() => pageInfo.value.records?.filter(item => item.isDeleted !== BoolEnum.TRUE));
 
 
 watch(() => animated, (val) => {
@@ -152,9 +153,45 @@ onDeactivated(() => {
   unWatch();
 });
 
+function onClickDelete(itemId: number) {
+  if (user.userId === undefined || !pageInfo?.value?.records) {
+    return;
+  }
+  const index = pageInfo.value.records.findIndex(item => item.id === itemId);
+  if (index === -1) {
+    ElMessage.error("评论不存在");
+    return;
+  }
+  ElMessageBox.confirm(`确定要删除该评论吗？`, {
+    title: "删除评论",
+    confirmButtonText: "确定",
+    confirmButtonClass: "el-button--danger",
+    cancelButtonText: "取消",
+
+    type: "warning",
+  }).then(async () => {
+    const res = await useDeleteCommentApi(itemId, user.getToken);
+    if (res.code === ResultStatus.SUCCESS) {
+      if (pageInfo?.value?.records && pageInfo.value.records[index]) {
+        pageInfo.value.records[index].isDeleted = BoolEnum.TRUE;
+      }
+      ElMessage.success("删除成功！");
+    }
+    else {
+      ElMessage.error("删除失败！");
+    }
+  }).catch(() => {
+    // cancel
+  },
+  );
+}
+
+
 defineExpose({
   pageInfo,
+  filterRecords,
   noMore,
+  onClickDelete,
   reload,
   loadData,
   addComment,
@@ -180,8 +217,8 @@ await reload();
       :class="itemsClass"
       v-bind="$attrs"
     >
-      <slot v-for="item in pageInfo.records" name="item" :item="item">
-        <div :key="item.id" class="flex gap-4 py-4 border-default-b" :class="itemClass">
+      <slot v-for="item in filterRecords" name="item" :item="item">
+        <div :key="item.id" class="group flex gap-4 py-4 border-default-b" :class="itemClass">
           <CardNuxtImg :default-src="item.commentatorAvatar" class="h-12 w-12 flex-shrink-0 rounded-full border-default card-default">
             <template #error>
               <div h-full w-full flex-row-c-c text-lg>
@@ -189,7 +226,6 @@ await reload();
               </div>
             </template>
           </CardNuxtImg>
-
           <div flex-1>
             <div font-500>
               <div>
@@ -202,6 +238,7 @@ await reload();
                   {{ item.commentStatusText }}
                   {{ item.commentStatus === CommentStatusEnum.PENDING ? `（自己可见）` : '' }}
                 </el-badge>
+                <span v-if="user.userId === item.commentator && item.isDeleted !== BoolEnum.TRUE && item.id" class="m-t-2 op-0 transition-200 btn-danger group-hover:op-100" @click="onClickDelete(item.id)">删除</span>
               </span>
             </div>
             <p class="msg-popper">

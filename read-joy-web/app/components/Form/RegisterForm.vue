@@ -94,27 +94,6 @@ const rules = reactive<FormRules>({
   ],
 });
 
-/**
- *
- * @param timer 本地定时器
- * @param num 计数对象
- * @param target 开始秒数
- * @param step 自增自减
- * @param fn 回调
- */
-function useInterval(timer: any, num: Ref<number>, target?: number, step: number = -1, fn?: () => void) {
-  num.value = target || timer.value;
-  timer.value = setInterval(() => {
-    num.value += step;
-    // 清除定时器
-    if (num.value <= 0) {
-      num.value = -1;
-      timer.value = -1;
-      clearInterval(timer.value);
-      fn && fn();
-    }
-  }, 1000);
-}
 const store = useUserStore();
 /**
  * 注册

@@ -35,15 +35,6 @@ export function useInit() {
     }
   });
 
-
-  // 2、监听书籍id变化
-  watch(() => store.theBookDetail.bookId, (newVal, oldVal) => {
-    if (newVal && newVal !== oldVal) {
-      store.setBook(newVal);
-    }
-  });
-
-
   return () => {
     user.showRegisterForm = false;
     user.showLoginForm = false;
