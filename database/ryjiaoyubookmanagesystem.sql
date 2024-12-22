@@ -11,7 +11,7 @@
  Target Server Version : 80039 (8.0.39)
  File Encoding         : 65001
 
- Date: 20/12/2024 00:06:44
+ Date: 22/12/2024 13:11:22
 */
 
 SET NAMES utf8mb4;
@@ -50,7 +50,7 @@ CREATE TABLE `book`  (
   `coverImageUrl` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '封面图片URL',
   `publishionDate` datetime NOT NULL COMMENT '出版日期',
   PRIMARY KEY (`bookId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 44 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '书籍表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 45 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '书籍表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of book
@@ -94,6 +94,7 @@ INSERT INTO `book` VALUES (36, '978-7-300-12345-8', '肉桂色铺子', 3, 'Bruno
 INSERT INTO `book` VALUES (37, '978-7-543-23456-9', '虞美人草', 3, '夏目漱石', '一本难读、奇怪又华丽无比，被称作“炫技”的小说。', 35.00, '人民文学出版社', 'files/public/1734526507639.jpg', '2024-03-30 00:00:00');
 INSERT INTO `book` VALUES (38, '978-1-23-456789-1', '第一个人', 3, 'Albert Camus', '一部寻根小说，叙述作者怎样从蒙昧中蹒跚走来。', 48.00, '上海译文出版社', 'files/public/1734526481555.jpg', '2024-05-15 00:00:00');
 INSERT INTO `book` VALUES (39, '978-7-108-56789-0', '丛林故事', 3, 'Rudyard Kipling', '英国19世纪末20世纪初的文学大家，儿童文学巨匠的代表作品。', 39.99, '商务印书馆', 'files/public/1734526462157.jpg', '2024-07-10 00:00:00');
+INSERT INTO `book` VALUES (44, '978-90-775-6357-4', '篮坛头号黑粉', 25, 'Kiwi2333', '篮坛头号黑粉', 42.00, '篮坛头号黑粉公司', 'files/public/1734795640025.webp', '2024-12-30 00:00:00');
 
 -- ----------------------------
 -- Table structure for category
@@ -133,7 +134,6 @@ INSERT INTO `category` VALUES (22, '健康');
 INSERT INTO `category` VALUES (23, '军事');
 INSERT INTO `category` VALUES (24, '科普');
 INSERT INTO `category` VALUES (25, '体育');
-INSERT INTO `category` VALUES (26, '生活');
 INSERT INTO `category` VALUES (27, '娱乐');
 
 -- ----------------------------
@@ -149,7 +149,7 @@ CREATE TABLE `comment`  (
   `isDeleted` tinyint(1) NOT NULL COMMENT '是否删除',
   `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '评论表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '评论表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of comment
@@ -169,6 +169,10 @@ INSERT INTO `comment` VALUES (12, 2, 2, '赞赞赞', 2, 0, '2024-12-17 00:30:06'
 INSERT INTO `comment` VALUES (13, 13, 2, '云南通志 小说', 2, 0, '2024-12-17 00:32:15');
 INSERT INTO `comment` VALUES (14, 13, 2, '还可以', 2, 0, '2024-12-17 00:32:19');
 INSERT INTO `comment` VALUES (15, 11, 2, '史记', 2, 0, '2024-12-17 00:39:26');
+INSERT INTO `comment` VALUES (28, 3, 10, '感觉挺好看的', 2, 0, '2024-12-20 11:06:30');
+INSERT INTO `comment` VALUES (29, 3, 10, 'xxx', 2, 0, '2024-12-20 11:08:44');
+INSERT INTO `comment` VALUES (30, 3, 15, '测试', 2, 0, '2024-12-21 23:00:26');
+INSERT INTO `comment` VALUES (31, 3, 15, '**', 2, 0, '2024-12-21 23:00:28');
 
 -- ----------------------------
 -- Table structure for resource
@@ -176,7 +180,7 @@ INSERT INTO `comment` VALUES (15, 11, 2, '史记', 2, 0, '2024-12-17 00:39:26');
 DROP TABLE IF EXISTS `resource`;
 CREATE TABLE `resource`  (
   `resourceId` int NOT NULL AUTO_INCREMENT COMMENT '资源ID',
-  `type` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '资源类型，视频，教学大纲，课件等',
+  `type` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '资源类型 ',
   `bookId` int NOT NULL COMMENT '关联的图书ID',
   `title` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '资源标题',
   `size` int NOT NULL COMMENT '资源大小',
@@ -187,14 +191,19 @@ CREATE TABLE `resource`  (
   `downloadCount` int NOT NULL DEFAULT 0 COMMENT '下载数',
   `likeCount` int NOT NULL DEFAULT 0 COMMENT '点赞数',
   PRIMARY KEY (`resourceId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '资源表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '资源表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of resource
 -- ----------------------------
-INSERT INTO `resource` VALUES (4, 'application/pdf', 1, '《百年孤独》高长荣[译]（正版）.pdf', 2615527, 'files/auth/1734252417307.pdf', 'admin', '2024-12-15 12:50:15', 0, 10, 2);
-INSERT INTO `resource` VALUES (5, 'image/png', 1, '杂谈2.png', 33922, 'files/auth/1734284945239.png', 'admin', '2024-12-16 01:49:05', 0, 2, 1);
-INSERT INTO `resource` VALUES (6, 'application/x-msdownload', 2, 'wtsapi32.dll', 46080, 'files/auth/1734621909997.dll', 'admin123', '2024-12-19 23:25:10', 1, 0, 0);
+INSERT INTO `resource` VALUES (4, 'application/pdf', 1, '《百年孤独》高长荣[译]（正版）.pdf', 2615527, 'files/auth/1734252417307.pdf', 'admin', '2024-12-15 12:50:15', 0, 13, 3);
+INSERT INTO `resource` VALUES (5, 'image/png', 1, '杂谈2.png', 33922, 'files/auth/1734284945239.png', 'admin', '2024-12-16 01:49:05', 0, 4, 2);
+INSERT INTO `resource` VALUES (6, 'application/octet-stream', 2, 'wtsapi32.dll', 46080, 'files/auth/1734621909997.dll', 'admin123', '2024-12-19 23:25:10', 0, 2, 1);
+INSERT INTO `resource` VALUES (7, 'image/png', 11, 'logo.png', 8232, 'files/auth/1734686441224.png', 'admin123', '2024-12-20 17:20:41', 0, 1, 0);
+INSERT INTO `resource` VALUES (8, 'image/png', 38, '图片资源.png', 430667, 'files/auth/1734696778403.png', 'admin123', '2024-12-20 20:12:58', 0, 1, 0);
+INSERT INTO `resource` VALUES (9, 'application/octet-stream', 37, 'ce.png', 160161, 'files/auth/1734697732956.png', 'admin123', '2024-12-20 20:28:53', 1, 0, 0);
+INSERT INTO `resource` VALUES (10, 'image/jpeg', 37, 'nuxt.jpg', 205391, 'files/auth/1734701394747.jpg', 'admin123', '2024-12-20 21:02:44', 1, 2, 0);
+INSERT INTO `resource` VALUES (11, 'application/octet-stream', 44, 't5_50655278.webp', 32422, 'files/auth/1734795713115.webp', 'admin123', '2024-12-21 23:41:53', 0, 21, 0);
 
 -- ----------------------------
 -- Table structure for user
@@ -211,18 +220,20 @@ CREATE TABLE `user`  (
   `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `userType` tinyint(1) NOT NULL COMMENT '用户类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (2, 'kiwi2333', '123456', '张武', '13415000000', 'files/public/2_1734272754454.jpg', 1, '2024-12-09 23:23:25', 1);
+INSERT INTO `user` VALUES (2, 'kiwi2333', '123456', 'Kiwi2333', '13415000000', 'files/public/2_1734272754454.jpg', 1, '2024-12-09 23:23:25', 1);
 INSERT INTO `user` VALUES (3, 'Huya2333', '123456', '张', '18624581213', NULL, 1, '2024-12-08 22:10:43', 1);
 INSERT INTO `user` VALUES (4, 'Liwu12', '123456', '张', '18624581213', NULL, 1, '2024-12-08 22:10:50', 1);
 INSERT INTO `user` VALUES (7, 'liuxiwu2', '123456', '张', '18624581213', NULL, 1, '2024-12-13 03:27:55', 1);
 INSERT INTO `user` VALUES (8, 'liuxiw2', '123456', '张', '18624581213', NULL, 1, '2024-12-13 03:28:17', 1);
-INSERT INTO `user` VALUES (10, 'ikun233', '123456', NULL, NULL, 'files/public/10_1734525111020.png', 1, '2024-12-15 19:26:27', 1);
+INSERT INTO `user` VALUES (10, 'ikun233', '123456', NULL, NULL, 'files/public/10_1734803163584.png', 1, '2024-12-15 19:26:27', 1);
 INSERT INTO `user` VALUES (11, 'ikun2333', '123456', NULL, NULL, NULL, 0, '2024-12-16 12:05:51', 1);
 INSERT INTO `user` VALUES (12, 'bjj2333', '123456', NULL, NULL, NULL, 1, '2024-12-18 10:44:26', 1);
+INSERT INTO `user` VALUES (15, 'niuke233', '123456', 'ces ', '13238223723', 'files/public/15_1734791249562.jpg', 1, '2024-12-21 22:21:51', 1);
+INSERT INTO `user` VALUES (16, 'kunkun', '123456', NULL, NULL, NULL, 1, '2024-12-22 01:19:45', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
