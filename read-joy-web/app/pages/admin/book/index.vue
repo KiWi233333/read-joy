@@ -8,7 +8,7 @@ import { type AdminBookDetailVO, AdminBookSortType, type AdminBookVO, type Admin
 import { DefaultOrderSort, ResultStatus } from "~/composables/api/types/result";
 import { useAdminDefaultStore } from "~/composables/sotre/useAdminDefaultStore";
 import { useAdminStore } from "~/composables/sotre/useAdminStore";
-import { BaseUrlImg } from "~/composables/utils/useBaseUrl";
+import { BaseUrlFile, BaseUrlImg } from "~/composables/utils/useBaseUrl";
 import { compareObjects, DATE_FORMAT, DATE_SELECTOR_OPTIONS, FILE_TYPE_ICON_DEFAULT, FILE_TYPE_ICON_MAP, formatFileSize, randomISBN } from "~/composables/utils/useUtils";
 import { appName } from "~/constants";
 
@@ -987,6 +987,13 @@ function resetSearchOption() {
                       点赞：{{ item.likeCount }}
                     </div>
                   </div>
+                  <a
+                    v-if="admin.isLogin && item.url"
+                    target="_blank"
+                    :href="admin.token && item.url ? `${BaseUrlFile}${item.url}?Authorization=${admin.token}` : ''"
+                  >
+                    <i title="预览文件" class="i-solar:eye-outline mr-2 block h-5 w-5 transition-all btn-primary" />
+                  </a>
                 </li>
               </ul>
               <div v-if="form.resourceList?.length === 0" text-center text-small>

@@ -19,6 +19,10 @@ async function loadData() {
   }
   else {
     store.theBookDetail = {};
+    throw createError({
+      statusCode: 404,
+      statusMessage: "404，该图书暂未收录！",
+    });
   }
   return true;
 }

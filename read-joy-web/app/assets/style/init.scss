@@ -68,7 +68,7 @@ body.dark {
 
 // 全局滚动条
 ::-webkit-scrollbar {
-  width: 6px;
+  width: $scroll-bar-width;
   height: 0;
   background-color: transparent;
 }

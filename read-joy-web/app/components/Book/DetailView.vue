@@ -4,6 +4,7 @@ import { CardBookInfoSe } from "#components";
 import { useAddResourceLikeApi } from "~/composables/api/resource";
 import { ResultStatus } from "~/composables/api/types/result";
 import { useDefaultStore } from "~/composables/sotre/useDefaultStore";
+import { useSettingStore } from "~/composables/sotre/useSettingStore";
 import { useUserStore } from "~/composables/sotre/useUserStore";
 import { BaseUrlFile, BaseUrlImg } from "~/composables/utils/useBaseUrl";
 import { downloadFile } from "~/composables/utils/useFile";
@@ -15,6 +16,7 @@ const {
 } = defineProps<{
   bookDetial?: Partial<BookDetailVO>
 }>();
+const setting = useSettingStore();
 const user = useUserStore();
 const store = useDefaultStore();
 const likeAllCount = computed(() => bookDetial?.resourceList?.reduce((pre, cur) => pre + cur.likeCount, 0) || 0);
@@ -55,7 +57,7 @@ async function likeResource(item: ResourceVO) {
   <div class="relative py-4">
     <section class="main-content">
       <!-- 左侧 -->
-      <div w-full flex-row-c-c flex-col truncate>
+      <div w-full flex-row-c-c flex-col truncate class="group">
         <CardElImage
           :preview-src-list="[BaseUrlImg + bookDetial?.coverImageUrl]"
           preview-teleported
@@ -65,7 +67,7 @@ async function likeResource(item: ResourceVO) {
         >
           <template #error>
             <small class="h-full w-full flex flex-row items-center justify-center">
-              暂无图片
+              暂无封面
             </small>
           </template>
         </CardElImage>
@@ -76,11 +78,21 @@ async function likeResource(item: ResourceVO) {
           {{ bookDetial?.author }}
         </div>
         <!-- 指数卡片 -->
-        <div class="mt-4 w-4/5 overflow-hidden rounded-0 bg-transparent py-4 sm:w-2/3 border-default-t">
-          <div text-small>
-            推荐指数：{{ (likeAllCount + downAllCount) || "暂无" }}
+        <div class="mt-2 w-4/5 overflow-hidden rounded-0 bg-transparent py-4 sm:w-2/3 border-default-t">
+          <div flex-row-bt-c>
+            <span text-small>
+              推荐指数：{{ (likeAllCount + downAllCount) || "暂无" }}
+            </span>
+            <el-switch
+              v-model="setting.isNewTabOpenBook"
+              class="ml-a op-0 transition-opacity group-hover:op-100"
+              title="设置默认新标签页打开"
+              inline-prompt active-text="新标签"
+              inactive-text="抽屉式"
+              style="--el-switch-on-color: var(--el-color-primary);"
+            />
           </div>
-          <div mt-2 flex>
+          <div mt-4 flex>
             <el-progress style="--el-fill-color-light: var(--el-color-primary-light-9);" :width="60" type="circle" class="mr-4" :percentage="(likeAllCount + downAllCount) || 0">
               <template #default="{ percentage }">
                 <span class="text-sm">{{ percentage }}</span>
@@ -89,11 +101,11 @@ async function likeResource(item: ResourceVO) {
             <div class="right flex-1 text-mini">
               <div class="mt-2 flex items-center">
                 <i i-solar:like-broken />
-                <Progress :model-value="likeAllCount" :max="(likeAllCount + downAllCount) || 100" class="ml-2 h-2 flex-1" />
+                <Progress :model-value="likeAllCount" :max="(likeAllCount + downAllCount) || 100" style="height: 0.5rem;" class="ml-2 flex-1" />
               </div>
               <div class="mt-2 flex items-center">
                 <i i-solar:download-minimalistic-outline />
-                <Progress :model-value="downAllCount" :max="(likeAllCount + downAllCount) || 100" class="ml-2 h-2 flex-1" />
+                <Progress :model-value="downAllCount" :max="(likeAllCount + downAllCount) || 100" class="ml-2 flex-1" style="height: 0.5rem;" />
               </div>
             </div>
           </div>
@@ -146,7 +158,7 @@ async function likeResource(item: ResourceVO) {
           </div>
         </el-tab-pane>
         <el-tab-pane lazy label="课程资源" name="resource" class="tab-pane">
-          <ul class="grid cols-2 gap-2 sm:cols-3 sm:gap-4" data-fade style="--anima: latter-slice-blur-top;">
+          <ul class="grid cols-1 gap-2 sm:cols-2 sm:gap-4" data-fade style="--anima: latter-slice-blur-top;">
             <li
               v-for="item in bookDetial?.resourceList"
               :key="item.resourceId"
@@ -159,9 +171,7 @@ async function likeResource(item: ResourceVO) {
                 :src="FILE_TYPE_ICON_MAP[item.type] || FILE_TYPE_ICON_DEFAULT"
               >
                 <template #error>
-                  <small class="h-full w-full flex flex-row items-center justify-center">
-                    暂无图片
-                  </small>
+                  <small class="h-full w-full flex flex-row items-center justify-center" />
                 </template>
               </CardElImage>
               <div class="w-full truncate text-sm">
@@ -174,6 +184,13 @@ async function likeResource(item: ResourceVO) {
               </div>
               <!-- 点赞 -->
               <ClientOnly>
+                <a
+                  v-if="user.isLogin && item.url"
+                  target="_blank"
+                  :href="user.token && item.url ? `${BaseUrlFile}${item.url}?Authorization=${user.token}` : ''"
+                >
+                  <i title="预览文件" class="i-solar:eye-outline mr-2 block h-5 w-5 transition-all btn-primary" />
+                </a>
                 <i :title="actionResourceMap[`${item.resourceId}`] ? '已点赞' : '点赞'" :class="actionResourceMap[`${item.resourceId}`] ? 'i-solar:like-bold text-danger' : 'i-solar:like-broken'" class="block h-6 w-6 btn-danger" @click.stop.prevent.capture="likeResource(item)" />
               </ClientOnly>
             </li>

@@ -45,7 +45,7 @@ function onNewTaget(book: Partial<BookDetailVO>) {
               title="设置默认新标签页打开"
               inline-prompt active-text="新标签"
               inactive-text="抽屉式"
-              style="--el-switch-on-color: var(--el-color-primary); --el-switch-off-color: var(--el-color-danger)"
+              style="--el-switch-on-color: var(--el-color-primary);"
             />
             <i i-solar:circle-top-up-linear mr-4 p-2.4 op-60 transition-opacity btn-info title="新标签页打开" group-hover:op-100 @click="onNewTaget(book)" />
             <i i-solar:close-circle-outline p-3 op-60 transition-opacity btn-danger group-hover:op-100 title="关闭" @click="show = false" />
