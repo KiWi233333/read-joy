@@ -85,6 +85,7 @@ public class WebAndSwaggerConfig implements WebMvcConfigurer { // 覆写addResou
         registry.addInterceptor(authInterceptor) // 注册拦截器
                 .addPathPatterns("/**") // 拦截所有请求
                 .excludePathPatterns(
+                        "/static/**",
                         "/swagger-resources/**",
                         "/swagger-ui.html/**",
                         "/doc.html/**", // swagger

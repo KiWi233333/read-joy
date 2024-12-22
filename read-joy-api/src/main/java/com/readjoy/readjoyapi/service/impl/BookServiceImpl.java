@@ -8,11 +8,13 @@ import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.readjoy.readjoyapi.common.dto.book.InsertBookDTO;
 import com.readjoy.readjoyapi.common.dto.book.SelectBookDTO;
 import com.readjoy.readjoyapi.common.dto.book.UpdateBookDTO;
+import com.readjoy.readjoyapi.common.enums.BoolEnum;
 import com.readjoy.readjoyapi.common.mapper.BookMapper;
 import com.readjoy.readjoyapi.common.pojo.Book;
 import com.readjoy.readjoyapi.common.pojo.Resource;
 import com.readjoy.readjoyapi.common.utils.AssertUtil;
 import com.readjoy.readjoyapi.common.utils.LocalFileUtil;
+import com.readjoy.readjoyapi.common.utils.RequestHolderUtil;
 import com.readjoy.readjoyapi.common.vo.book.BookDetailVO;
 import com.readjoy.readjoyapi.common.vo.book.BookVO;
 import com.readjoy.readjoyapi.common.vo.resource.AdminResourceVO;
@@ -50,7 +52,6 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
     @Override
     public IPage<BookVO> getAdminPageByDTO(SelectBookDTO<BookVO> dto) {
         return bookRepository.selectPageByDTO(dto);
-
     }
 
     @Override
@@ -79,7 +80,14 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
 
     @Override
     public BookDetailVO getBookDetail(Integer id) {
-        final BookDetailVO bookDetailVO = bookRepository.selectDetailAndResources(new Book().setBookId(id));
+        final BookDetailVO bookDetailVO = bookRepository.selectDetailAndResources(new Book().setBookId(id), BoolEnum.FALSE);
+        AssertUtil.isNotEmpty(bookDetailVO, "查询图书不存在！");
+        return bookDetailVO;
+    }
+
+    @Override
+    public BookDetailVO getAdminBookDetail(Integer id) {
+        final BookDetailVO bookDetailVO = bookRepository.selectDetailAndResources(new Book().setBookId(id), null);
         AssertUtil.isNotEmpty(bookDetailVO, "查询图书不存在！");
         return bookDetailVO;
     }

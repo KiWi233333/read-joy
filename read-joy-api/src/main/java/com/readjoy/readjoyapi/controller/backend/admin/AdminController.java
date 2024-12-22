@@ -20,17 +20,17 @@ import org.springframework.web.bind.annotation.*;
 import static com.readjoy.readjoyapi.common.utils.UserTokenUtil.HEADER_NAME;
 
 /**
- * 管理员模块/登录注册
+ * 管理员模块/个人管理
  *
  * @className: AdminController
  * @author: Kiwi23333
- * @description: 管理员模块/登录注册
+ * @description: 管理员模块/个人管理
  * @date: 2024/12/7 16:41
  */
 
 @RestController
 @RequestMapping("/admin")
-@Tag("管理员模块/登录注册")
+@Tag("管理员模块/个人管理")
 @Slf4j
 public class AdminController {
 

@@ -29,6 +29,7 @@ public interface BookService {
 
     BookDetailVO getBookDetail(Integer id);
 
+    BookDetailVO getAdminBookDetail(Integer id);
     Integer batchDeleteBook(Integer[] longs);
 
 }

@@ -55,7 +55,7 @@ public class AdminBookController {
     Result<BookDetailVO> getBookDetail(
             @RequestHeader(name = HEADER_NAME) String token,
             @PathVariable("id") Integer id) {
-        return Result.ok(bookService.getBookDetail(id));
+        return Result.ok(bookService.getAdminBookDetail(id));
     }
 
     @Operation(description = "添加图书")

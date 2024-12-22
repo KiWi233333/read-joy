@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * 身份验证拦截器
@@ -89,7 +86,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             // 3、头部存放信息
             RequestHolderUtil.set(userTokenDTO);
             // 4、下载文件权限验证和计数
-            checkAuthFileDownload(url);
+            final Integer integer = checkAuthFileDownload(url);
             // 判断 用户类型 /admin需要管理员权限 /user需要普通用户权限
             final String requestURI = request.getRequestURI();
             log.info("当前用户 uid:{}, userType:{}, 请求接口：{}", userTokenDTO.getId(), userTokenDTO.getUserType(), requestURI);
@@ -121,11 +118,12 @@ public class AuthInterceptor implements HandlerInterceptor {
      *
      * @param url 请求url
      */
-    private void checkAuthFileDownload(String url) {
+    private Integer checkAuthFileDownload(String url) {
         String resultUrl = url.substring(1);
         if (resultUrl.startsWith(fileDownloadAuthPrefix)) {
             log.info("当前用户下载文件并自增下载次数：{}", resultUrl);
-            resourceService.incrementDownloadCount(resultUrl); // 文件 自增下载次数
+            return resourceService.incrementDownloadCount(resultUrl);// 文件 自增下载次数
         }
+        return 0;
     }
 }

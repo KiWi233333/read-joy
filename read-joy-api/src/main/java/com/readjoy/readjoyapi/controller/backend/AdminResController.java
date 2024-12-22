@@ -30,6 +30,13 @@ public class AdminResController {
     @Resource
     private AdminService adminService;
 
+    @GetMapping("/statistics/home")
+    @Operation(summary = "获取首页数据统计")
+    public Result<AdminHomeStatisticsVO> getHomeStatistics(
+            @RequestHeader(name = HEADER_NAME) String token,
+            AdminDataDTO adminDataDTO) {
+        return Result.ok(adminService.getHomeStatistics(adminDataDTO));
+    }
     @PostMapping("/file/auth")
     @Operation(summary = "上传文件(权限文件)")
     public Result<String> uploadAuth(
@@ -49,11 +56,4 @@ public class AdminResController {
         return Result.ok(localFileUtil.deleteAuthFile(url));
     }
 
-    @GetMapping("/statistics/home")
-    @Operation(summary = "获取首页数据统计")
-    public Result<AdminHomeStatisticsVO> getHomeStatistics(
-            @RequestHeader(name = HEADER_NAME) String token,
-            AdminDataDTO adminDataDTO) {
-        return Result.ok(adminService.getHomeStatistics(adminDataDTO));
-    }
 }

@@ -203,14 +203,6 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         final int updateCount = resourceRepository.getBaseMapper().update(new Resource().setIsDeleted(BoolEnum.TRUE.getValue()), new LambdaQueryWrapper<Resource>()
                 .in(Resource::getResourceId, Arrays.asList(ids)));
         AssertUtil.isTrue(updateCount == ids.length, "部分资源删除失败！");
-        // 删除文件 TODO: 待优化，使用异步删除
-        //        int count = 0;
-        //        for (Resource resource : list) {
-        //            if (localFileUtil.deleteAuthFile(resource.getUrl())) {
-        //                count++;
-        //            }
-        //        }
-        //        log.info("删除文件文件数量：{}，成功数量：{}", ids, count);
         return updateCount;
     }
 

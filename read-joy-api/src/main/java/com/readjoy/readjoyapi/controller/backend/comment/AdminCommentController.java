@@ -39,6 +39,16 @@ public class AdminCommentController {
         return Result.ok(commentService.getPageByDTO(dto));
     }
 
+    @Operation(description = "修改评论审核状态")
+    @PutMapping("/{id}/{status}")
+    Result<Integer> updateCommentStatus(
+            @RequestHeader(name = HEADER_NAME) String token,
+            @PathVariable("id") Integer id,
+            @PathVariable("status") Integer status) {
+        AssertUtil.isTrue(CommentStatusEnum.fromCode(status) != null, "修改状态码错误，请检查！");
+        return Result.ok(commentService.updateCommentStatus(id, status));
+    }
+
     @Operation(description = "删除评论")
     @DeleteMapping("/{id}")
     Result<Long> deleteComment(
@@ -55,14 +65,5 @@ public class AdminCommentController {
         return Result.ok(commentService.batchDeleteComment(ids));
     }
 
-    @Operation(description = "修改评论审核状态")
-    @PutMapping("/{id}/{status}")
-    Result<Integer> updateCommentStatus(
-            @RequestHeader(name = HEADER_NAME) String token,
-            @PathVariable("id") Integer id,
-            @PathVariable("status") Integer status) {
-        AssertUtil.isTrue(CommentStatusEnum.fromCode(status) != null, "修改状态码错误，请检查！");
-        return Result.ok(commentService.updateCommentStatus(id, status));
-    }
 
 }

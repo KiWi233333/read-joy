@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.github.yulichang.repository.JoinCrudRepository;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.readjoy.readjoyapi.common.dto.book.SelectBookDTO;
+import com.readjoy.readjoyapi.common.enums.BoolEnum;
 import com.readjoy.readjoyapi.common.mapper.BookMapper;
 import com.readjoy.readjoyapi.common.pojo.Book;
 import com.readjoy.readjoyapi.common.pojo.Category;
@@ -26,7 +27,7 @@ import java.util.List;
 @Component
 public class BookRepository extends JoinCrudRepository<BookMapper, Book> {
 
-    // 用户
+    // 用户筛选图书分页
     public IPage<BookVO> selectPageByDTO(SelectBookDTO<BookVO> dto) {
         final MPJLambdaWrapper<Book> qw = new MPJLambdaWrapper<Book>()
                 .selectAll(Book.class)
@@ -79,10 +80,12 @@ public class BookRepository extends JoinCrudRepository<BookMapper, Book> {
     /**
      * 根据id查询书籍详情 和 资源
      *
-     * @param book 图书实体
+     * @param book      图书实体
+     *                  图书id
+     * @param isDeleted 图书是否删除
      * @return BookDetailVO
      */
-    public BookDetailVO selectDetailAndResources(Book book) {
+    public BookDetailVO selectDetailAndResources(Book book, BoolEnum isDeleted) {
         final MPJLambdaWrapper<Book> qw = new MPJLambdaWrapper<Book>()
                 .selectAll(Book.class)
                 .selectAs(Category::getCategoryName, BookDetailVO::getCategoryName)
@@ -93,7 +96,11 @@ public class BookRepository extends JoinCrudRepository<BookMapper, Book> {
                 // 图书详情
                 .eq(book.getBookId() != null, Book::getBookId, book.getBookId())
                 .eq(StringUtils.isNotBlank(book.getIsbn()), Book::getIsbn, book.getIsbn());
-        return this.selectJoinOne(BookDetailVO.class, qw);
+        final BookDetailVO bookDetailVO = this.selectJoinOne(BookDetailVO.class, qw);
+        if (isDeleted != null) { // 图书资源是否删除
+            bookDetailVO.getResourceList().removeIf(resource -> !resource.getIsDeleted().equals(isDeleted.getValue()));
+        }
+        return bookDetailVO;
     }
 
     public Integer batchDelete(Integer[] longs) {
