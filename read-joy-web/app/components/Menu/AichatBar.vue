@@ -227,6 +227,7 @@ onMounted(() => {
         <template #reference>
           <!-- v-window-lock="isShow" -->
           <div
+            v-window-lock="isShow"
             :title="`${appName}助手`"
             data-fade
             :class="{ 'shadow-bg': !isShow }"

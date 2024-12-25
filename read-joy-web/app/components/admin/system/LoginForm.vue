@@ -8,11 +8,10 @@ enum LoginType {
 }
 
 const admin = useAdminStore();
-const loginType = useLocalStorage<LoginType>("loginType", LoginType.ADMIN);
 const isLoading = ref<boolean>(false);
 const autoLogin = ref<boolean>(true);
 // 表单
-const userForm = useLocalStorage("userForm", {
+const adminForm = useLocalStorage("adminForm", {
   username: "",
   password: "",
 });
@@ -48,8 +47,8 @@ async function onLogin(formEl: any | undefined) {
     isLoading.value = true;
     admin.isOnLogining = true;
     const res = await useAdminLoginApi({
-      username: userForm.value.username,
-      password: userForm.value.password,
+      username: adminForm.value.username,
+      password: adminForm.value.password,
     });
     if (res.code === ResultStatus.SUCCESS) {
       // 登录成功
@@ -89,7 +88,7 @@ async function onLogin(formEl: any | undefined) {
     label-position="top"
     hide-required-asterisk
     :rules="rules"
-    :model="userForm"
+    :model="adminForm"
     style="border: none;"
     class="form"
   >
@@ -102,7 +101,7 @@ async function onLogin(formEl: any | undefined) {
       prop="username"
     >
       <el-input
-        v-model.trim="userForm.username"
+        v-model.trim="adminForm.username"
         autocomplete="off"
         :prefix-icon="ElIconUser"
         size="large"
@@ -118,7 +117,7 @@ async function onLogin(formEl: any | undefined) {
       class="animated"
     >
       <el-input
-        v-model.trim="userForm.password"
+        v-model.trim="adminForm.password"
         :prefix-icon="ElIconLock"
         autocomplete="off"
         size="large"
