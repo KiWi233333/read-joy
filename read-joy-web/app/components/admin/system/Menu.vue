@@ -34,13 +34,16 @@ const activeMenu = computed({
           <div
             sticky top-0 z-2
             class="h-14 w-full flex-row-bt-c bg-color"
-            @click="setting.isMenuFold = !setting.isMenuFold"
           >
             <NuxtLink to="/admin" :class="setting.isMenuFold ? 'op-0 w-0 ' : 'pl-2 w-6.6rem op-100' " class="truncate text-sm transition-all">
               <img alt="logo-text" src="/logo.png" class="mr-2 inline h-6 select-none object-cover">
               后台管理
             </NuxtLink>
-            <span h-2.6rem w-2.6rem flex-row-c-c cursor-pointer>
+            <span
+              h-2.6rem
+
+              w-2.6rem flex-row-c-c cursor-pointer @click="setting.isMenuFold = !setting.isMenuFold"
+            >
               <i
                 class="i-solar:hamburger-menu-outline"
                 inline-block h-5 w-5
