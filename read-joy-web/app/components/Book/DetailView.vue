@@ -85,7 +85,7 @@ async function likeResource(item: ResourceVO) {
             </span>
             <el-switch
               v-model="setting.isNewTabOpenBook"
-              class="ml-a op-0 transition-opacity group-hover:op-100"
+              class="ml-a op-20 transition-opacity group-hover:op-100"
               title="设置默认新标签页打开"
               inline-prompt active-text="新标签"
               inactive-text="抽屉式"
