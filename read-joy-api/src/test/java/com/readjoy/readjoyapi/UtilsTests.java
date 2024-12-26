@@ -2,6 +2,7 @@
 package com.readjoy.readjoyapi;
 
 import com.readjoy.readjoyapi.common.utils.LocalFileUtil;
+import com.readjoy.readjoyapi.common.utils.XFAuthUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -47,4 +48,11 @@ class UtilsTests {
 ////        log.info("size: " + LocalFileUtil.formatSize(size));
 //    }
 
+    @Resource
+    private XFAuthUtil xfAuthUtil;
+
+    @Test
+    void testLocalFiles() throws IOException {
+        System.out.println(xfAuthUtil.getAuthorizationUrl());
+    }
 }

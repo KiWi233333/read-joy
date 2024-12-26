@@ -61,7 +61,7 @@ export interface AdminLoginVO {
  * @returns 是否成功
  */
 export function useUpdateAdminPwdApi(dto: AdminUpdatePwdDTO, token: string) {
-  return useHttp.put<Result<BoolEnum>>("/user/pwd", {
+  return useHttp.put<Result<BoolEnum>>("/admin/pwd", {
     ...dto,
   }, {
     headers: {
