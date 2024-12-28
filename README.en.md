@@ -80,7 +80,7 @@ Join us to start your reading journey and discover more exciting content! Whethe
 
 ![Frontend - Login](./.doc/img/front/login.png)
 
-- Backend - Admin Page 
+- Backend - Admin Page
 
 ![Backend - Admin Page](./.doc/img/back/home.png)
 
@@ -110,16 +110,14 @@ Join us to start your reading journey and discover more exciting content! Whethe
 
 ![Backend - Resource Page](./.doc/img/back/res.png)
 
-
-
 - Mobile Adaptation
 
 <div align=center style="margin:1em; display:flex;flex-wrap:wrap;justify-content:center;">
- <img src="./.doc/img/front/phone1.png" width = "140" style="display:inline-block;margin: auto;" alt="Mobile Adaptation" align=center />
+ <img src="./.doc/img/front/phone1.png" width = "150" style="display:inline-block;margin: 2em;" alt="Mobile Adaptation" align=center />
 
- <img src="./.doc/img/front/phone2.png" width = "140" style="display:inline-block;margin: auto;" alt="Mobile Adaptation" align=center />
+ <img src="./.doc/img/front/phone2.png" width = "150" style="display:inline-block;margin: 2em;" alt="Mobile Adaptation" align=center />
 
- <img src="./.doc/img/front/phone-dark.png" width = "140" style="display:inline-block;margin: auto;" alt="Mobile Adaptation" align=center />
+ <img src="./.doc/img/front/phone-dark.png" width = "150" style="display:inline-block;margin: 2em;" alt="Mobile Adaptation" align=center />
 
 </div>
 
