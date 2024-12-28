@@ -26,6 +26,11 @@
           src="https://img.shields.io/badge/License-Apache--2.0-blue.svg">
       </a>
     </div>
+    <div>
+      <a href="https://app.netlify.com/sites/readjoy/deploys">
+          <img src="https://api.netlify.com/api/v1/badges/a54a9b5e-f15e-42b5-a381-fc4469738a68/deploy-status" alt="Netlify Status">
+      </a>
+    </div>
 
 语言 : 简体中文 | [English](./README.en.md)
 </div>
