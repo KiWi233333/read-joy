@@ -32,7 +32,18 @@ Language: Simplified Chinese | [English](./README.en.md)
 
 ## Introduction
 
-Read-Joy is an aesthetically pleasing and minimalist reading book website based on Nuxt3 and Spring Boot.
+Welcome to Read-Joy 🎉: a web application that makes reading more beautiful and convenient! Based on the modern Nuxt3 and Spring Boot technology stack, we have created a simple yet sophisticated reading platform for you. Whether you are a book lover or a creator seeking inspiration, this platform can meet your needs.
+
+Note: This project is a `course project`, and the database is `fixed` due to the topic, so the implemented features are limited and for learning purposes only.
+
+### Features That May Interest You
+
+- **Elegant Interface**: We have carefully designed the user interface to ensure you enjoy an unparalleled visual experience while reading.
+- **Smart Recommendations**: Through advanced AI technology, we recommend the books that suit you best, making every reading experience full of surprises.
+- **Diverse Features**: From dark mode to convenient search features, Read-Joy provides you with a comprehensive reading experience.
+- **Community Interaction**: Share your insights with other readers, participate in discussions, and enhance your reading enjoyment.
+
+Join us to start your reading journey and discover more exciting content! Whether it's classic literature or the latest bestsellers, Read-Joy will be your best companion. Let's sail through the sea of books together and enjoy every moment of reading joy!
 
 ## Default Account
 
