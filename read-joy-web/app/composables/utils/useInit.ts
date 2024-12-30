@@ -35,6 +35,14 @@ export function useInit() {
     }
   });
 
+  // 监听模式切换
+  const colorMode = useColorMode();
+  watch(() => colorMode.value, (val) => {
+    if (!val)
+      return;
+    useModeToggle(val, undefined, true);
+  });
+
   return () => {
     user.showRegisterForm = false;
     user.showLoginForm = false;
@@ -52,7 +60,7 @@ function keyToggleTheme(e: KeyboardEvent) {
       return;
     }
     // 计算屏幕中心坐标
-    const centerY = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
+    // const centerY = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight);
     const xy = dom?.getBoundingClientRect();
     const colorMode = useColorMode();
     const mode = colorMode.value === "dark" ? "light" : "dark";
