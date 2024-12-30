@@ -56,7 +56,7 @@ export default defineNuxtConfig({
     classSuffix: "",
   },
   build: {
-    transpile: [/echarts/],
+    transpile: [/echarts/, "popperjs/core", "resize-detector"],
   },
   routeRules: {
     "/": {

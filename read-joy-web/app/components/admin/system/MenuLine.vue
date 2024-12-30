@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { MenuItem } from "./Menu.vue";
+import type { MenuItem } from "~/composables/utils/useRoute";
 import { ElMenuItem, ElSubMenu } from "element-plus";
 import { BaseUrlImg } from "~/composables/utils/useBaseUrl";
 
