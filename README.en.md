@@ -151,10 +151,6 @@ pnpm run dev
 
 #### 🖥 Backend
 
-```sh
-pnpm run dev
-```
-
 Backend:
 
 Open the project in Idea, and start the `com.readjoy.readjoyapi.ReadJoyApiApplication` class.

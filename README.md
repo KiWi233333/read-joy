@@ -151,10 +151,6 @@ pnpm run dev
 
 #### 🖥 后端
 
-```sh
-pnpm run dev
-```
-
 后端：
 
 Idea 打开项目，启动 `com.readjoy.readjoyapi.ReadJoyApiApplication` 类。
