@@ -8,6 +8,7 @@
     "dev:pwa": "VITE_PLUGIN_PWA=true nuxi dev",
     "dev:prod": "VITE_PLUGIN_PWA=false NITRO_PORT=3000 nuxt dev --dotenv .env.production",
     "dev:prod:pwa": "nuxt dev --dotenv .env.production",
+    "prod": "VITE_PLUGIN_PWA=false NITRO_PORT=3001 nuxt dev --dotenv .env.production",
     "generate": "nuxi generate --dotenv .env.production",
     "build": "nuxi build --dotenv .env.production",
     "start": "PORT=3001 node .output/server/index.mjs",

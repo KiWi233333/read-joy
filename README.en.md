@@ -38,9 +38,18 @@ Language: English | [Simplified Chinese](./README.en.md)
 
 ## Introduction
 
+### Overview
+
 Welcome to Read-Joy 🎉: a web application that makes reading more beautiful and convenient! Based on the modern Nuxt3 and Spring Boot technology stack, we have created a simple yet sophisticated reading platform for you. Whether you are a book lover or a creator seeking inspiration, this platform can meet your needs.
 
 Note: This project is a `course project`, and the database is `fixed` due to the topic, so the implemented features are limited and for learning purposes only.
+
+
+### Preview Links
+
+- [Read Joy - Home Page](https://readjoy.kiwi2333.top)
+
+- [Read Joy - Admin Page](https://readjoy.kiwi2333.top/admin)
 
 ### Features That May Interest You
 
