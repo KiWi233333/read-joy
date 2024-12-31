@@ -27,7 +27,7 @@ useHead({
 </script>
 
 <template>
-  <div>
+  <div class="w-full">
     <ListBookList
       :show-load="true"
       :show-more-text="true"
@@ -36,7 +36,8 @@ useHead({
       :ssr="true"
       animated="auto"
       :dto="tempDto"
-      books-class="relative grid cols-2 w-full items-start gap-4 md:cols-5 sm:cols-4 md:gap-10 cols-[repeat(auto-fill,_minmax(min(30vw,_10rem),_1fr))] pr-2px"
+      book-class="max-w-full"
+      books-class="relative grid cols-2 w-full items-start gap-2 md:cols-5 sm:cols-4 md:gap-10 pr-2px"
     >
       <template #header="{ pageInfo }">
         <div class="sticky left-0 top-4rem z-2 mb-4 flex flex-col items-center justify-between gap-4 pb-4 pt-10 sm:flex-row bg-color-layout">
@@ -80,18 +81,19 @@ useHead({
 </template>
 
 <style lang="scss" scoped>
-$input-width: min(50vw, 16rem);
-$scle-input-width: min(65vw, 20rem);
+$input-width: min(65vw, 22rem);
+$scle-input-width: min(65vw, 28rem);
 .search {
+  background-color: #fff;
   :deep(.el-input__wrapper) {
     width: $input-width;
     transition: width $transition-delay;
     transition-timing-function: $animate-cubic-bount;
     border-radius: 20px;
-    height: 2rem;
+    height: 2.2rem;
     border: 0;
     background-color: #fff;
-    box-shadow: inset 0 0 2px 1px #f8f8f8, inset 0 0 2px 1px #f8f8f8;
+    box-shadow: none;
     input::placeholder {
       letter-spacing: 0.3em;
       transition: width $transition-delay;

@@ -15,9 +15,10 @@ const store = useDefaultStore();
     :key="book.bookId"
     class="group flex flex-col items-center justify-center sm:w-36"
     :href="`/book/${book.bookId}`"
+    v-bind="$attrs"
     @click.prevent.stop="store.setBook(book.bookId)"
   >
-    <div class="book relative h-fit">
+    <div class="book relative h-fit max-w-full">
       <CardNuxtImg
         :default-src="book.coverImageUrl"
         class="img h-full w-full card-rounded-df card-default"
