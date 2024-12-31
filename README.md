@@ -127,12 +127,12 @@
  
 - 移动端适配
 
-<div align=center style="margin:1em; display:flex;flex-wrap:wrap;justify-content:center;">
- <img src="./.doc/img/front/phone1.png" width = "150" style="display:inline-block;margin: 2em;" alt="移动端适配" align=center />
+<div style="display:flex;flex-wrap:wrap;">
+ <img src="./.doc/img/front/phone1.png" width = "150" style="display:inline-block;margin: 2em;" alt="移动端适配" />
 
- <img src="./.doc/img/front/phone2.png" width = "150" style="display:inline-block;margin: 2em;" alt="移动端适配" align=center />
+ <img src="./.doc/img/front/phone2.png" width = "150" style="display:inline-block;margin: 2em;" alt="移动端适配" />
 
- <img src="./.doc/img/front/phone-dark.png" width = "150" style="display:inline-block;margin: 2em;" alt="移动端适配" align=center />
+ <img src="./.doc/img/front/phone-dark.png" width = "150" style="display:inline-block;margin: 2em;" alt="移动端适配" />
 
 </div>
 
