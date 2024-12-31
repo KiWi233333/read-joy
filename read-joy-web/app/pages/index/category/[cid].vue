@@ -84,7 +84,6 @@ useHead({
 // $input-width: min(100%, 24rem);
 // $scle-input-width: min(100%, 28rem);
 .search {
-  background-color: #fff;
   width: 100%;
   :deep(.el-input__wrapper) {
     --at-apply: "w-full sm:w-22rem";
