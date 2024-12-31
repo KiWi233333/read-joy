@@ -40,14 +40,14 @@ useHead({
       books-class="relative grid cols-2 w-full items-start gap-2 md:cols-5 sm:cols-4 md:gap-10 pr-2px"
     >
       <template #header="{ pageInfo }">
-        <div class="sticky left-0 top-4rem z-2 mb-4 flex flex-col items-center justify-between gap-4 pb-4 pt-10 sm:flex-row bg-color-layout">
+        <div class="sticky left-0 top-4rem z-2 mb-4 max-w-full flex flex-col items-center justify-between gap-4 pb-4 pt-10 sm:flex-row bg-color-layout">
           <h2 class="flex items-end text-lg font-bold">
             <strong>{{ $route.query?.ct || '' }}</strong>
             <span class="ml-2 min-w-6em" py-1 font-500 text-small>
               共{{ pageInfo?.total }}本图书
             </span>
           </h2>
-          <div class="group relative z-9 flex items-center" @click="inputRef?.focus">
+          <div class="group relative z-9 w-full flex items-center sm:w-fit" @click="inputRef?.focus">
             <ElInput
               ref="inputRef"
               v-model.trim="pageDTO.keyword"
@@ -81,12 +81,13 @@ useHead({
 </template>
 
 <style lang="scss" scoped>
-$input-width: min(65vw, 22rem);
-$scle-input-width: min(65vw, 28rem);
+// $input-width: min(100%, 24rem);
+// $scle-input-width: min(100%, 28rem);
 .search {
   background-color: #fff;
+  width: 100%;
   :deep(.el-input__wrapper) {
-    width: $input-width;
+    --at-apply: "w-full sm:w-22rem";
     transition: width $transition-delay;
     transition-timing-function: $animate-cubic-bount;
     border-radius: 20px;
@@ -105,13 +106,12 @@ $scle-input-width: min(65vw, 28rem);
     input:focus,
     input:valid,
     &.is-focus {
-      width: $scle-input-width;
+      --at-apply: "w-full sm:w-26rem";
     }
     .el-input__suffix {
       position: absolute;
       right: 3%;
     }
-
   }
 }
 .dark .search :deep(.el-input__wrapper) {

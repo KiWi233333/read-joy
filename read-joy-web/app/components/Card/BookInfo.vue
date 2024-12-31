@@ -21,7 +21,7 @@ const store = useDefaultStore();
     <div class="book relative h-fit max-w-full">
       <CardNuxtImg
         :default-src="book.coverImageUrl"
-        class="img h-full w-full card-rounded-df card-default"
+        class="img"
       >
         <template #error>
           <small class="h-full w-full flex flex-row items-center justify-center">
@@ -48,9 +48,9 @@ const store = useDefaultStore();
 
 <style lang="scss" scoped>
 .book {
-  --at-apply: "h-50 w-36 border-default card-rounded-df";
+  --at-apply: "w-36 aspect-ratio-10/14 max-h-50 border-default card-rounded-df";
   .img {
-    --at-apply: "h-full w-full  card-default card-rounded-df";
+    --at-apply: "h-full w-full card-rounded-df card-default";
   }
 }
 </style>
