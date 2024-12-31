@@ -65,6 +65,8 @@ export async function downloadFile(url: string, fileName: string, headers: Recor
   // 【步骤2】使用 fetch 方法访问文件的url，将内容一点点的放到 StreamSaver 创建的文件里
   fetch(url, {
     headers,
+    // 禁止缓存
+    cache: "no-cache",
   })
     .then((res) => {
       const stream = res.body;
