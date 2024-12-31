@@ -81,7 +81,8 @@ const commentTimeRange = computed({
         </template>
       </CardNuxtImg>
       <el-form-item
-        prop="commentBody" class="flex-row-c-c flex-1" style="margin: 0;" :rules="[{
+        prop="commentBody"
+        class="comment-form flex-row-c-c flex-1" style="margin: 0;" :rules="[{
           required: true,
           message: '评论内容不能为空！',
           trigger: 'blur',
@@ -136,7 +137,7 @@ const commentTimeRange = computed({
             :format-preview="DATE_FORMAT"
             :disabled="isSending"
             :btn-props="{
-              class: 'text-left flex bg-color w-14rem hover:bg-color',
+              class: 'text-left flex  w-14rem bg-transparent ',
             }"
             placeholder="选择时间范围"
             :clearable="true"
@@ -155,5 +156,9 @@ const commentTimeRange = computed({
 </template>
 
 <style lang="scss" scoped>
-
+.comment-form {
+  :deep(.el-textarea__inner) {
+    background-color: transparent;
+  }
+}
 </style>

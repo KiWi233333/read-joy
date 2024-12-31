@@ -34,6 +34,7 @@ function downloadResource(resource: ResourceVO) {
   downloadFile(BaseUrlFile + resource.url, resource.title, {
     Authorization: user.getToken,
   }, () => {
+    resource.downloadCount++;
     ElMessage.closeAll("warning");
     ElMessage.success("下载完成！");
   });
@@ -59,7 +60,7 @@ async function likeResource(item: ResourceVO) {
       <!-- 左侧 -->
       <div w-full flex-row-c-c flex-col truncate class="group">
         <CardElImage
-          :preview-src-list="[BaseUrlImg + bookDetial?.coverImageUrl]"
+          :preview-src-list="$route.name === 'index-book-bid' ? [BaseUrlImg + bookDetial?.coverImageUrl] : []"
           preview-teleported
           infinite
           class="h-64 w-45 shadow-md border-default card-default-br"

@@ -159,7 +159,7 @@ await reload();
     >
       <slot v-for="item in pageInfo.records" name="item" :item="item">
         <div :key="item.id" class="flex gap-4 py-4 border-default-b" :class="itemClass">
-          <CardNuxtImg :default-src="item.commentatorAvatar" class="h-12 w-12 flex-shrink-0 rounded-full border-default card-default">
+          <CardNuxtImg :default-src="item.commentatorAvatar" class="h-10 w-10 flex-shrink-0 rounded-full border-default card-default">
             <template #error>
               <div h-full w-full flex-row-c-c text-lg>
                 {{ item?.commentatorName?.[0] || " " }}

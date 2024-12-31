@@ -269,6 +269,7 @@ body .el-message {
 }
 .el-menu.el-menu--popup {
   padding: 0.4rem;
+  border-radius: 0;
   .el-menu-item {
     margin-top: 0.4rem;
     border-radius: calc(var(--el-popper-border-radius) / 2);

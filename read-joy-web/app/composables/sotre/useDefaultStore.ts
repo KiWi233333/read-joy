@@ -70,6 +70,16 @@ export const useDefaultStore = defineStore(
       }
     }
 
+    // 适配模态框高度和拖拽问题
+    const user = useUserStore();
+    const store = useDefaultStore();
+    const setting = useSettingStore();
+    watch([() => user.showLoginForm, () => setting.isNewTabOpenBook], ([showLoginForm, isNewTabOpenBook]) => {
+      if (showLoginForm && !isNewTabOpenBook) {
+        store.showBookDetail = false;
+      }
+    });
+
     return {
       showBookDetail,
       theBookDetail,

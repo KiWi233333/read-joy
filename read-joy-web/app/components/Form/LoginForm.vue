@@ -114,7 +114,7 @@ async function onLogin(formEl: any | undefined) {
         });
         setTimeout(() => {
           user.showLoginForm = false;
-        }, 1000);
+        }, 2000);
       }
       // 登录失败
       else {
@@ -138,7 +138,6 @@ async function onLogin(formEl: any | undefined) {
 </script>
 
 <template>
-  <!-- 登录 -->
   <el-form
     ref="formRef"
     :disabled="isLoading"
@@ -227,7 +226,7 @@ async function onLogin(formEl: any | undefined) {
           <br>
           <small el-color-info op-80>（{{ user.userInfo.loginName ? "已登录" : "请登录" }}）</small>
         </div>
-        <div flex-row-bt-c px-4>
+        <div flex-row-bt-c class="w-4/5" px-4 pb-4>
           <BtnElButton
             type="primary"
             transition-icon class="w-8em"

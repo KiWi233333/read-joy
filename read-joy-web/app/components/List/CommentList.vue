@@ -219,7 +219,7 @@ await reload();
     >
       <slot v-for="item in filterRecords" name="item" :item="item">
         <div :key="item.id" class="group flex gap-4 py-4 border-default-b" :class="itemClass">
-          <CardNuxtImg :default-src="item.commentatorAvatar" class="h-12 w-12 flex-shrink-0 rounded-full border-default card-default">
+          <CardNuxtImg :default-src="item.commentatorAvatar" class="h-10 w-10 flex-shrink-0 rounded-full border-default card-default">
             <template #error>
               <div h-full w-full flex-row-c-c text-lg>
                 {{ item?.commentatorName?.[0] || " " }}
@@ -231,14 +231,14 @@ await reload();
               <div>
                 {{ item.commentatorName }}
                 <span v-if="item.commentator === user.userId" class="rounded px-1 py-2px dark:!text-info card-default text-mini border-default-hover">自己</span>
-                <span v-if="item.createTime" class="float-right ml-a text-small">{{ formatDate(new Date(item.createTime.replace(/-/g, '/'))) }}</span>
+                <span v-if="item.createTime" class="float-right text-mini">{{ formatDate(new Date(item.createTime.replace(/-/g, '/'))) }}</span>
+                <span v-if="user.userId === item.commentator && item.isDeleted !== BoolEnum.TRUE && item.id" class="float-right mr-2 op-0 transition-200 btn-danger text-mini group-hover:op-100" @click="onClickDelete(item.id)">删除</span>
               </div>
               <span v-if="item.createTime" float-right flex-row-c-c text-right text-mini>
                 <el-badge v-if="item.commentator === user.userId && item.commentStatus !== CommentStatusEnum.APPROVED" class="ml-2" :type="item.commentStatus ? BadgeTypeMap[item.commentStatus] : 'info'" is-dot>
                   {{ item.commentStatusText }}
                   {{ item.commentStatus === CommentStatusEnum.PENDING ? `（自己可见）` : '' }}
                 </el-badge>
-                <span v-if="user.userId === item.commentator && item.isDeleted !== BoolEnum.TRUE && item.id" class="m-t-2 op-0 transition-200 btn-danger group-hover:op-100" @click="onClickDelete(item.id)">删除</span>
               </span>
             </div>
             <p class="msg-popper">
@@ -270,7 +270,7 @@ await reload();
 .msg-popper {
   --at-apply: "w-fit mt-2 max-w-20em md:max-w-full p-2 px-3 leading-1.2em bg-color rounded-1.5";
   box-shadow:
-    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   border-radius: 4px 1rem 1rem 1rem;
 }

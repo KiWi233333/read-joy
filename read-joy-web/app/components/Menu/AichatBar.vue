@@ -202,9 +202,24 @@ function clearHistory() {
   ];
 }
 
+watch(isShow, (newVal) => {
+  if (newVal) {
+    nextTick(() => {
+      scrollBottom();
+      inputRef.value?.focus();
+    });
+  }
+});
+
 // 初始化滚动到底部
 onMounted(() => {
   nextTick(scrollBottom);
+});
+
+defineExpose({
+  isShow,
+  onSubmit,
+  clearHistory,
 });
 </script>
 

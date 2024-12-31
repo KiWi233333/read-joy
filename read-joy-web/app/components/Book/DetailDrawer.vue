@@ -23,7 +23,6 @@ const show = computed({
     emit("update:open", open);
   },
 });
-
 const setting = useSettingStore();
 
 function onNewTaget(book: Partial<BookDetailVO>) {

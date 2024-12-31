@@ -33,9 +33,8 @@ const showDialog = computed({
     v-model="showDialog"
     style="width: fit-content;box-shadow: none;"
     class="border-default"
-    center
     :show-close="false"
-    destroy-on-close
+    center destroy-on-close trap-focus
   >
     <div class="forms">
       <div key="login-bg" class="mt-4 flex-row-c-c gap-3 px-3 sm:(relative left-a top-a px-4)">
@@ -48,7 +47,7 @@ const showDialog = computed({
         </h3>
       </div>
       <!-- 表单 -->
-      <div w-80vw px-3 text-1rem sm:w-22rem sm:px-4>
+      <div class="w-80vw px-3 text-1rem sm:(w-22rem px-4)">
         <div ref="autoAnimateRef" class="relative mt-6 sm:mt-8">
           <!-- 登录 -->
           <FormLoginForm
