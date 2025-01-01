@@ -1,7 +1,7 @@
 <template>
-  <el-scrollbar height="100vh" class="bg-color-layoutr elative">
+  <div class="bg-color-layoutr relative">
     <main bg-color-layout>
       <slot />
     </main>
-  </el-scrollbar>
+  </div>
 </template>
