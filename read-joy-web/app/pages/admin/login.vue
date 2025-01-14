@@ -17,7 +17,7 @@ definePageMeta({
     <div
       data-fade
       style="--lv: 2;--anima: latter-slice-blur-top;"
-      class="relative z-1 grid w-9/10 md:(cols-2 w-2/5) border-default card-default"
+      class="relative z-1 grid w-9/10 lg:(cols-2 w-800px) md:(cols-2 w-700px) border-default card-default"
     >
       <section hidden md:block class="img-bg h-full w-full card-rounded-df rounded-r-0 shadow-lg shadow-inset border-default-r" />
       <section class="group relative flex-row-bt-c px-4 py-8 md:(px-8 py-24)">

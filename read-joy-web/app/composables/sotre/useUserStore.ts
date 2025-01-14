@@ -56,17 +56,23 @@ export const useUserStore = defineStore(
      * @param t token
      */
     const onUserLogin = async (t: string, saveLocal?: boolean, redirectTo?: string, callback?: (data: UserInfoVO) => void) => {
-      // 用户信息
-      const res = await useGetUserInfoApi(t);
-      if (res.code && res.code === ResultStatus.SUCCESS) {
-        userInfo.value = res.data as UserInfoVO;
-        isLogin.value = true;
-        token.value = t;
-        callback && callback(res.data);
-        if (redirectTo)
-          await navigateTo(redirectTo);
+      try {
+        // 用户信息
+        const res = await useGetUserInfoApi(t);
+        if (res.code && res.code === ResultStatus.SUCCESS) {
+          userInfo.value = res.data as UserInfoVO;
+          isLogin.value = true;
+          token.value = t;
+          callback && callback(res.data);
+          if (redirectTo)
+            await navigateTo(redirectTo);
+        }
+        else {
+          callbackUserExit(t);
+        }
       }
-      else {
+      catch (error) {
+        console.error(error);
         callbackUserExit(t);
       }
     };
