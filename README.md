@@ -2,7 +2,7 @@
  <div align=center margin="10em" style="margin:4em 0 0 0;font-size: 30px;letter-spacing:0.3em;">
 <img src="./.doc/img/logo.png" width="140px" height="140px" alt="logo" align=center />
  </div>
- <h2 align=center style="margin: 2em 0; padding-bottom:1em;">悦读时光 | Read-Joy</h2>
+ <h2 align=center style="margin: 1em 0; padding-bottom:1em;">悦读时光 | Read-Joy</h2>
 
 <div>
       <a href="https://github.com/Kiwi233333/read-joy" target="_blank">
@@ -142,18 +142,36 @@
 
 #### 🎨 前端
 
+1. 前置环境
+- Node.js 20.0.0+
+- pnpm 8.0.0+
+
+2. 安装依赖和启动
 ```sh
-# 安装依赖
 pnpm install
-# 启动项目
+```
+3. 启动项目
+```sh
 pnpm run dev
 ```
 
 #### 🖥 后端
 
-后端：
+1. 前置环境
+- JDK 17.0+
+- MySQL 8.0+
+- Redis 6.0+
 
-Idea 打开项目，启动 `com.readjoy.readjoyapi.ReadJoyApiApplication` 类。
+2. 配置
+- 克隆项目到本地
+- 创建数据库，导入SQL脚本
+- 开启Redis服务
+- 修改application-dev.application 中的数据库、Redis配置信息
+- 启动项目
+
+
+3. 启动项目
+  Idea 打开项目，启动 `com.readjoy.readjoyapi.ReadJoyApiApplication` 类。
 
 
 ### 📦 部署
