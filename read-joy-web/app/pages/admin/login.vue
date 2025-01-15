@@ -41,7 +41,7 @@ definePageMeta({
 }
 .bg {
   position: absolute;
-  background: radial-gradient(circle at top, #a252fd, #656fffad);
+  background: radial-gradient(circle at top, rgb(65, 138, 255), rgba(255, 255, 255, 0.9));
   z-index: 0;
   border-radius: 67% 33% 70% 30% / 30% 54% 46% 70%;
   animation: border-anima 20s ease-out infinite;

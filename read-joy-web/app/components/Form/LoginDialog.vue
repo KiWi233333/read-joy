@@ -34,7 +34,9 @@ const showDialog = computed({
     style="width: fit-content;box-shadow: none;"
     class="border-default"
     :show-close="false"
-    center destroy-on-close trap-focus
+    center
+    destroy-on-close
+    trap-focus
   >
     <div class="forms">
       <div key="login-bg" class="mt-4 flex-row-c-c gap-3 px-3 sm:(relative left-a top-a px-4)">
