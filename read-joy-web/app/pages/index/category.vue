@@ -58,7 +58,7 @@ await loadCategoryData();
 
 <template>
   <div
-    class="grid cols-[1fr_4fr] min-h-86vh w-full gap-4 grid-items-start sm:(cols-[1fr_5fr] gap-6)"
+    class="grid cols-[1fr_4fr] w-full gap-4 grid-items-start sm:(cols-[1fr_5fr] gap-6)"
     sm:pb-20vh
   >
     <div class="sticky left-0 top-4rem z-2 pt-10">
