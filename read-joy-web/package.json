@@ -61,8 +61,7 @@
     "shadcn-nuxt": "0.11.3",
     "tailwindcss": "3.4.17",
     "typescript": "5.7.3",
-    "vue-tsc": "2.1.6",
-    "webpack": "5"
+    "vue-tsc": "2.1.6"
   },
   "resolutions": {
     "unplugin": "2.0.0-beta.1",
